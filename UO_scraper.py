@@ -158,7 +158,7 @@ def engage_site_scraper(list):
             else:
                 CSV_data.append(org_list)
         else:
-            pass
+            CSV_data.append("N/A")
         CSV_data_inputter(CSV_data)
         print(CSV_data)
 
@@ -305,9 +305,9 @@ if __name__ == '__main__':
     CSV_file_creator()
 
     #scrape engage
-    """URL_list = engage_URL_web_scraper()
+    URL_list = engage_URL_web_scraper()
     engage_URL_web_scraper()
-    engage_site_scraper(URL_list)"""
+    engage_site_scraper(URL_list)
 
     #scrape events calender
     events_calendar_URL_scraper()
