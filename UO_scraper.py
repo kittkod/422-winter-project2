@@ -272,7 +272,12 @@ def event_calender_site_scraper(list_of_links):
         event_description = event_calendar_fixup(event_description.text)
 
         CSV_data.append(event_description)
-        print(CSV_data)
+
+        event_organizer = soup.find('dd', class_='filter-departments')
+
+        event_organizer = event_calendar_fixup(event_organizer.text)
+
+        CSV_data.append(event_organizer)
 
         CSV_data_inputter(CSV_data)
         
@@ -300,9 +305,9 @@ if __name__ == '__main__':
     CSV_file_creator()
 
     #scrape engage
-    URL_list = engage_URL_web_scraper()
+    """URL_list = engage_URL_web_scraper()
     engage_URL_web_scraper()
-    engage_site_scraper(URL_list)
+    engage_site_scraper(URL_list)"""
 
     #scrape events calender
     events_calendar_URL_scraper()
