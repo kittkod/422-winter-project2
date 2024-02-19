@@ -3,18 +3,20 @@ Web Scraper for University of Oregon Club Free Food
 """
 
 from bs4 import BeautifulSoup
-import mysql.connector
 import csv
 import pandas as pd
 import re
 
 from selenium import webdriver 
-#from selenium.webdriver import Chrome 
-#from selenium.webdriver.common.by import By 
 
 import re
 
-CSV_file = "EngageData.csv"
+CSV_file = "Free_Food_Database.csv"
+
+################################################################
+## Function block for scraping "Engage Free Food Club Events" ##
+################################################################
+
 
 def extract_date_time(string):
     # Define regular expressions to match date, start time, and end time
@@ -67,7 +69,6 @@ def remove_desc_details(string):
     cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     return cleaned_text.strip()
 
-
 def engage_URL_web_scraper():
 
     chrome_options = webdriver.ChromeOptions()
@@ -93,15 +94,14 @@ def engage_URL_web_scraper():
 
 
 def engage_site_scraper(list):
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")  # Enable headless mode
+
+    # Initialize the WebDriver with Chrome options
+    driver = webdriver.Chrome(options=chrome_options)
     for link in list:
         CSV_data = []
         new_link = "https://uoregon.campuslabs.com"+link
-        
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")  # Enable headless mode
-
-        # Initialize the WebDriver with Chrome options
-        driver = webdriver.Chrome(options=chrome_options)
 
         driver.get(new_link)
         page_source = driver.page_source
@@ -162,6 +162,124 @@ def engage_site_scraper(list):
         CSV_data_inputter(CSV_data)
         print(CSV_data)
 
+################################################################
+## Function block for scraping Events Calendar for Free Food ##
+################################################################
+
+def events_calendar_time_fixup(date_and_time):
+
+    date_and_time = date_and_time.replace("\n", "").replace(",", "")
+    date_and_time = date_and_time.split()
+
+    if len(date_and_time) == 7:
+        date = date_and_time[1]+" "+date_and_time[2]+" "+date_and_time[0]
+        start_time = date_and_time[4]
+        end_time = date_and_time[6]
+        return date, start_time, end_time
+    if len(date_and_time) == 5:
+        date = date_and_time[1]+" "+date_and_time[2]+" "+date_and_time[0]
+        start_time = date_and_time[4]
+        end_time = "N/A"
+        return date, start_time, end_time
+    if len(date_and_time) == 3:
+        date=date_and_time[1]+" "+date_and_time[2]+" "+date_and_time[0]
+        start_time = "N/A"
+        end_time = "N/A"
+        return date, start_time, end_time
+    else:
+        date = "N/A"
+        start_time = "N/A"
+        end_time = "N/A"
+        return date, start_time, end_time
+
+def event_calendar_fixup(string):
+
+    cleaned_text = re.sub(r'\xa0|\n', ' ', string)
+    cleaned_text = re.sub(r'\s+', ' ', string)
+    return cleaned_text.strip()
+
+def event_calendar_URL_fixup(link):
+    
+    # Split the link by '/'
+    parts = link.split('/')
+    URL = parts[-1]
+    return URL
+
+
+   
+def events_calendar_URL_scraper():
+
+    starting_link = 'https://calendar.uoregon.edu/search/events?event_types[]=15630'
+    link_list = []
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")  # Enable headless mode
+
+    # Initialize the WebDriver with Chrome options
+    driver = webdriver.Chrome(options=chrome_options)
+    
+    driver.get(starting_link)
+    page_source = driver.page_source
+
+    soup = BeautifulSoup(page_source, 'html.parser')
+    
+    list_of_data = soup.find_all('div', class_= "item event_item vevent")
+
+    for link in list_of_data: 
+        new_link = link.find('a', href=lambda href: href and '/event/' in href)
+        new_link = new_link.get('href')
+        new_link = event_calendar_URL_fixup(new_link)
+        link_list.append(new_link)
+    event_calender_site_scraper(link_list)
+    return
+
+    #return new_data
+
+def event_calender_site_scraper(list_of_links):
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")  # Enable headless mode
+    driver = webdriver.Chrome(options=chrome_options)
+    for link in list_of_links:
+
+        CSV_data = []
+        new_link = "https://calendar.uoregon.edu/event/"+link
+
+        driver.get(new_link)
+        page_source = driver.page_source
+
+        soup = BeautifulSoup(page_source, 'html.parser')
+
+        total_info = soup.find('div', class_='box_content vevent grid_8')
+        event_name = total_info.find('h1', class_='summary')
+        event_name = event_calendar_fixup(event_name.text)
+        CSV_data.append(event_name)
+
+        date_and_time = total_info.find('p', class_='dateright')
+        date, start_time, end_time = events_calendar_time_fixup(date_and_time.text)
+
+        CSV_data.append(date)
+        CSV_data.append(start_time)
+        CSV_data.append(end_time)
+
+        event_location = total_info.find('p', class_='location')
+        event_location = event_calendar_fixup(event_location.text)
+        if event_location:
+            CSV_data.append(event_location) 
+        else:
+            CSV_data.append("N/A")
+
+        event_description = total_info.find('div', class_='description')
+
+        event_description = event_calendar_fixup(event_description.text)
+
+        CSV_data.append(event_description)
+        print(CSV_data)
+
+        CSV_data_inputter(CSV_data)
+        
+######################################
+## CSV File Creation Function Block ##
+######################################
+        
 def CSV_file_creator():
     header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)']
     with open(CSV_file, 'w', newline="") as file:
@@ -177,8 +295,15 @@ def CSV_data_inputter(data):
 
     
 if __name__ == '__main__':
-    URL_list = engage_URL_web_scraper()
-    #URL_list = ['/engage/event/9833502']
+
+    #create CSV file
     CSV_file_creator()
-    #engage_URL_web_scraper()
+
+    #scrape engage
+    URL_list = engage_URL_web_scraper()
+    engage_URL_web_scraper()
     engage_site_scraper(URL_list)
+
+    #scrape events calender
+    events_calendar_URL_scraper()
+
