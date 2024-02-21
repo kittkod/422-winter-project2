@@ -3,8 +3,9 @@ Web Scraper for University of Oregon Club Free Food
 """
 
 from bs4 import BeautifulSoup
+import requests
 import csv
-import pandas as pd
+#import pandas as pd
 import re
 
 from selenium import webdriver 
@@ -159,6 +160,8 @@ def engage_site_scraper(list):
                 CSV_data.append(org_list)
         else:
             CSV_data.append("N/A")
+
+        #add to CSV file
         CSV_data_inputter(CSV_data)
         print(CSV_data)
 
@@ -205,8 +208,6 @@ def event_calendar_URL_fixup(link):
     URL = parts[-1]
     return URL
 
-
-   
 def events_calendar_URL_scraper():
 
     starting_link = 'https://calendar.uoregon.edu/search/events?event_types[]=15630'
@@ -231,8 +232,6 @@ def events_calendar_URL_scraper():
         link_list.append(new_link)
     event_calender_site_scraper(link_list)
     return
-
-    #return new_data
 
 def event_calender_site_scraper(list_of_links):
     chrome_options = webdriver.ChromeOptions()
@@ -278,9 +277,34 @@ def event_calender_site_scraper(list_of_links):
         event_organizer = event_calendar_fixup(event_organizer.text)
 
         CSV_data.append(event_organizer)
+        print(CSV_data)
 
+        ## Input into CSV file
         CSV_data_inputter(CSV_data)
         
+############################################
+## 211 Food Pantry Scraper Function Block ##
+############################################
+        
+def Food_Pantry_211():
+    
+    raw_link = 'https://www.211info.org/search/97408/10/?search_term=Food%20Pantries'
+    link = requests.get(raw_link)
+    soup = BeautifulSoup(link.text, 'html.parser')
+    list_of_all_pantries = soup.find_all("div", class_="search-result-item")
+    for link in list_of_all_pantries:
+        check_location = link.find("div", class_="search-result-item-address")
+        if check_location:
+            #print(check_location.text)
+            fixed_location = re.findall('[A-Z][^A-Z]*', check_location.text)
+            print(fixed_location)
+            """if 'Eugene' or 'Coburg' in fixed_location:
+                print(fixed_location)
+            else:
+                break"""
+        
+
+
 ######################################
 ## CSV File Creation Function Block ##
 ######################################
@@ -305,10 +329,13 @@ if __name__ == '__main__':
     CSV_file_creator()
 
     #scrape engage
-    URL_list = engage_URL_web_scraper()
-    engage_URL_web_scraper()
-    engage_site_scraper(URL_list)
+    #URL_list = engage_URL_web_scraper()
+    #engage_URL_web_scraper()
+    #engage_site_scraper(URL_list)
 
     #scrape events calender
-    events_calendar_URL_scraper()
+    #events_calendar_URL_scraper()
+
+    #scrape 211 Food Pantry data
+    Food_Pantry_211()
 
