@@ -1,4 +1,7 @@
-lat,lon,Color,sizes
-44.0430978, -123.0670994, red, 8
-44.04358895589884, -123.07538151741028, orange, 8
-44.04358546139572, -123.07766889687626, green, 8
+lat,lon,sizes,text,comment,Food Resources
+44.0430978, -123.0670994, 8, there is free pizza today <br>in deschutes hall from 5-7., Deschutes Hall,Free Pizza
+44.04358895589884, -123.07538151741028, 8, there is a grocery drop today<br>at the EMU, EMU, Grocery Drop
+44.04358546139572, -123.07766889687626, 8, Potatoes at east main, 33 east main, Potatoes
+44.0461586, -123.0874064, 8, Every tuesday from 1-2<br>there is a gardening feast., some place, Gardening Feast
+44.043320, -123.077728, 8, There is MEAT at the library, Knight library, Meat
+44.045, -123.066, 8, stuff at MATTHEW!!, Matthew knight, stuff
