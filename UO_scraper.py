@@ -5,7 +5,7 @@ Web Scraper for University of Oregon Club Free Food
 from bs4 import BeautifulSoup
 import requests
 import csv
-#import pandas as pd
+import pandas as pd
 import re
 
 from selenium import webdriver 
@@ -338,4 +338,4 @@ if __name__ == '__main__':
 
     #scrape 211 Food Pantry data
     Food_Pantry_211()
-
+    
