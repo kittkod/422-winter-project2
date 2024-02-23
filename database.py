@@ -3,15 +3,22 @@ needs to: sort through data in .csv to look for if user wants specific hours/day
 and make functions to make dictionaries like this: 
 
 us_cities = {
-    'lat':[44.0430978, 44.04358895589884, 44.04358546139572, 44.0461586, 44.043320, 44.045], 
-    'lon': [-123.0670994, -123.07538151741028, -123.07766889687626, -123.0874064, -123.077728, -123.066], 
-    'sizes': [8, 8, 8, 8, 8, 8],
-    'text': ['there is free pizza today <br>in deschutes hall from 5-7.', 'there is a grocery drop today<br>at the EMU', 'Potatoes at east main', 'Every tuesday from 1-2<br>there is a gardening feast.', 'There is MEAT at the library', 'stuff at MATTHEW!!'],
-    'comment': ['Deschutes Hall', 'EMU', '33 east main', 'some place', 'Knight Library', 'Matthew knight'], 
-    'Food Resources': ['Free Pizza', 'Grocery Drop', 'Potatoes', 'Gardening Feast', 'Meat', 'stuff']
+    'lat':[], 
+    'lon': [], 
+    'sizes': [],
+    'text': [],
+    'comment': [], 
+    'Food Resources': [],
+    'location' : [],
+    'time' : []
 }
 
-with the corresponding data 
+'text' should be 'Description', but format it like: '> there is free pizza today <br>in deschutes hall from 5-7.<br>' so theres breaks at the end and also a carrot at the beginning with a space next to it
+'comment' should be 'Event Title'
+'Food Resources' should be 'Event Title' + at + 'Location' like 'food at EMU'
+'location' should be 'Location'
+'time' should be 'Start time' - 'End time' like : '4pm - 6pm'
+
 '''
 
 import csv
