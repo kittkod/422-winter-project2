@@ -5,14 +5,22 @@ Web Scraper for University of Oregon Club Free Food
 from bs4 import BeautifulSoup
 import requests
 import csv
-import pandas as pd
+import json
 import re
+import coordinate_finder
 
 from selenium import webdriver 
 
 import re
 
 CSV_file = "Free_Food_Database.csv"
+
+with open('campus_buildings.txt') as f: 
+    data = f.read() 
+      
+# reconstructing the data as a dictionary 
+js = json.loads(data) 
+class_dictionary = js
 
 ################################################################
 ## Function block for scraping "Engage Free Food Club Events" ##
@@ -50,11 +58,13 @@ def remove_location_info(string):
     string = re.sub(r'(\d+)\s+(st|nd|rd|th)\b', r'\1\2', string)
 
     split_string = re.findall(r'[A-Za-z]+|\d+', string)
+
+    split_string = ' '.join(split_string)
     
     # Join the split components with a space
-    cleaned_string = ' '.join(split_string)
+    string = split_string
     
-    return cleaned_string.strip() 
+    return string.strip() 
 
 def get_organization_name(string):
 
@@ -161,9 +171,35 @@ def engage_site_scraper(list):
         else:
             CSV_data.append("N/A")
 
+        print(location_text)
+        matched_location = None
+        for location in class_dictionary:
+            if location in location_text:
+                matched_location = location
+                break
+        if matched_location == None:
+            new_location = coordinate_finder.address_converter(location_text)
+            lat, long = coordinate_finder.lat_and_long(new_location)
+            try:
+                isinstance(lat, int) == True
+            except:
+                lat, long = [None, None]
+                CSV_data.append(lat)
+                CSV_data.append(long)
+            else:
+                CSV_data.append(lat)
+                CSV_data.append(long)
+        else: 
+            latlong = class_dictionary.get(matched_location).split(" ")
+            lat = latlong[0]
+            long = latlong[1]
+            print(lat, long)
+            CSV_data.append(lat)
+            CSV_data.append(long)
+
         #add to CSV file
         CSV_data_inputter(CSV_data)
-        print(CSV_data)
+        #print(CSV_data)
 
 ################################################################
 ## Function block for scraping Events Calendar for Free Food ##
@@ -277,9 +313,39 @@ def event_calender_site_scraper(list_of_links):
         event_organizer = event_calendar_fixup(event_organizer.text)
 
         CSV_data.append(event_organizer)
-        print(CSV_data)
 
-        ## Input into CSV file
+        matched_location = None
+
+        if event_location:
+            for location in class_dictionary:
+                if location in event_location:
+                    matched_location = location
+                    break
+            if matched_location == None:
+                new_location = coordinate_finder.address_converter(event_location)
+                lat, long = coordinate_finder.lat_and_long(new_location)
+                try:
+                    isinstance(lat, int) == True
+                except:
+                    lat, long = ["N/A", "N/A"]
+                    CSV_data.append(lat)
+                    CSV_data.append(long)
+                else:
+                    CSV_data.append(lat)
+                    CSV_data.append(long)
+            else: 
+                latlong = class_dictionary.get(matched_location).split(" ")
+                lat = latlong[0]
+                long = latlong[1]
+                print(lat, long)
+                CSV_data.append(lat)
+                CSV_data.append(long)
+            #print(CSV_data)
+
+            ## Input into CSV file
+        else:
+            CSV_data.append("N/A")
+            CSV_data.append("N/A")
         CSV_data_inputter(CSV_data)
         
 ############################################
@@ -310,7 +376,7 @@ def Food_Pantry_211():
 ######################################
         
 def CSV_file_creator():
-    header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)']
+    header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)', 'Latitude', 'Longitude']
     with open(CSV_file, 'w', newline="") as file:
         csvwriter = csv.writer(file)
         csvwriter.writerow(header)
@@ -327,15 +393,21 @@ if __name__ == '__main__':
 
     #create CSV file
     CSV_file_creator()
+    print("hi")
+
+    #scrape locations
+    coordinate_finder.class_dict_maker()
+    print("hi 2")
 
     #scrape engage
-    #URL_list = engage_URL_web_scraper()
+    URL_list = engage_URL_web_scraper()
+    print("hi 3")
     #engage_URL_web_scraper()
-    #engage_site_scraper(URL_list)
+    engage_site_scraper(URL_list)
 
     #scrape events calender
-    #events_calendar_URL_scraper()
+    events_calendar_URL_scraper()
 
     #scrape 211 Food Pantry data
-    Food_Pantry_211()
-    
+    #Food_Pantry_211()
+
