@@ -9,7 +9,7 @@ import json
 
 raw_link = "https://en.wikipedia.org/wiki/List_of_University_of_Oregon_buildings"
 class_dictionary = {}
-address_exceptions = {"Grace Evangelical Church": "710 E 17th Ave"}
+address_exceptions = {"Grace Evangelical Church": [44.0408363098272, -123.08166553148503]}
 
 def class_dict_maker():
 
@@ -37,8 +37,6 @@ def class_dict_maker():
     return class_dictionary
                 
 def address_converter(initial_address: str):
-    #initial_address = re.sub(r'(\d+)\s(st|nd|rd|th)\b', '', initial_address)
-    #print(initial_address)
 
     pattern = r'^\D+\d+'
 
@@ -47,18 +45,20 @@ def address_converter(initial_address: str):
 
     # If a match is found, return the matched substring, else return the original string
     if match:
-        print(match.group())
-        return match.group()
+        return (match.group()+" Eugene OR")
     else:
         return initial_address
 
 def lat_and_long(address: str): 
+    print("hi")
     """Take an address and return the latitude and longitude"""
-    if address in address_exceptions:
-        address = address_exceptions[address]
-        url = 'https://nominatim.openstreetmap.org/search?q=' + urllib.parse.quote(address) +'&format=json'
-        response = requests.get(url).json()
-        return [response[0]["lat"], response[0]["lon"]]
+    match = None
+    for location in address_exceptions:
+            if location in address:
+                match = location
+                print(address)
+                lat_long = address_exceptions[match]
+                return [lat_long[0], lat_long[1]]
     else:    
         url = 'https://nominatim.openstreetmap.org/search?q=' + urllib.parse.quote(address) +'&format=json'
 
