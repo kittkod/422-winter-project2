@@ -1,10 +1,10 @@
-# import CustomTkinter module for GUI
 # CustomTkinter was made by Tom Schimansky,
 # Documentation here: https://github.com/TomSchimansky/CustomTkinter?tab=readme-ov-file
 import customtkinter as ctk
 import tkinter as tk
 import csv
 from database import filter_events, convert_to_dict, get_all_events
+import Resource_Graph
 # from tkinter import ttk
 # from tkinter import filedialog
 # from PIL import ImageTk, Image
@@ -24,21 +24,14 @@ window.geometry('444x444')
 # Create widgets for the application
 # Split into multiple lines for readability.
 
-label = ctk.CTkLabel(
-    window,  
-    corner_radius = 5) # rounded-rectangle effect
-label.pack() # placing widget on window with layout method 'pack'
-
 #######################################################################
 # Light Mode and Dark Mode Buttons
 #######################################################################
 
-# Note capitalization; 'window' is master
+# Note capitalization of 'CTkButton'
 light_mode_button = ctk.CTkButton(
-    window, 
+    window, # 'window' is master
     text = '☀',
-    # fg_color = ('black', 'grey'),
-    # hover_color = ('grey', 'white'),
     width = 6,
     command = lambda: ctk.set_appearance_mode('light'))
 light_mode_button.pack()
@@ -51,6 +44,22 @@ dark_mode_button = ctk.CTkButton(
     # hover_color = ('grey', 'white'),
     command = lambda: ctk.set_appearance_mode('dark'))
 dark_mode_button.pack()
+
+#######################################################################
+
+# Test and implement 'Today button'
+today_button = ctk.CTkButton(
+    window, 
+    text = 'Today',
+    command = lambda: print('The Today Button was pressed.')) #FIXME Get from Max
+today_button.pack()
+
+# Test and implement 'Tomorrow button'
+tomorrow_button = ctk.CTkButton(
+    window, 
+    text = 'Tomorrow',
+    command = lambda: print('The Tomorrow Button was pressed.')) #FIXME Get from Max
+tomorrow_button.pack()
 
 #######################################################################
 
@@ -98,18 +107,17 @@ def on_view_map_click():
     
     print(event_dict)  # Placeholder to show the dictionary in the console
 
+#######################################################################
+# Our 'View Map' Button 
+#    Brings you to a page with the interactive map
+#######################################################################
+
 view_map_popup_button = ctk.CTkButton(
     window,
     text = 'View Map',
-    command=on_view_map_click
-    #FIXME command to go to map goes here! <3
+    command = lambda: Resource_Graph.main()
 )
-
-view_map_popup_button
-
-#######################################################################
-#######################################################################
-#######################################################################
+view_map_popup_button.pack()
 
 # run
 window.mainloop()
