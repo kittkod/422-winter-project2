@@ -26,7 +26,6 @@ class_dictionary = js
 ## Function block for scraping "Engage Free Food Club Events" ##
 ################################################################
 
-
 def extract_date_time(string):
     # Define regular expressions to match date, start time, and end time
     date_pattern = r'(\w+\s+\d{1,2}\s+\d{4})'  
@@ -39,7 +38,8 @@ def extract_date_time(string):
     # Combine date and time information into a list of tuples
     extracted_info = []
     extracted_info.append(dates[0])
-    for vals in times:
+
+    for vals in times: #add start and end times 
         extracted_info.append(vals)
     
     return extracted_info
@@ -352,24 +352,89 @@ def event_calender_site_scraper(list_of_links):
 ## 211 Food Pantry Scraper Function Block ##
 ############################################
         
-def Food_Pantry_211():
+def pantry_address_splitter(address: str):
+    #split addresses into usable text
+    result = re.sub(r'([a-z])([A-Z])', r'\1 \2', address)
+    return result
+
+def pantry_hour_fixer(hours: str):
+    #split hours into starting, ending times, and date
+    text = re.sub('Hours:','', hours)
+    text = re.sub(r'\n', '', text)
+
+    print("Text:")
+    print(text)
+
+    hours_list = text.split("-")
+    first = False
+    starting_hour = 'N/A'
+    ending_hour = 'N/A'
+    times = []
+
+    date_info = []
+    dates = text.split(" ")
+
+    for day in dates:
+        if 'pm' in day:
+            break
+        if 'am' in day:
+            break
+        date_info.append(day)
+    date_info = " ".join(date_info)
+    pantry_date = date_info.strip()
+
+    i = 0
+
+    for time, item in enumerate(hours_list):
+        if i % 2 == 0:
+            if "am" in item or "pm" in item or "noon" in item:
+                times.append(item.split()[-1])
+                i = i + 1
+        else:
+            if "am" in item or "pm" in item or "noon" in item:
+                times.append(item.split()[0])
+                i = i + 1
+            else:
+                break
+
+    pattern = r'\b\d{1,2}(:\d{2})?[ap]m\b'
+
+    if len(times) == 2:
+        print(times)
+        starting_time = re.findall(pattern,times[0])
+        ending_time = times[1]
+        print(starting_time)
+
+
+def food_pantry_211_scraper():
     
+    #scrape food pantry data from 211
     raw_link = 'https://www.211info.org/search/97408/10/?search_term=Food%20Pantries'
+    #
     link = requests.get(raw_link)
     soup = BeautifulSoup(link.text, 'html.parser')
+    #create soup object from data
+
     list_of_all_pantries = soup.find_all("div", class_="search-result-item")
+
+    list_of_addresses = []
+    #list of all pantries
     for link in list_of_all_pantries:
         check_location = link.find("div", class_="search-result-item-address")
         if check_location:
-            #print(check_location.text)
             fixed_location = re.findall('[A-Z][^A-Z]*', check_location.text)
-            print(fixed_location)
-            """if 'Eugene' or 'Coburg' in fixed_location:
-                print(fixed_location)
-            else:
-                break"""
-        
+            for street_details in fixed_location:
+                if 'Eugene' in street_details or 'Coburg' in street_details or 'Springfield' in street_details:
+                    pantry_address = pantry_address_splitter(check_location.text)
+                    if pantry_address in list_of_addresses:
+                        break
+                    else:
+                        list_of_addresses.append(pantry_address)
+                    pantry_name = link.find("div", class_="search-result-item-name").text
+                    pantry_hours = pantry_hour_fixer(link.find("div", class_="search-result-item-hours").text)
 
+                    #print(pantry_hours.strip())
+                
 
 ######################################
 ## CSV File Creation Function Block ##
@@ -387,27 +452,23 @@ def CSV_data_inputter(data):
         csvwriter = csv.writer(file)
         csvwriter.writerow(data)
         return
-
     
 if __name__ == '__main__':
 
     #create CSV file
     CSV_file_creator()
-    print("hi")
 
     #scrape locations
     coordinate_finder.class_dict_maker()
-    print("hi 2")
 
     #scrape engage
-    URL_list = engage_URL_web_scraper()
-    print("hi 3")
+    #URL_list = engage_URL_web_scraper()
     #engage_URL_web_scraper()
-    engage_site_scraper(URL_list)
+    #engage_site_scraper(URL_list)
 
     #scrape events calender
-    events_calendar_URL_scraper()
+    #events_calendar_URL_scraper()
 
     #scrape 211 Food Pantry data
-    #Food_Pantry_211()
+    food_pantry_211_scraper()
 
