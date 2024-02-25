@@ -1,19 +1,11 @@
 ###### Dollarless Dining
 
-# Dollarless Dining
-
 **Project Proposal**  
 K. Griffiths (kg) 
 S. Badaruddin (sb)  
 N. Deivanayagam (nd)  
 M. Hermens (mh)  
 J. Wallin (jw)
-
-## Table of Contents
-- [SRS Concept of Operations](#srs-concept-of-operations)
-- [Software Design Specifications](#software-design-specifications)
-- [Project Timeline](#project-timeline)
-- [References and Acknowledgments](#references-and-acknowledgments)
 
 ## SRS Concept of Operations
 
