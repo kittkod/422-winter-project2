@@ -1,4 +1,4 @@
-###### Dollarless Dining
+#  Dollarless Dining
 
 **Project Proposal**  
 K. Griffiths (kg) 
