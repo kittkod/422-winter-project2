@@ -19,6 +19,7 @@ us_cities = {
 'location' should be 'Location'
 'time' should be 'Start time' - 'End time' like : '4pm - 6pm'
 
+P.S. I made a function to break up long strings! its called break_str() below
 '''
 
 import csv
@@ -34,6 +35,19 @@ with open('campus_buildings.txt') as f:
     campus_buildings = json.load(f)
 
 csv_file_path = 'Free_Food_Database.csv'
+
+# Function to break up long strings
+def break_str(input_string, size):
+    new_str = ''
+    tmp = ''
+    for letter in input_string:
+        if len(tmp) == size:
+            new_str += '<br>'
+            tmp = ''
+        tmp += letter
+        new_str += letter
+    
+    return new_str
 
 # Finds location within building dict. with partial string matching
 def flexible_match_location(event_location, buildings_dict):
