@@ -11,6 +11,7 @@ def graph_scatterplot(input_data, title_name):
         input_data:dict - a dictionary with types 'lat', 'lon', 'sizes', 'text', 'comment', 'Food Resources'
         title_name:str - a string that pertains to the title of the given graph 
     '''
+    # this should be changed to the code below
     fig = px.scatter_mapbox(input_data, lat="Latitude", lon="Longitude", title=title_name,
         height=650, width=1200, zoom=14.4, hover_name="Event Title",
         hover_data={
@@ -24,7 +25,24 @@ def graph_scatterplot(input_data, title_name):
         },
         size='sizes', color="Event Title", color_continuous_scale="red", labels={'Description':''})
 
-    fig.update_traces(hoverinfo='text', hovertemplate='%{hovertext}')
+    '''
+    should be this instead: 
+    
+    fig = px.scatter_mapbox(input_data, lat="Latitude", lon="Longitude", title=title_name,
+    height=650, width=1200, zoom=14.4, text="comment", hover_name="comment",
+    hover_data={
+        "text":True, 
+        "time":True, 
+        "location":True,
+        "Food Resources":False, 
+        "sizes":False, 
+        "comment":False, 
+        "lat":False, 
+        "lon":False},
+    size='sizes', color="Food Resources", color_continuous_scale="red", labels={'text':''})
+    '''
+    
+    fig.update_traces(hoverinfo='text', hovertemplate='%{hovertext}') # delete this
 
     fig.update_layout(mapbox_style='open-street-map')
     fig.update_layout(margin={"r":0,"t":70,"l":40,"b":0})
