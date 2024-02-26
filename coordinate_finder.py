@@ -38,6 +38,9 @@ def class_dict_maker():
                 
 def address_converter(initial_address: str):
 
+    if not isinstance(initial_address, str):
+        initial_address = str(initial_address)
+        
     pattern = r'^\D+\d+'
 
     # Use re.search() to find the matched pattern in the string
