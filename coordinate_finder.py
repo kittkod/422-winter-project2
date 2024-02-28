@@ -34,6 +34,8 @@ def class_dict_maker():
     class_dictionary["Knight Law"] = class_dictionary.get("William Knight Law Center")
     class_dictionary["Ford Alumni Center"] = class_dictionary.get("Cheryl Ramberg Ford and Allyn Ford Alumni Center")
     class_dictionary["Ford Lecture Hall"] = class_dictionary.get("Jordan Schnitzer Art Museum")
+    class_dictionary["HEDCO"] = class_dictionary.get("HEDCO Education Building")
+    class_dictionary["Redwood Room"] = class_dictionary.get("Erb Memorial Union")
     return class_dictionary
                 
 def address_converter(initial_address: str):
@@ -53,13 +55,11 @@ def address_converter(initial_address: str):
         return initial_address
 
 def lat_and_long(address: str): 
-    print("hi")
     """Take an address and return the latitude and longitude"""
     match = None
     for location in address_exceptions:
             if location in address:
                 match = location
-                print(address)
                 lat_long = address_exceptions[match]
                 return [lat_long[0], lat_long[1]]
     else:    
@@ -71,12 +71,13 @@ def lat_and_long(address: str):
         except:
             return ["N/A", "N/A"]
         else:
-            print(response[0]["lat"])
-            print(response[0]["lon"])
 
             return [response[0]["lat"], response[0]["lon"]]
 
-if __name__ == '__main__':
+def main():
     class_dict = class_dict_maker()
     with open('campus_buildings.txt', 'w') as convert_file: 
         convert_file.write(json.dumps(class_dict))
+
+if __name__ == '__main__':
+    main()

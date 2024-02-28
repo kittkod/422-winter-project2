@@ -15,12 +15,14 @@ import re
 
 CSV_file = "Free_Food_Database.csv"
 
+days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
 with open('campus_buildings.txt') as f: 
     data = f.read() 
       
 # reconstructing the data as a dictionary 
-js = json.loads(data) 
-class_dictionary = js
+js_file = json.loads(data) 
+class_dictionary = js_file
 
 ################################################################
 ## Function block for scraping "Engage Free Food Club Events" ##
@@ -83,8 +85,10 @@ def remove_desc_details(string):
 def engage_URL_web_scraper():
 
     chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--offline")
     chrome_options.add_argument("--headless")  # Enable headless mode
-
+    proxy = "user:pass@myproxy:8080"
+    chrome_options.add_argument(f"--proxy={proxy}")
     # Initialize the WebDriver with Chrome options
     driver = webdriver.Chrome(options=chrome_options)
 
@@ -101,12 +105,17 @@ def engage_URL_web_scraper():
     for link in list_of_data:
         new_data.append(link.get('href'))
 
+    driver.quit()
+
     return new_data
 
-
 def engage_site_scraper(list):
+
     chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--offline")
     chrome_options.add_argument("--headless")  # Enable headless mode
+    proxy = "user:pass@myproxy:8080"
+    chrome_options.add_argument(f"--proxy={proxy}")
 
     # Initialize the WebDriver with Chrome options
     driver = webdriver.Chrome(options=chrome_options)
@@ -154,10 +163,9 @@ def engage_site_scraper(list):
         if event_description:
             description = BeautifulSoup(event_description['content'], 'html.parser').get_text()
             CSV_data.append(remove_desc_details(description))
-
         else:
             pass
-
+        
         if raw_organizer:
             org_list = []
             for organization in raw_organizer:
@@ -171,9 +179,13 @@ def engage_site_scraper(list):
         else:
             CSV_data.append("N/A")
 
-        print(location_text)
         matched_location = None
-        for location in class_dictionary:
+
+        for words in location_text.split(" "):
+            if class_dictionary.get(words.strip()) != None: 
+                matched_location = class_dictionary.get(words.strip())
+                break
+        for location in class_dictionary.keys():
             if location in location_text:
                 matched_location = location
                 break
@@ -193,13 +205,13 @@ def engage_site_scraper(list):
             latlong = class_dictionary.get(matched_location).split(" ")
             lat = latlong[0]
             long = latlong[1]
-            print(lat, long)
             CSV_data.append(lat)
             CSV_data.append(long)
+        
+        CSV_data.append("False")
 
         #add to CSV file
         CSV_data_inputter(CSV_data)
-        #print(CSV_data)
 
 ################################################################
 ## Function block for scraping Events Calendar for Free Food ##
@@ -273,12 +285,14 @@ def event_calender_site_scraper(list_of_links):
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")  # Enable headless mode
     driver = webdriver.Chrome(options=chrome_options)
+    link_list = []
+
     for link in list_of_links:
+        link_list.append("https://calendar.uoregon.edu/event/"+link)
 
+    for links in link_list:
         CSV_data = []
-        new_link = "https://calendar.uoregon.edu/event/"+link
-
-        driver.get(new_link)
+        driver.get(links)
         page_source = driver.page_source
 
         soup = BeautifulSoup(page_source, 'html.parser')
@@ -303,9 +317,7 @@ def event_calender_site_scraper(list_of_links):
             CSV_data.append("N/A")
 
         event_description = total_info.find('div', class_='description')
-
         event_description = event_calendar_fixup(event_description.text)
-
         CSV_data.append(event_description)
 
         event_organizer = soup.find('dd', class_='filter-departments')
@@ -317,7 +329,7 @@ def event_calender_site_scraper(list_of_links):
         matched_location = None
 
         if event_location:
-            for location in class_dictionary:
+            for location in class_dictionary.keys():
                 if location in event_location:
                     matched_location = location
                     break
@@ -337,15 +349,14 @@ def event_calender_site_scraper(list_of_links):
                 latlong = class_dictionary.get(matched_location).split(" ")
                 lat = latlong[0]
                 long = latlong[1]
-                print(lat, long)
                 CSV_data.append(lat)
                 CSV_data.append(long)
-            #print(CSV_data)
-
-            ## Input into CSV file
         else:
             CSV_data.append("N/A")
             CSV_data.append("N/A")
+        
+        CSV_data.append("False")
+            
         CSV_data_inputter(CSV_data)
         
 ############################################
@@ -357,54 +368,54 @@ def pantry_address_splitter(address: str):
     result = re.sub(r'([a-z])([A-Z])', r'\1 \2', address)
     return result
 
-def pantry_hour_fixer(hours: str):
-    #split hours into starting, ending times, and date
-    text = re.sub('Hours:','', hours)
-    text = re.sub(r'\n', '', text)
+def extract_date(string: str):
 
-    print("Text:")
-    print(text)
-
-    hours_list = text.split("-")
-    first = False
-    starting_hour = 'N/A'
-    ending_hour = 'N/A'
+    length = 0
+    delimiters = ["/",","]
+ 
+    for delimiter in delimiters:
+        string = " ".join(string.split(delimiter))
     times = []
+    result = []
 
-    date_info = []
-    dates = text.split(" ")
+    """for hour in hours:
+        if 'am' in hour or 'pm' in hour:
+            print(hour)
+            pattern = r'\b\d{1,2}(?::\d{2})?(?:am|pm)\b'
+            #match = re.search(pattern, hour)
+            time = re.sub(r'(?<=[a-z])([A-Z])', r' \1', hour)
+            for tim in time:
+                ans = re.findall(pattern, tim)
+                for answer in ans:
+                    times.append(answer)
+        if 'noon' in hour:
+            times.append('noon')"""
 
-    for day in dates:
-        if 'pm' in day:
-            break
-        if 'am' in day:
-            break
-        date_info.append(day)
-    date_info = " ".join(date_info)
-    pantry_date = date_info.strip()
-
-    i = 0
-
-    for time, item in enumerate(hours_list):
-        if i % 2 == 0:
-            if "am" in item or "pm" in item or "noon" in item:
-                times.append(item.split()[-1])
-                i = i + 1
+    result = string.split()
+    data = []
+    for part in result:
+        if "-" in part:
+            part = part.split("-")
+            for indices in part: 
+                if indices in days_of_week:
+                    length += 1
+            if length % 2 == 0:
+                index_num = 0
+                while index_num < length:
+                    start_index = part[index_num]
+                    return_index = part[index_num+1]
+                    main_index = days_of_week.index(start_index)
+                    end_index = days_of_week.index(return_index)
+                    i = main_index
+                    while i <= end_index:
+                        data.append(days_of_week[i])
+                        i += 1
+                    return data
         else:
-            if "am" in item or "pm" in item or "noon" in item:
-                times.append(item.split()[0])
-                i = i + 1
-            else:
-                break
+            data = result
+            return data
 
-    pattern = r'\b\d{1,2}(:\d{2})?[ap]m\b'
-
-    if len(times) == 2:
-        print(times)
-        starting_time = re.findall(pattern,times[0])
-        ending_time = times[1]
-        print(starting_time)
-
+                
 
 def food_pantry_211_scraper():
     
@@ -420,6 +431,7 @@ def food_pantry_211_scraper():
     list_of_addresses = []
     #list of all pantries
     for link in list_of_all_pantries:
+        CSV_list = []
         check_location = link.find("div", class_="search-result-item-address")
         if check_location:
             fixed_location = re.findall('[A-Z][^A-Z]*', check_location.text)
@@ -430,10 +442,71 @@ def food_pantry_211_scraper():
                         break
                     else:
                         list_of_addresses.append(pantry_address)
+                    
                     pantry_name = link.find("div", class_="search-result-item-name").text
-                    pantry_hours = pantry_hour_fixer(link.find("div", class_="search-result-item-hours").text)
+                    pantry_hours = link.find("div", class_="search-result-item-hours").text
 
-                    #print(pantry_hours.strip())
+                    #print(pantry_hours)
+
+                    text = re.sub('Hours:','', pantry_hours)
+                    text = re.sub(r'\n', '', text)
+                    text = text.split(" ")
+
+                    daily_info = []
+                    hours_info = []
+
+                    for day in text:
+                        if 'Monday' in day or 'Tuesday' in day or 'Wednesday' in day or 'Thursday' in day or 'Friday' in day or 'Saturday' in day or 'Sunday' in day:
+                            daily_info.append(day)
+                            hours_info.append(day)
+                        if 'am' in day or 'pm' in day or 'noon' in day and day not in daily_info:
+                            hours_info.append(day)
+
+                    pantry_hours = " ".join(hours_info)
+                    daily_info = " ".join(daily_info)
+                    pantry_date = extract_date(daily_info)
+
+                    repeat_date = []        
+                    for data in pantry_date:
+                        if data in days_of_week and data not in repeat_date:
+                            repeat_date.append(data)
+                    pantry_date = repeat_date
+
+                    pantry_organizer = []
+                    pantry_organizer_list = link.find_all("div", class_="search-result-item-sub-name")
+                    if pantry_organizer_list:
+                        for pantry in pantry_organizer_list:
+                            pantry_organizer.append(pantry.text.lower().capitalize())
+                        pantry_organizer = (" ").join(pantry_organizer)
+                    else:
+                        pantry_organizer = "N/A"
+
+                    pantry_description = link.find("div", "search-result-item-eligibility").text.strip()
+                    pantry_description = re.sub("\n", " ", pantry_description)
+                    print(pantry_description)
+                    
+                    fixed_address = coordinate_finder.address_converter(pantry_address)
+                    if fixed_address:
+                        lat, long = coordinate_finder.lat_and_long(fixed_address)
+                    else:
+                        lat, long = "N/A"
+                    i = 0
+                    while i < len(pantry_date):
+                        CSV_list = []
+                        CSV_list.append(pantry_name)
+                        CSV_list.append(pantry_date[i])
+                        CSV_list.append(pantry_hours)
+                        CSV_list.append("N/A")
+                        CSV_list.append(pantry_address)
+                        CSV_list.append(pantry_description)
+                        CSV_list.append(pantry_organizer)
+                        CSV_list.append(lat)
+                        CSV_list.append(long)
+                        CSV_list.append(True)
+                        CSV_data_inputter(CSV_list)
+                        i += 1                   
+
+    return 
                 
 
 ######################################
@@ -441,7 +514,7 @@ def food_pantry_211_scraper():
 ######################################
         
 def CSV_file_creator():
-    header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)', 'Latitude', 'Longitude']
+    header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)', 'Latitude', 'Longitude', 'Reoccuring']
     with open(CSV_file, 'w', newline="") as file:
         csvwriter = csv.writer(file)
         csvwriter.writerow(header)
@@ -459,15 +532,16 @@ if __name__ == '__main__':
     CSV_file_creator()
 
     #scrape locations
-    coordinate_finder.class_dict_maker()
+    coordinate_finder.main()
 
     #scrape engage
-    #URL_list = engage_URL_web_scraper()
-    #engage_URL_web_scraper()
-    #engage_site_scraper(URL_list)
+    URL_list = engage_URL_web_scraper()
+    engage_site_scraper(URL_list)
+    #print("Scraping resources")
 
     #scrape events calender
-    #events_calendar_URL_scraper()
+    events_calendar_URL_scraper()
+    #print("Scraping resources")
 
     #scrape 211 Food Pantry data
     food_pantry_211_scraper()
