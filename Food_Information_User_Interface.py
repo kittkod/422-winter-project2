@@ -21,6 +21,15 @@ window = ctk.CTk()
 window.title('Dollarless Dining')
 window.geometry('555x555')
 
+
+header_label = ctk.CTkLabel(
+    window,
+    text='Dollarless Dining',
+    font=('Helvetica', 20, 'bold'),
+    pady=10,
+    bg_color='pink')
+header_label.pack()
+
 # Create widgets for the application
 # Split into multiple lines for readability.
 
@@ -32,21 +41,34 @@ settings_frame = ctk.CTkScrollableFrame(
     window,
     label_text = 'UO Free Food Resources')
 
-# Note capitalization of 'CTkButton'
+# Create a frame for the appearance mode header and buttons
+mode_frame = ctk.CTkFrame(window)
+
+# Appearance Mode Header
+mode_header_label = ctk.CTkLabel(
+    mode_frame,
+    text='Appearance Mode:',
+    font=('Helvetica', 12, 'bold'),
+    pady=5)
+mode_header_label.pack(side=tk.TOP)
+
+# Light Mode and Dark Mode Buttons
 light_mode_button = ctk.CTkButton(
-    window,
+    mode_frame,
     text='☀',
     width=6,
     command=lambda: ctk.set_appearance_mode('light'))
-light_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
+light_mode_button.pack(side=tk.LEFT, padx=5)
 
 dark_mode_button = ctk.CTkButton(
-    window, 
+    mode_frame, 
     text='☾',
     width=6,
     command=lambda: ctk.set_appearance_mode('dark'))
-dark_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
+dark_mode_button.pack(side=tk.LEFT, padx=5)
 
+# Pack the frame containing the header and buttons
+mode_frame.pack(side=tk.LEFT)
 
 #######################################################################
 # Today and Tomorrow Buttons
