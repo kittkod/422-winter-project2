@@ -21,6 +21,7 @@ window = ctk.CTk()
 window.title('Dollarless Dining')
 window.geometry('444x444')
 
+
 # Create widgets for the application
 # Split into multiple lines for readability.
 
@@ -65,9 +66,28 @@ tomorrow_button.pack()
 
 scrollable_frame_food_list = ctk.CTkScrollableFrame(
     window,
-    label_text = 'UO Free Food Resources'
+    label_text = 'UO Free Food'
     )
 scrollable_frame_food_list.pack()
+
+
+#######################################################################
+
+def show_resource_list():
+    resource_list_window = ctk.CTk()
+    resource_list_window.title('Extra Free Food Resources')
+
+    # Create a listbox to display the free food resources
+    resource_listbox = ctk.CTkListbox(resource_list_window)
+    resource_listbox.pack(fill='both', expand=True)
+
+    resource_list_window.mainloop()
+
+
+# Create a button to show the free food resources list
+resource_button = ctk.CTkButton(window, text='Extra Resources', command=show_resource_list)
+resource_button.pack()
+
 
 #######################################################################
 
