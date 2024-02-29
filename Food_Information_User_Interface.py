@@ -19,7 +19,7 @@ csv_file_path = 'Free_Food_Database.csv'
 # This CTk window inherets from the Tk window
 window = ctk.CTk() 
 window.title('Dollarless Dining')
-window.geometry('444x444')
+window.geometry('555x555')
 
 # Create widgets for the application
 # Split into multiple lines for readability.
@@ -34,20 +34,18 @@ settings_frame = ctk.CTkScrollableFrame(
 
 # Note capitalization of 'CTkButton'
 light_mode_button = ctk.CTkButton(
-    window, # 'window' is master
-    text = '☀',
-    width = 6,
-    command = lambda: ctk.set_appearance_mode('light'))
-light_mode_button.pack()
+    window,
+    text='☀',
+    width=6,
+    command=lambda: ctk.set_appearance_mode('light'))
+light_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
 
 dark_mode_button = ctk.CTkButton(
     window, 
-    text = '☾',
-    width = 6,
-    # fg_color = ('black', 'grey'),
-    # hover_color = ('grey', 'white'),
-    command = lambda: ctk.set_appearance_mode('dark'))
-dark_mode_button.pack()
+    text='☾',
+    width=6,
+    command=lambda: ctk.set_appearance_mode('dark'))
+dark_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
 
 
 #######################################################################
@@ -59,14 +57,14 @@ today_button = ctk.CTkButton(
     window, 
     text = 'Today',
     command = lambda: print('The Today Button was pressed.')) #FIXME Implement this filter
-today_button.pack()
+today_button.pack(pady=5)
 
 # Test and implement 'Tomorrow button'
 tomorrow_button = ctk.CTkButton(
     window, 
     text = 'Tomorrow',
     command = lambda: print('The Tomorrow Button was pressed.')) #FIXME Implement this filter
-tomorrow_button.pack()
+tomorrow_button.pack(pady=5)
 
 #######################################################################
 # Scrolling List of Free Food Resources
@@ -76,7 +74,7 @@ scrollable_frame_food_list = ctk.CTkScrollableFrame(
     window,
     label_text = 'UO Free Food'
     )
-scrollable_frame_food_list.pack()
+scrollable_frame_food_list.pack(pady=5)
 
 #######################################################################
 
@@ -100,7 +98,7 @@ def show_resource_list():
 
 # Create a button to show the free food resources list
 resource_button = ctk.CTkButton(window, text='Extra Resources', command=show_resource_list)
-resource_button.pack()
+resource_button.pack(pady=5)
 
 #######################################################################
 
@@ -154,7 +152,7 @@ view_map_popup_button = ctk.CTkButton(
     text = 'View Map',
     command = lambda: Resource_Graph.main()
 )
-view_map_popup_button.pack()
+view_map_popup_button.pack(pady=5)
 
 #######################################################################
 # Administrator Pop-up Button
