@@ -12,7 +12,7 @@ import Resource_Graph
 csv_file_path = 'Free_Food_Database.csv'
 
 #######################################################################
-# Test customtkinter
+# Implementing customTkinter
 #######################################################################
 
 # Create Dollarless Dining application window
@@ -27,6 +27,10 @@ window.geometry('444x444')
 #######################################################################
 # Light Mode and Dark Mode Buttons
 #######################################################################
+
+settings_frame = ctk.CTkScrollableFrame(
+    window,
+    label_text = 'UO Free Food Resources')
 
 # Note capitalization of 'CTkButton'
 light_mode_button = ctk.CTkButton(
@@ -47,21 +51,25 @@ dark_mode_button.pack()
 
 
 #######################################################################
+# Today and Tomorrow Buttons
+#######################################################################
 
 # Test and implement 'Today button'
 today_button = ctk.CTkButton(
     window, 
     text = 'Today',
-    command = lambda: print('The Today Button was pressed.')) #FIXME Get from Max
+    command = lambda: print('The Today Button was pressed.')) #FIXME Implement this filter
 today_button.pack()
 
 # Test and implement 'Tomorrow button'
 tomorrow_button = ctk.CTkButton(
     window, 
     text = 'Tomorrow',
-    command = lambda: print('The Tomorrow Button was pressed.')) #FIXME Get from Max
+    command = lambda: print('The Tomorrow Button was pressed.')) #FIXME Implement this filter
 tomorrow_button.pack()
 
+#######################################################################
+# Scrolling List of Free Food Resources
 #######################################################################
 
 scrollable_frame_food_list = ctk.CTkScrollableFrame(
@@ -69,9 +77,6 @@ scrollable_frame_food_list = ctk.CTkScrollableFrame(
     label_text = 'UO Free Food'
     )
 scrollable_frame_food_list.pack()
-
-
-#######################################################################
 
 def show_resource_list():
     resource_list_window = ctk.CTkToplevel()
@@ -115,6 +120,10 @@ def populate_scrollable_frame():
 # Call the populate function to initially populate the frame
 populate_scrollable_frame()
 
+#######################################################################
+# View Map Function
+#######################################################################
+
 # Function to handle View Map button click
 def on_view_map_click():
     # placeholder values:
@@ -146,11 +155,29 @@ view_map_popup_button = ctk.CTkButton(
 )
 view_map_popup_button.pack()
 
+#######################################################################
+# Administrator Pop-up Button
+#######################################################################
+
+#FIXME
+
+#######################################################################
+# Administrator Pop-Up Insert New Event Functionality
+#######################################################################
+
+#FIXME
+
+#######################################################################
+# Administrator Pop-Up Window
+#######################################################################
+
+#FIXME
+
 # Jasmine trying stuff out >:)
 #from tkinterhtml import HtmlFrame
 #frame = HtmlFrame(window, horizontal_scrollbar="auto")
 #frame.set_content("")
 #frame.pack()
 
-# run
+# Run canvas
 window.mainloop()

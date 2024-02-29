@@ -175,6 +175,7 @@ def engage_site_scraper(list):
             if len(org_list) == 1:
                 CSV_data.append(org_list[0])
             else:
+                org_list = " ".join(org_list)
                 CSV_data.append(org_list)
         else:
             CSV_data.append("N/A")
@@ -375,21 +376,8 @@ def extract_date(string: str):
  
     for delimiter in delimiters:
         string = " ".join(string.split(delimiter))
-    times = []
+        
     result = []
-
-    """for hour in hours:
-        if 'am' in hour or 'pm' in hour:
-            print(hour)
-            pattern = r'\b\d{1,2}(?::\d{2})?(?:am|pm)\b'
-            #match = re.search(pattern, hour)
-            time = re.sub(r'(?<=[a-z])([A-Z])', r' \1', hour)
-            for tim in time:
-                ans = re.findall(pattern, tim)
-                for answer in ans:
-                    times.append(answer)
-        if 'noon' in hour:
-            times.append('noon')"""
 
     result = string.split()
     data = []
@@ -446,8 +434,6 @@ def food_pantry_211_scraper():
                     pantry_name = link.find("div", class_="search-result-item-name").text
                     pantry_hours = link.find("div", class_="search-result-item-hours").text
 
-                    #print(pantry_hours)
-
                     text = re.sub('Hours:','', pantry_hours)
                     text = re.sub(r'\n', '', text)
                     text = text.split(" ")
@@ -483,7 +469,6 @@ def food_pantry_211_scraper():
 
                     pantry_description = link.find("div", "search-result-item-eligibility").text.strip()
                     pantry_description = re.sub("\n", " ", pantry_description)
-                    print(pantry_description)
                     
                     fixed_address = coordinate_finder.address_converter(pantry_address)
                     if fixed_address:
