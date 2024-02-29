@@ -21,14 +21,12 @@ window = ctk.CTk()
 window.title('Dollarless Dining')
 window.geometry('555x555')
 
-
 header_label = ctk.CTkLabel(
     window,
     text='Dollarless Dining',
     font=('Helvetica', 25, 'bold'),
-    pady=10,
     bg_color='pink')
-header_label.pack()
+header_label.pack(fill=tk.X)  # fill=tk.X expands the label horizontally
 
 # Create widgets for the application
 # Split into multiple lines for readability.
