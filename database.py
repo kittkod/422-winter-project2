@@ -102,7 +102,7 @@ def get_all_events(csv_file_path):
     df['sizes'] = 8
     return df.to_dict(orient='records')
 
-def run_map(input_csv):
+def run_map(input_csv, start_day, end_day):
     ''' *Description
     also write some comments
     '''

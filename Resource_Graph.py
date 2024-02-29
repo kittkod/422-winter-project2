@@ -65,7 +65,7 @@ def clean_coordinate(value):
         return value
 
 def main():
-    dict = database.run_map('Free_Food_Database.csv') 
+    dict = database.run_map('Free_Food_Database.csv', '2/2/24', '2/5/24') 
     graph_scatterplot(dict, "Food Resources on Specific Date")
 
     return 0
