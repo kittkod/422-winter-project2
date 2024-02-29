@@ -21,7 +21,6 @@ window = ctk.CTk()
 window.title('Dollarless Dining')
 window.geometry('444x444')
 
-
 # Create widgets for the application
 # Split into multiple lines for readability.
 
@@ -45,6 +44,7 @@ dark_mode_button = ctk.CTkButton(
     # hover_color = ('grey', 'white'),
     command = lambda: ctk.set_appearance_mode('dark'))
 dark_mode_button.pack()
+
 
 #######################################################################
 
@@ -74,11 +74,17 @@ scrollable_frame_food_list.pack()
 #######################################################################
 
 def show_resource_list():
-    resource_list_window = ctk.CTk()
+    resource_list_window = ctk.CTkToplevel()
     resource_list_window.title('Extra Free Food Resources')
 
-    # Create a listbox to display the free food resources
-    resource_listbox = ctk.CTkListbox(resource_list_window)
+    # Use standard Tkinter Listbox instead of CTkListbox
+    resource_listbox = tk.Listbox(resource_list_window)
+
+    # Insert some items into the listbox for testing
+    resource_listbox.insert(1, "Resource 1")
+    resource_listbox.insert(2, "Resource 2")
+    resource_listbox.insert(3, "Resource 3")
+
     resource_listbox.pack(fill='both', expand=True)
 
     resource_list_window.mainloop()
@@ -87,6 +93,7 @@ def show_resource_list():
 # Create a button to show the free food resources list
 resource_button = ctk.CTkButton(window, text='Extra Resources', command=show_resource_list)
 resource_button.pack()
+
 
 
 #######################################################################
