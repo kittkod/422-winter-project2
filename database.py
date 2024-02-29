@@ -122,16 +122,19 @@ def run_map(input_csv, start_day, end_day):
     for _, row in df.iterrows():
         latitude_tmp = None
         longitude_tmp = None
-        if row['Latitude'] != 'nan':
+        if str(row['Latitude']) != 'nan':
             latitude_tmp = clean_coordinate(row['Latitude'])
-        if row['Longitude'] != 'nan':
+        if str(row['Longitude']) != 'nan':
             longitude_tmp = clean_coordinate(row['Longitude'])
-        if row['Latitude'] == 'nan' or row['Longitude'] == 'nan':
+        if str(row['Latitude']) == 'nan' or row['Longitude'] == 'nan':
             continue
         dict['lat'].append(latitude_tmp)
         dict['lon'].append(longitude_tmp)
         dict['sizes'].append(8)
-        dict['text'].append(break_str(('> ' + str(row['Description']) + '<br>'), 40))
+        if str(row['Description']) != 'nan':
+            dict['text'].append(break_str(('> ' + str(row['Description']) + '<br>'), 40))
+        else:
+            dict['text'].append(' ')
         dict['comment'].append(break_str(str(row['Event Title']), 40))
         dict['Food Resources'].append(break_str(str(row['Event Title']), 25))
         if str(row['Start Time']) != 'nan' and str(row['End Time']) != 'nan':
@@ -141,8 +144,11 @@ def run_map(input_csv, start_day, end_day):
         elif str(row['Start Time']) == 'nan' and str(row['End Time']) != 'nan':
             dict['time'].append(break_str((' ' + str(row['End Time'])), 40))
         else:
-            dict['time'].append("specific time not found.")
-        dict['location'].append(break_str(' ' + str(row["Location"]), 40))
+            dict['time'].append(" ")
+        if str(row['Location']) != 'nan':
+            dict['location'].append(break_str(' ' + str(row["Location"]), 40))
+        else:
+            dict['location'].append(' ')
         # this doesn't work because theyre all strings
         '''
         if type(row['Organizer(s)']) is list:
@@ -154,7 +160,10 @@ def run_map(input_csv, start_day, end_day):
             dict['organizer'].append(break_str(organizer_str, 40))
         else:
         '''
-        dict['organizer'].append(break_str(' ' + str(row['Organizer(s)']), 40))
+        if str(row['Organizer(s)']) != 'nan':
+            dict['organizer'].append(break_str(' ' + str(row['Organizer(s)']), 40))
+        else:
+            dict['organizer'].append(' ')
 
     return dict
 
