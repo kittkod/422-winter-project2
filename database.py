@@ -1,25 +1,6 @@
 '''
-needs to: sort through data in .csv to look for if user wants specific hours/days (from input from tkinter)
-and make functions to make dictionaries like this: 
-
-us_cities = {
-    'lat':[], 
-    'lon': [], 
-    'sizes': [],
-    'text': [],
-    'comment': [], 
-    'Food Resources': [],
-    'location' : [],
-    'time' : []
-}
-
-'text' should be 'Description', but format it like: '> there is free pizza today <br>in deschutes hall from 5-7.<br>' so theres breaks at the end and also a carrot at the beginning with a space next to it
-'comment' should be 'Event Title'
-'Food Resources' should be 'Event Title' + at + 'Location' like 'food at EMU'
-'location' should be 'Location'
-'time' should be 'Start time' - 'End time' like : '4pm - 6pm'
-
-P.S. I made a function to break up long strings! its called break_str() below
+Database for graph function helpers and UI-database connectors
+needs to: sort through data in .csv to look for if user wants specific hours/days 
 '''
 
 import csv
@@ -29,6 +10,7 @@ import customtkinter as ctk
 import pandas as pd
 from coordinate_finder import address_converter
 from datetime import datetime
+from Resource_Graph import clean_coordinate
 
 # Load campus buildings data
 with open('campus_buildings.txt') as f:
@@ -92,6 +74,7 @@ def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
 
     return filtered_df
 
+'''
 # Function to convert filtered dataframe to dictionary
 def convert_to_dict(filtered_df):
     event_data = {
@@ -112,11 +95,68 @@ def convert_to_dict(filtered_df):
         event_data['Food Resources'].append(row['Event Title'])
 
     return event_data
+'''
 
 def get_all_events(csv_file_path):
     df = pd.read_csv(csv_file_path)
     df['sizes'] = 8
     return df.to_dict(orient='records')
+
+def run_map(input_csv):
+    ''' *Description
+    also write some comments
+    '''
+    df = pd.read_csv(input_csv) 
+    dict = {
+        'lat':[], 
+        'lon': [], 
+        'sizes': [],
+        'text': [],
+        'comment': [], 
+        'Food Resources': [],
+        'location' : [],
+        'time' : [],
+        'organizer': []
+    }
+
+    for _, row in df.iterrows():
+        latitude_tmp = None
+        longitude_tmp = None
+        if row['Latitude'] != 'nan':
+            latitude_tmp = clean_coordinate(row['Latitude'])
+        if row['Longitude'] != 'nan':
+            longitude_tmp = clean_coordinate(row['Longitude'])
+        if row['Latitude'] == 'nan' or row['Longitude'] == 'nan':
+            continue
+        dict['lat'].append(latitude_tmp)
+        dict['lon'].append(longitude_tmp)
+        dict['sizes'].append(8)
+        dict['text'].append(break_str(('> ' + str(row['Description']) + '<br>'), 40))
+        dict['comment'].append(break_str(str(row['Event Title']), 40))
+        dict['Food Resources'].append(break_str(str(row['Event Title']), 25))
+        if str(row['Start Time']) != 'nan' and str(row['End Time']) != 'nan':
+            dict['time'].append(break_str((' ' + str(row['Start Time']) + '-' + str(row['End Time'])), 40))
+        elif str(row['Start Time']) != 'nan' and str(row['End Time']) == 'nan':
+            dict['time'].append(break_str((' ' + str(row['Start Time'])), 40))
+        elif str(row['Start Time']) == 'nan' and str(row['End Time']) != 'nan':
+            dict['time'].append(break_str((' ' + str(row['End Time'])), 40))
+        else:
+            dict['time'].append("specific time not found.")
+        dict['location'].append(break_str(' ' + str(row["Location"]), 40))
+        # this doesn't work because theyre all strings
+        '''
+        if type(row['Organizer(s)']) is list:
+            organizer_str = ''
+            for listnum in range(len(row['Organizer(s)'])):
+                organizer_str += str(row['Organizer(s)'][listnum])
+                if listnum != (len(row['Organizer(s)']) - 1):
+                    organizer_str += ", "
+            dict['organizer'].append(break_str(organizer_str, 40))
+        else:
+        '''
+        dict['organizer'].append(break_str(' ' + str(row['Organizer(s)']), 40))
+
+    return dict
 
 if __name__ == "__main__":
     print("Running database.py script...")

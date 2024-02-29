@@ -3,7 +3,7 @@
 import customtkinter as ctk
 import tkinter as tk
 import csv
-from database import filter_events, convert_to_dict, get_all_events
+from database import filter_events, get_all_events
 import Resource_Graph
 # from tkinter import ttk
 # from tkinter import filedialog
@@ -118,6 +118,12 @@ view_map_popup_button = ctk.CTkButton(
     command = lambda: Resource_Graph.main()
 )
 view_map_popup_button.pack()
+
+# Jasmine trying stuff out >:)
+#from tkinterhtml import HtmlFrame
+#frame = HtmlFrame(window, horizontal_scrollbar="auto")
+#frame.set_content("")
+#frame.pack()
 
 # run
 window.mainloop()
