@@ -38,16 +38,28 @@ csv_file_path = 'Free_Food_Database.csv'
 
 # Function to break up long strings
 def break_str(input_string, size):
+    words = input_string.split(' ')
     new_str = ''
-    tmp = ''
-    for letter in input_string:
-        if len(tmp) == size:
-            new_str += '<br>'
-            tmp = ''
-        tmp += letter
-        new_str += letter
+    line = ''
     
+    for word in words:
+        if len(line) + len(word) + 1 <= size:  # +1 for space
+            line += word + ' '
+        else:
+            new_str += line.rstrip() + '<br>'  # Remove trailing space and add line break
+            line = word + ' '  # Start a new line with the current word
+    
+    new_str += line.rstrip()  # Add the last line
     return new_str
+
+def clean_coordinate(value):
+    if isinstance(value, str):
+        # Remove semicolon and any other non-numeric characters (except for the decimal point)
+        clean_value = ''.join(c for c in value if c.isdigit() or c == '.')
+        return float(clean_value) if clean_value else None
+    else:
+        # If value is already a float (or other non-string), return it directly
+        return value
 
 # Finds location within building dict. with partial string matching
 def flexible_match_location(event_location, buildings_dict):
