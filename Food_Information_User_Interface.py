@@ -25,7 +25,7 @@ window.geometry('555x555')
 header_label = ctk.CTkLabel(
     window,
     text='Dollarless Dining',
-    font=('Helvetica', 20, 'bold'),
+    font=('Helvetica', 25, 'bold'),
     pady=10,
     bg_color='pink')
 header_label.pack()
@@ -47,8 +47,8 @@ mode_frame = ctk.CTkFrame(window)
 # Appearance Mode Header
 mode_header_label = ctk.CTkLabel(
     mode_frame,
-    text='Appearance Mode:',
-    font=('Helvetica', 12, 'bold'),
+    text='Appearance',
+    font=('Helvetica', 15, 'bold'),
     pady=5)
 mode_header_label.pack(side=tk.TOP)
 
