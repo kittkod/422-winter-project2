@@ -98,6 +98,28 @@ scrollable_frame_food_list.pack(pady=5)
 
 #######################################################################
 
+# Function to populate the scrollable frame with data
+def populate_scrollable_frame():
+    # Retrieve all events
+    events = get_all_events(csv_file_path)
+    
+    # Clear existing data in the scrollable frame
+    for widget in scrollable_frame_food_list.winfo_children():
+        widget.destroy()
+    
+    # Create a new widget for each event
+    for event in events:
+        event_label = ctk.CTkLabel(scrollable_frame_food_list, text=event['Event Title'])
+        event_label.pack()
+
+# Call the populate function to initially populate the frame
+populate_scrollable_frame()
+
+
+#######################################################################
+# Extra Resources Button
+#######################################################################
+
 def show_resource_list():
     resource_list_window = ctk.CTkToplevel()
     resource_list_window.title('Extra Free Food Resources')
@@ -119,25 +141,6 @@ def show_resource_list():
 # Create a button to show the free food resources list
 resource_button = ctk.CTkButton(window, text='Extra Resources', command=show_resource_list)
 resource_button.pack(pady=5)
-
-#######################################################################
-
-# Function to populate the scrollable frame with data
-def populate_scrollable_frame():
-    # Retrieve all events
-    events = get_all_events(csv_file_path)
-    
-    # Clear existing data in the scrollable frame
-    for widget in scrollable_frame_food_list.winfo_children():
-        widget.destroy()
-    
-    # Create a new widget for each event
-    for event in events:
-        event_label = ctk.CTkLabel(scrollable_frame_food_list, text=event['Event Title'])
-        event_label.pack()
-
-# Call the populate function to initially populate the frame
-populate_scrollable_frame()
 
 #######################################################################
 # View Map Function
