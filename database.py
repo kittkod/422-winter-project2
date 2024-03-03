@@ -20,7 +20,8 @@ def run_map(input_csv, start_day, end_day):
         'Location': [],
         'Time': [],
         'Organizer': [],
-        'Date': []
+        'Date': [],
+        'Reoccurring': []
     }
 
     for _, row in df.iterrows():
@@ -48,14 +49,24 @@ def run_map(input_csv, start_day, end_day):
         event_dict['comment'].append(break_str(row.get('Event Title', ''), 40))
         event_dict['Food Resources'].append(break_str(row.get('Event Title', ''), 25))
         event_dict['Time'].append(format_time(row))
+
         location = str(row.get('Location', ' '))
         # Check if location is 'nan' which is the string representation of NaN for floats
         if location.lower() != 'nan':
             event_dict['Location'].append(break_str(location, 40))
         else:
             event_dict['Location'].append(' ')
+
         event_dict['Organizer'].append(break_str(row.get('Organizer(s)', ' '), 40))
-        event_dict['Date'].append(row.get('Date', None))
+
+        # Check if the event is reoccurring and adjust the Date field accordingly
+        reoccurring = row.get('Reoccurring', False)
+        event_dict['Reoccurring'].append(reoccurring)
+        
+        date = str(row.get('Date', '')).strip()
+        if reoccurring and date.lower() != 'nan' and date:
+            date = f"Every {date}"
+        event_dict['Date'].append(date)
 
     return event_dict
 
