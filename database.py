@@ -77,7 +77,7 @@ def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
 
     return filtered_df
 
-'''
+
 # Function to convert filtered dataframe to dictionary
 def convert_to_dict(filtered_df):
     event_data = {
@@ -98,7 +98,6 @@ def convert_to_dict(filtered_df):
         event_data['Food Resources'].append(row['Event Title'])
 
     return event_data
-'''
 
 def get_all_events(csv_file_path):
     df = pd.read_csv(csv_file_path)
@@ -106,19 +105,21 @@ def get_all_events(csv_file_path):
     return df.to_dict(orient='records')
 
 def run_map(input_csv, start_day, end_day):
-    ''' *Description
-    also write some comments
+    ''' 
+    This function processes events from a CSV file and formats them for use in a scatterplot map.
+    It filters events based on a date range and extracts the necessary information for plotting.
     '''
     df = pd.read_csv(input_csv) 
-    dict = {
-        'lat':[], 
+
+    event_dict = {
+        'lat': [], 
         'lon': [], 
         'sizes': [],
         'text': [],
         'comment': [], 
         'Food Resources': [],
-        'Location' : [],
-        'Time' : [],
+        'Location': [],
+        'Time': [],
         'Organizer': []
     }
 
@@ -129,35 +130,54 @@ def run_map(input_csv, start_day, end_day):
             latitude_tmp = clean_coordinate(row['Latitude'])
         if str(row['Longitude']) != 'nan':
             longitude_tmp = clean_coordinate(row['Longitude'])
-        if str(row['Latitude']) == 'nan' or row['Longitude'] == 'nan':
+        if latitude_tmp is None or longitude_tmp is None:
             continue
-        dict['lat'].append(latitude_tmp)
-        dict['lon'].append(longitude_tmp)
-        dict['sizes'].append(8)
-        if str(row['Description']) != 'nan':
-            dict['text'].append(break_str(('> ' + str(row['Description']) + '<br>'), 40))
-        else:
-            dict['text'].append(' ')
-        dict['comment'].append(break_str(str(row['Event Title']), 40))
-        dict['Food Resources'].append(break_str(str(row['Event Title']), 25))
-        if str(row['Start Time']) != 'nan' and str(row['End Time']) != 'nan':
-            dict['Time'].append(break_str((' ' + str(row['Start Time']) + '-' + str(row['End Time'])), 40))
-        elif str(row['Start Time']) != 'nan' and str(row['End Time']) == 'nan':
-            dict['Time'].append(break_str((' ' + str(row['Start Time'])), 40))
-        elif str(row['Start Time']) == 'nan' and str(row['End Time']) != 'nan':
-            dict['Time'].append(break_str((' ' + str(row['End Time'])), 40))
-        else:
-            dict['Time'].append(" ")
-        if str(row['Location']) != 'nan':
-            dict['Location'].append(break_str(' ' + str(row["Location"]), 40))
-        else:
-            dict['Location'].append(' ')
-        if str(row['Organizer(s)']) != 'nan':
-            dict['Organizer'].append(break_str(' ' + str(row['Organizer(s)']), 40))
-        else:
-            dict['Organizer'].append(' ')
+        
+        event_dict['lat'].append(latitude_tmp)
+        event_dict['lon'].append(longitude_tmp)
+        event_dict['sizes'].append(8)
 
-    return dict
+        # Process the Description field to remove specific unwanted parts
+        description = str(row['Description'])
+        if description != 'nan':
+            # Remove unwanted patterns
+            patterns_to_remove = ['==> Eligibility:', '=', '=Eligibility:']
+            for pattern in patterns_to_remove:
+                description = description.replace(pattern, '')
+            description = description.strip()
+            # Add the cleaned description to the event_dict
+            event_dict['text'].append(break_str(description, 40))
+        else:
+            event_dict['text'].append(' ')
+
+        # Add event title to the comment and Food Resources
+        event_title = break_str(str(row['Event Title']), 40)
+        event_dict['comment'].append(event_title)
+        event_dict['Food Resources'].append(break_str(event_title, 25))
+
+        # Process the Time field to replace "=" with ":"
+        start_time = str(row['Start Time'])
+        end_time = str(row['End Time'])
+        if start_time != 'nan' and end_time != 'nan':
+            time_str = f"{start_time}-{end_time}"
+        elif start_time != 'nan':
+            time_str = start_time
+        elif end_time != 'nan':
+            time_str = end_time
+        else:
+            time_str = " "
+        time_str = time_str.replace('=', ':').strip()
+        event_dict['Time'].append(break_str(time_str, 40))
+
+        # Process the Location field
+        location = str(row['Location'])
+        event_dict['Location'].append(break_str(location if location != 'nan' else ' ', 40))
+
+        # Process the Organizer(s) field
+        organizer = str(row['Organizer(s)'])
+        event_dict['Organizer'].append(break_str(organizer if organizer != 'nan' else ' ', 40))
+
+    return event_dict
 
 if __name__ == "__main__":
     print("Running database.py script...")

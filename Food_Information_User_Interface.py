@@ -3,7 +3,7 @@
 import customtkinter as ctk
 import tkinter as tk
 import csv
-from database import filter_events, get_all_events
+from database import filter_events, get_all_events, run_map
 import Resource_Graph
 # from tkinter import ttk
 # from tkinter import filedialog
@@ -158,7 +158,7 @@ def on_view_map_click():
     
     # Filter events and convert to dictionary
     filtered_df = filter_events(csv_file_path, date, start_time, end_time)
-    event_dict = convert_to_dict(filtered_df)
+    event_dict = run_map(filtered_df, None, None)
     
     # Here, pass event_dict to plotting function
     # plot_events(event_dict)  # This function should handle the plotting

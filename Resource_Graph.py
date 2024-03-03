@@ -42,9 +42,6 @@ def graph_scatterplot(input_data, title_name):
         "lat":False, 
         "lon":False},
     size='sizes', color="Food Resources", color_continuous_scale="red", labels={'text':''})
-    
-    
-    #ig.update_traces(hoverinfo='text', hovertemplate='%{hovertext}') # delete this
 
     fig.update_layout(mapbox_style='open-street-map')
     fig.update_layout(margin={"r":0,"t":70,"l":40,"b":0})
