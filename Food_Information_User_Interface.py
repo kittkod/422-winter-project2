@@ -47,6 +47,7 @@ dark_mode_button.pack()
 
 #######################################################################
 
+<<<<<<< Updated upstream
 # Test and implement 'Today button'
 today_button = ctk.CTkButton(
     window, 
@@ -60,6 +61,26 @@ tomorrow_button = ctk.CTkButton(
     text = 'Tomorrow',
     command = lambda: print('The Tomorrow Button was pressed.')) #FIXME Get from Max
 tomorrow_button.pack()
+=======
+# Functions to handle button clicks
+def filter_today():
+    Resource_Graph.main('today')
+
+def filter_tomorrow():
+    Resource_Graph.main('tomorrow')
+
+def filter_this_week():
+    Resource_Graph.main('week')
+
+# Buttons in the GUI
+today_button = ctk.CTkButton(window, text='Today', command=filter_today)
+tomorrow_button = ctk.CTkButton(window, text='Tomorrow', command=filter_tomorrow)
+this_week_button = ctk.CTkButton(window, text='This Week', command=filter_this_week)
+
+today_button.pack(pady=5)
+tomorrow_button.pack(pady=5)
+this_week_button.pack(pady=5)
+>>>>>>> Stashed changes
 
 #######################################################################
 

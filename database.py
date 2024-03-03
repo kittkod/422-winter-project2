@@ -29,6 +29,10 @@ import customtkinter as ctk
 import pandas as pd
 from coordinate_finder import address_converter
 from datetime import datetime
+<<<<<<< Updated upstream
+=======
+from utils import clean_coordinate, get_lat_lon
+>>>>>>> Stashed changes
 
 # Load campus buildings data
 with open('campus_buildings.txt') as f:
@@ -52,6 +56,7 @@ def break_str(input_string, size):
     new_str += line.rstrip()  # Add the last line
     return new_str
 
+<<<<<<< Updated upstream
 def clean_coordinate(value):
     if isinstance(value, str):
         # Remove semicolon and any other non-numeric characters (except for the decimal point)
@@ -86,6 +91,8 @@ def get_lat_lon(address):
         print(f"Location: {address} not found in campus buildings.")
         return None, None
 
+=======
+>>>>>>> Stashed changes
 # Function to filter events based on date and time range
 def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
     df = pd.read_csv(csv_file_path)
@@ -104,6 +111,7 @@ def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
 
     return filtered_df
 
+<<<<<<< Updated upstream
 # Function to convert filtered dataframe to dictionary
 def convert_to_dict(filtered_df):
     event_data = {
@@ -125,6 +133,8 @@ def convert_to_dict(filtered_df):
 
     return event_data
 
+=======
+>>>>>>> Stashed changes
 def get_all_events(csv_file_path):
     df = pd.read_csv(csv_file_path)
     df['sizes'] = 8
