@@ -33,6 +33,7 @@ def add_to_admin_file(dictionary):
         CSV_data_inputter(admin_CSV_entry, admin_CSV_file)
 
     CSV_data_inputter(admin_CSV_entry, food_CSV_file)
+    
     return
 
 def contains_year(input_string):
@@ -43,6 +44,7 @@ def contains_year(input_string):
 def admin_file_updater():
     """Checks if admin file contains out-of-date data
     - should only be called in conjunction with updating data"""
+
     original_admin_df = pd.read_csv("admin_info.csv")
     admin_df = original_admin_df[["Date", "Start Time", "End Time"]]
     admin_df = pd.DataFrame(admin_df)
@@ -82,6 +84,7 @@ def admin_file_updater():
     
 
 if __name__ == "__main__":
+    "Test cases - don't run unless you are prepared to refresh the data afterwards"
 
     CSV_file_creator(admin_CSV_file)
 
