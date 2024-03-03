@@ -655,7 +655,7 @@ def food_for_lane_scraper():
 ######################################
         
 def CSV_file_creator(CSV_file):
-    header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)', 'Latitude', 'Longitude', 'Reoccuring']
+    header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)', 'Latitude', 'Longitude', 'Reoccurring']
     with open(CSV_file, 'w', newline="") as file:
         csvwriter = csv.writer(file)
         csvwriter.writerow(header)
