@@ -1,7 +1,7 @@
 #######################################################################
 #                                                                     # 
-# Food Information User Interface =^..^=                              #   
-# Update me upon completion! <3                                       #
+# Food Information User Interface                                     #   
+# Update upon completion                                              #
 #                                                                     # 
 #######################################################################
 
