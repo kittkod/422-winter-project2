@@ -4,7 +4,6 @@ Code body to take in an address and return the latitude and longitude -- require
 from bs4 import BeautifulSoup
 import requests
 import urllib.parse
-import re
 import json
 
 raw_link = "https://en.wikipedia.org/wiki/List_of_University_of_Oregon_buildings"
@@ -37,22 +36,6 @@ def class_dict_maker():
     class_dictionary["HEDCO"] = class_dictionary.get("HEDCO Education Building")
     class_dictionary["Redwood Room"] = class_dictionary.get("Erb Memorial Union")
     return class_dictionary
-                
-def address_converter(initial_address: str):
-
-    if not isinstance(initial_address, str):
-        initial_address = str(initial_address)
-        
-    pattern = r'^\D+\d+'
-
-    # Use re.search() to find the matched pattern in the string
-    match = re.search(pattern, initial_address)
-
-    # If a match is found, return the matched substring, else return the original string
-    if match:
-        return (match.group()+" Eugene OR")
-    else:
-        return initial_address
 
 def lat_and_long(address: str): 
     """Take an address and return the latitude and longitude"""
