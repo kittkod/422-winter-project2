@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 import urllib.parse
 import json
+import re
 
 raw_link = "https://en.wikipedia.org/wiki/List_of_University_of_Oregon_buildings"
 class_dictionary = {}
@@ -22,6 +23,9 @@ def class_dict_maker():
             if coords != None:
                 coordinates = coords.find("span", class_= "geo")
                 building = (coords.find("span", class_="fn org"))
+                if "Hall" in building.text:
+                    no_hall_building = building.text.replace("Hall", "")
+                    class_dictionary[no_hall_building] = coordinates.text
                 class_dictionary[building.text] = coordinates.text
     class_dictionary["EMU"] = class_dictionary.get("Erb Memorial Union")
     class_dictionary["PSC"] = class_dictionary.get("Allan Price Science Commons and Research Library")
@@ -37,6 +41,19 @@ def class_dict_maker():
     class_dictionary["Redwood Room"] = class_dictionary.get("Erb Memorial Union")
     return class_dictionary
 
+def address_converter(initial_address: str):
+    #find specific address pattern
+    pattern = r'^\D+\d+'
+
+    # Use re.search() to find the matched pattern in the string
+    match = re.search(pattern, initial_address)
+
+    # If a match is found, return the matched substring, else return the original string
+    if match:
+        return match.group()
+    else:
+        return initial_address
+    
 def lat_and_long(address: str): 
     """Take an address and return the latitude and longitude"""
     match = None
