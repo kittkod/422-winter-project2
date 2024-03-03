@@ -5,8 +5,6 @@ import plotly.express as px
 import database # testing - jasmine
 import sys
 
-
-
 def graph_scatterplot(input_data, title_name):
     ''' This function graphs a plotly.express.scatter_mapbox() type with a dictionary
     of inputted plot points.
@@ -35,9 +33,9 @@ def graph_scatterplot(input_data, title_name):
     text="comment", hover_name="comment",
     hover_data={
         "text":True, 
-        "time":True, 
-        "location":True,
-        "organizer":True,
+        "Time":True, 
+        "Location":True,
+        "Organizer":True,
         "Food Resources":False, 
         "sizes":False, 
         "comment":False, 

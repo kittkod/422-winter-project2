@@ -20,15 +20,18 @@ csv_file_path = 'Free_Food_Database.csv'
 
 # Function to break up long strings
 def break_str(input_string, size):
+    words = input_string.split(' ')
     new_str = ''
-    tmp = ''
-    for letter in input_string:
-        if len(tmp) == size:
-            new_str += '<br>'
-            tmp = ''
-        tmp += letter
-        new_str += letter
+    line = ''
     
+    for word in words:
+        if len(line) + len(word) + 1 <= size:  # +1 for space
+            line += word + ' '
+        else:
+            new_str += line.rstrip() + '<br>'  # Remove trailing space and add line break
+            line = word + ' '  # Start a new line with the current word
+    
+    new_str += line.rstrip()  # Add the last line
     return new_str
 
 # Finds location within building dict. with partial string matching
@@ -114,9 +117,9 @@ def run_map(input_csv, start_day, end_day):
         'text': [],
         'comment': [], 
         'Food Resources': [],
-        'location' : [],
-        'time' : [],
-        'organizer': []
+        'Location' : [],
+        'Time' : [],
+        'Organizer': []
     }
 
     for _, row in df.iterrows():
@@ -138,32 +141,21 @@ def run_map(input_csv, start_day, end_day):
         dict['comment'].append(break_str(str(row['Event Title']), 40))
         dict['Food Resources'].append(break_str(str(row['Event Title']), 25))
         if str(row['Start Time']) != 'nan' and str(row['End Time']) != 'nan':
-            dict['time'].append(break_str((' ' + str(row['Start Time']) + '-' + str(row['End Time'])), 40))
+            dict['Time'].append(break_str((' ' + str(row['Start Time']) + '-' + str(row['End Time'])), 40))
         elif str(row['Start Time']) != 'nan' and str(row['End Time']) == 'nan':
-            dict['time'].append(break_str((' ' + str(row['Start Time'])), 40))
+            dict['Time'].append(break_str((' ' + str(row['Start Time'])), 40))
         elif str(row['Start Time']) == 'nan' and str(row['End Time']) != 'nan':
-            dict['time'].append(break_str((' ' + str(row['End Time'])), 40))
+            dict['Time'].append(break_str((' ' + str(row['End Time'])), 40))
         else:
-            dict['time'].append(" ")
+            dict['Time'].append(" ")
         if str(row['Location']) != 'nan':
-            dict['location'].append(break_str(' ' + str(row["Location"]), 40))
+            dict['Location'].append(break_str(' ' + str(row["Location"]), 40))
         else:
-            dict['location'].append(' ')
-        # this doesn't work because theyre all strings
-        '''
-        if type(row['Organizer(s)']) is list:
-            organizer_str = ''
-            for listnum in range(len(row['Organizer(s)'])):
-                organizer_str += str(row['Organizer(s)'][listnum])
-                if listnum != (len(row['Organizer(s)']) - 1):
-                    organizer_str += ", "
-            dict['organizer'].append(break_str(organizer_str, 40))
-        else:
-        '''
+            dict['Location'].append(' ')
         if str(row['Organizer(s)']) != 'nan':
-            dict['organizer'].append(break_str(' ' + str(row['Organizer(s)']), 40))
+            dict['Organizer'].append(break_str(' ' + str(row['Organizer(s)']), 40))
         else:
-            dict['organizer'].append(' ')
+            dict['Organizer'].append(' ')
 
     return dict
 
