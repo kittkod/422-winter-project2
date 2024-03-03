@@ -71,7 +71,6 @@ def lat_and_long(address: str):
         except:
             return ["N/A", "N/A"]
         else:
-            print(response[0]["lat"], response[0]["lon"])
             if float(response[0]["lon"]) > -122 or float(response[0]["lon"]) < -124:
                 return ["N/A", "N/A"]
             if float(response[0]["lat"]) > 45 or float(response[0]["lat"]) < 43:

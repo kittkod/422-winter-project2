@@ -13,7 +13,7 @@ from selenium import webdriver
 
 import re
 
-CSV_file = "Free_Food_Database.csv"
+food_CSV_file = "Free_Food_Database.csv"
 
 days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -212,7 +212,7 @@ def engage_site_scraper(list):
         CSV_data.append("False")
 
         #add to CSV file
-        CSV_data_inputter(CSV_data)
+        CSV_data_inputter(CSV_data, food_CSV_file)
 
 ################################################################
 ## Function block for scraping Events Calendar for Free Food ##
@@ -358,7 +358,7 @@ def event_calender_site_scraper(list_of_links):
         
         CSV_data.append("False")
             
-        CSV_data_inputter(CSV_data)
+        CSV_data_inputter(CSV_data, food_CSV_file)
         
 ############################################
 ## 211 Food Pantry Scraper Function Block ##
@@ -488,33 +488,32 @@ def food_pantry_211_scraper():
                         CSV_list.append(lat)
                         CSV_list.append(long)
                         CSV_list.append(True)
-                        CSV_data_inputter(CSV_list)
+                        CSV_data_inputter(CSV_list, food_CSV_file)
                         i += 1                   
 
     return 
                 
-
 ######################################
 ## CSV File Creation Function Block ##
 ######################################
         
-def CSV_file_creator():
+def CSV_file_creator(CSV_file):
     header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)', 'Latitude', 'Longitude', 'Reoccuring']
     with open(CSV_file, 'w', newline="") as file:
         csvwriter = csv.writer(file)
         csvwriter.writerow(header)
         return
     
-def CSV_data_inputter(data):
+def CSV_data_inputter(data, CSV_file):
     with open(CSV_file, 'a', newline="") as file:
         csvwriter = csv.writer(file)
         csvwriter.writerow(data)
         return
-    
+
 if __name__ == '__main__':
 
     #create CSV file
-    CSV_file_creator()
+    CSV_file_creator(food_CSV_file)
 
     #scrape locations
     coordinate_finder.main()
@@ -530,4 +529,3 @@ if __name__ == '__main__':
 
     #scrape 211 Food Pantry data
     food_pantry_211_scraper()
-
