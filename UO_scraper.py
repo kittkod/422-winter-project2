@@ -6,9 +6,11 @@ from bs4 import BeautifulSoup
 import requests
 from urllib.request import urlopen, Request
 import csv
+import datetime
 import json
 import re
 import coordinate_finder
+import pandas as pd
 
 from selenium import webdriver 
 
@@ -360,6 +362,92 @@ def event_calender_site_scraper(list_of_links):
         CSV_data.append("False")
             
         CSV_data_inputter(CSV_data, food_CSV_file)
+
+
+############################################
+## Function Block for Student Life Events ##
+############################################
+        
+def student_life_scraper():
+
+    current_date = datetime.datetime.now().date()
+    food_terms = ['snack', 'snacks', 'treat', 'treats', 'refreshment', 'refreshments', 'food']
+
+    df = pd.read_csv('Free_Food_Database.csv')
+    df = pd.DataFrame(df)
+    list_of_event_titles = df['Event Title'].to_list()
+
+    raw_link = "https://studentlife.uoregon.edu/events"
+
+    req = Request(raw_link, headers={'User-Agent': 'Mozilla/5.0'})
+    #avoid error 403
+    webpage = urlopen(req).read()
+    soup = BeautifulSoup(webpage, 'html.parser')
+
+    list_of_events = soup.find("div",class_="uo__calender-default-wrapper")
+    list_of_all_events = list_of_events.find_all("div", class_="event-cell active photo_default")
+    for event in list_of_all_events:
+        list_of_details = event.find("div", class_="event-header")
+        event_title_tag = list_of_details.find("div", class_='event-title')
+        event_title = event_title_tag.find('span', class_='title').text
+
+        if event_title not in list_of_event_titles:
+            #check if not in CSV file
+            event_summary = []
+            event_summary_list = event.find("div", class_="event-info-block").find_all("p")
+            for text in event_summary_list:
+                event_summary.append(text.text)
+            event_summary = " ".join(event_summary).replace("Invite my friends Add to my calendar", "")
+            
+            for item in food_terms:
+                if item in event_summary:
+                    CSV_list = []
+                    event_date = event.find("div", "event-date").text.replace("\n", " ").strip()
+
+                    event_start_time = event_title_tag.find('span', class_='event-time').text.strip()
+                    
+                    current_year = datetime.datetime.now().year
+                    parsed_date = datetime.datetime.strptime(event_date, "%b %d").replace(year=current_year)
+                    formatted_date_str = parsed_date.strftime("%Y-%m-%d")
+                    # Compare the given date with the current date
+                    if str(current_date) == formatted_date_str:
+                        edit_event_time= event_start_time.replace('a.m.', 'AM').replace('p.m.', 'PM')
+                        new_hour = datetime.datetime.strptime(edit_event_time, '%I:%M %p').time()
+                        current_hour = datetime.datetime.now().hour
+
+                        target_hour = new_hour.hour
+
+                        if current_hour >= target_hour:
+                            break
+                        
+                    event_location = event.find("div", class_='event-detail event-room-number').text.replace("\n", " ").strip()
+                    event_location = re.sub(r'\s+', ' ', event_location)
+                    matched_location = None
+                    if event_location:
+                        for location in class_dictionary.keys():
+                            if location in event_location:
+                                matched_location = location
+                                break
+                        if matched_location == None:
+                            new_location = coordinate_finder.address_converter(event_location)
+                            lat, long = coordinate_finder.lat_and_long(new_location)
+                        else:
+                            latlong = class_dictionary.get(matched_location).split(" ")
+                            lat = latlong[0]
+                            long = latlong[1]
+                    CSV_list.append(event_title)
+                    CSV_list.append(event_date)
+                    CSV_list.append(event_start_time)
+                    CSV_list.append("N/A")
+                    CSV_list.append(event_location)
+                    CSV_list.append(event_summary)
+                    CSV_list.append(event_title)
+                    CSV_list.append(lat)
+                    CSV_list.append(long)
+                    CSV_list.append(False)
+                    CSV_data_inputter(CSV_list, food_CSV_file)
+
+                    break
         
 ############################################
 ## 211 Food Pantry Scraper Function Block ##
@@ -609,7 +697,7 @@ def food_for_lane_scraper():
                         CSV_data_inputter(CSV_list, food_CSV_file)
                         i += 1        
                 else:
-                #catch off cases of poor HTML tagging
+                #catch odd cases of poor HTML tagging
                     location_desc = details[1]+". "+details[2]
                     new_details_tuple = string_split(details[2], ".", 2)
                     new_details=[]
@@ -684,8 +772,13 @@ if __name__ == '__main__':
     events_calendar_URL_scraper()
     #print("Scraping resources")
 
+    #scrape food from studentlife
+    student_life_scraper()
+
     #scrape 211 Food Pantry data
     food_pantry_211_scraper()
 
-    #scape food for lane county hot meal sites
+    #scrape food for lane county hot meal sites
     food_for_lane_scraper()
+
+    
