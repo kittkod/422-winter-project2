@@ -57,7 +57,11 @@ def run_map(input_csv, start_day, end_day):
         else:
             event_dict['Location'].append(' ')
 
-        event_dict['Organizer'].append(break_str(row.get('Organizer(s)', ' '), 40))
+        # Check and format the 'Organizer(s)' field
+        organizer = row.get('Organizer(s)', '')
+        if pd.isna(organizer):  # If it's NaN, use an empty string instead
+            organizer = ''
+        event_dict['Organizer'].append(break_str(str(organizer), 40))
 
         # Check if the event is reoccurring and adjust the Date field accordingly
         reoccurring = row.get('Reoccurring', False)
