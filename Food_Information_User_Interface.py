@@ -150,27 +150,33 @@ def show_resource_list():
     resource_list_window.geometry('333x333')
     resource_list_window.resizable(False, False)  # width, height are constant
 
+    # Create a Label to display additional resources
+    resource_label = ctk.CTkLabel(resource_list_window, text="Additional Resources:")
+    resource_label.pack(padx=10, pady=10)
+
+    # Insert some sample text into the Label
+    sample_text = """
+    1. Resource 1
+    - Description 1
+
+    2. Resource 2
+    - Description 2
+
+    3. Resource 3
+    - Description 3
+    """
+    resource_text = ctk.CTkLabel(resource_list_window, text=sample_text, wraplength=300)
+    resource_text.pack(padx=10, pady=10)
+
     # Create an instance of CTkToplevel for focus management
     toplevel_window = None
-
-    def open_toplevel():
-        nonlocal toplevel_window
-        if toplevel_window is None or not toplevel_window.winfo_exists():
-            toplevel_window = ctk.CTkToplevel(resource_list_window)
-            # Additional configurations for the Toplevel window can be added here
-            resource_label = ctk.CTkLabel(toplevel_window, text='hello', font=('Helvetica', 16))
-            resource_label.pack(padx=20, pady=20)
-        else:
-            toplevel_window.focus()
-
-    resource_box = ctk.CTkFrame(resource_list_window)
-    resource_box.pack(fill='both', expand=True)
 
     resource_list_window.mainloop()
 
 # Create a button to show the free food resources list
 resource_button = ctk.CTkButton(window, text='Additional Resources', command=show_resource_list)
 resource_button.pack(pady=5)
+
 
 #######################################################################
 #                                                                     #
