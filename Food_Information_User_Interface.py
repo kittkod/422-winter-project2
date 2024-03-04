@@ -299,9 +299,9 @@ def show_user_input_window():
         placeholder_text="Description")
     desc_input.pack(padx=10, pady=10)
 
-    #######################################################################
-    # Input Submission Button
-    #######################################################################
+#######################################################################
+# Input Submission Button
+#######################################################################
 
     submit_form = ctk.CTkButton(
         inputs_frame,
@@ -357,12 +357,6 @@ def on_view_map_click():
     
     print(event_dict)  # Placeholder to show the dictionary in the console
 
-# Jasmine trying stuff out >:)
-#from tkinterhtml import HtmlFrame
-#frame = HtmlFrame(window, horizontal_scrollbar="auto")
-#frame.set_content("")
-#frame.pack()
-    
 
 #######################################################################
 # About Pop-up Button
