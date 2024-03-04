@@ -40,6 +40,7 @@ def class_dict_maker():
     class_dictionary["HEDCO"] = class_dictionary.get("HEDCO Education Building")
     class_dictionary["Redwood Room"] = class_dictionary.get("Erb Memorial Union")
     class_dictionary["Unthank Hall"] = '44.04386755; -123.06892427902709'
+    class_dictionary["ASUO"] = class_dictionary.get("Erb Memorial Union")
     return class_dictionary
 
 def address_converter(initial_address: str):

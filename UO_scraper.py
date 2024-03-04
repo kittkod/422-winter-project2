@@ -368,6 +368,22 @@ def event_calender_site_scraper(list_of_links):
 ## Function Block for Student Life Events ##
 ############################################
         
+def time_compare(current_date, event_date, event_start_time):
+
+    current_year = datetime.datetime.now().year
+    parsed_date = datetime.datetime.strptime(event_date, "%b %d").replace(year=current_year)
+    formatted_date_str = parsed_date.strftime("%Y-%m-%d")
+                    # Compare the given date with the current date
+    if str(current_date) == formatted_date_str:
+        edit_event_time= event_start_time.replace('a.m.', 'AM').replace('p.m.', 'PM')
+        new_hour = datetime.datetime.strptime(edit_event_time, '%I:%M %p').time()
+        current_hour = datetime.datetime.now().hour
+        target_hour = new_hour.hour
+
+        return current_hour, target_hour
+    else:
+        return None, None
+                    
 def student_life_scraper():
 
     current_date = datetime.datetime.now().date()
@@ -397,7 +413,7 @@ def student_life_scraper():
             event_summary_list = event.find("div", class_="event-info-block").find_all("p")
             for text in event_summary_list:
                 event_summary.append(text.text)
-            event_summary = " ".join(event_summary).replace("Invite my friends Add to my calendar", "")
+            event_summary = " ".join(event_summary).replace("Invite my friends Add to my calendar", "").strip()
             
             for item in food_terms:
                 if item in event_summary:
@@ -405,23 +421,15 @@ def student_life_scraper():
                     event_date = event.find("div", "event-date").text.replace("\n", " ").strip()
 
                     event_start_time = event_title_tag.find('span', class_='event-time').text.strip()
-                    
-                    current_year = datetime.datetime.now().year
-                    parsed_date = datetime.datetime.strptime(event_date, "%b %d").replace(year=current_year)
-                    formatted_date_str = parsed_date.strftime("%Y-%m-%d")
-                    # Compare the given date with the current date
-                    if str(current_date) == formatted_date_str:
-                        edit_event_time= event_start_time.replace('a.m.', 'AM').replace('p.m.', 'PM')
-                        new_hour = datetime.datetime.strptime(edit_event_time, '%I:%M %p').time()
-                        current_hour = datetime.datetime.now().hour
 
-                        target_hour = new_hour.hour
+                    current_hour, target_hour = time_compare(current_date, event_date, event_start_time)
 
-                        if current_hour >= target_hour:
-                            break
+                    if current_hour != None and target_hour != None and current_hour >= target_hour:
+                        break
                         
                     event_location = event.find("div", class_='event-detail event-room-number').text.replace("\n", " ").strip()
                     event_location = re.sub(r'\s+', ' ', event_location)
+
                     matched_location = None
                     if event_location:
                         for location in class_dictionary.keys():
@@ -448,6 +456,8 @@ def student_life_scraper():
                     CSV_data_inputter(CSV_list, food_CSV_file)
 
                     break
+
+    return
         
 ############################################
 ## 211 Food Pantry Scraper Function Block ##
