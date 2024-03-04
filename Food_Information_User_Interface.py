@@ -13,6 +13,8 @@ import csv
 from database import get_all_events, run_map
 import Resource_Graph
 
+import webbrowser
+
 # Below, imports which may be needed in the future
 # from tkinter import ttk
 # from tkinter import filedialog
@@ -141,26 +143,60 @@ populate_scrollable_frame()
 def show_resource_list():
     resource_list_window = ctk.CTkToplevel()
     resource_list_window.title('Additional Resources')
-    resource_list_window.geometry('333x333')
+    resource_list_window.geometry('555x555')
     resource_list_window.resizable(False, False)  # width, height are constant
 
     # Create a Label to display additional resources
     resource_label = ctk.CTkLabel(resource_list_window, text="Additional Resources:")
     resource_label.pack(padx=10, pady=10)
 
-    # Insert some sample text into the Label
-    sample_text = """
-    1. Resource 1
-    - Description 1
-
-    2. Resource 2
-    - Description 2
-
-    3. Resource 3
-    - Description 3
-    """
-    resource_text = ctk.CTkLabel(resource_list_window, text=sample_text, wraplength=300)
+    # Create a Text widget to display sample text with hyperlinks
+    resource_text = tk.Text(resource_list_window, wrap=tk.WORD, height=20, width=80)
     resource_text.pack(padx=10, pady=10)
+
+    # Insert text into the Text widget
+    sample_text = """
+    1. 211info
+    - Link: 
+        https://www.211info.org/get-help/food/
+
+    2. UOregon Engage
+    - Link: 
+        https://uoregon.campuslabs.com/engage/events?categories=16973
+
+    3. Food for Lane County
+    - Meal Sites: 
+        https://www.foodforlanecounty.org/find-a-meal-site/
+
+    - Mobile Food Pantry: 
+        https://www.foodforlanecounty.org/mobile-pantry/ 
+
+    - Trillium Produce Plus: 
+        https://www.foodforlanecounty.org/get-help/trillium-produce-plus/ 
+
+    4. UOregon Basic Needs Program
+    - Link: 
+        https://basicneeds.uoregon.edu/food
+
+    5. UOregon Free Food Events
+    - Link: 
+        https://calendar.uoregon.edu/search/events?event_types[]=15630
+
+    6. Burrito Brigade: Waste to Taste - Free Food Boxes
+    - Link: 
+        https://burritobrigade.org/waste-to-taste/ 
+
+    7. SNAP Food Benefits:
+    - Link: 
+        https://www.oregon.gov/odhs/food/pages/snap.aspx
+
+    8. UOregon Leftover Textover:
+    - Link: 
+        https://emu.uoregon.edu/leftover-textover 
+    """
+
+    # Add sample text with hyperlinks
+    resource_text.insert(tk.END, sample_text)
 
     # Create an instance of CTkToplevel for focus management
     toplevel_window = None
@@ -357,9 +393,9 @@ def show_about_popup():
     about_text = """
     Dollarless Dining
 
-    This program helps you discover free food resources on campus.
+    This program helps you find free food resources on campus.
 
-    Developed by Simone, Nithi, Max, Jasmine, Kylie
+    Developed by Simone Badaruddin, Nithi Deivanayagam, Kylie Griffiths, Max Hermens, Jasmine Wallin
 
     Copyright © 2024 University of Oregon
     """
