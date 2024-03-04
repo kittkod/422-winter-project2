@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 import urllib.parse
 import json
+import re
 
 raw_link = "https://en.wikipedia.org/wiki/List_of_University_of_Oregon_buildings"
 class_dictionary = {}
@@ -22,6 +23,9 @@ def class_dict_maker():
             if coords != None:
                 coordinates = coords.find("span", class_= "geo")
                 building = (coords.find("span", class_="fn org"))
+                if "Hall" in building.text:
+                    no_hall_building = building.text.replace("Hall", "")
+                    class_dictionary[no_hall_building] = coordinates.text
                 class_dictionary[building.text] = coordinates.text
     class_dictionary["EMU"] = class_dictionary.get("Erb Memorial Union")
     class_dictionary["PSC"] = class_dictionary.get("Allan Price Science Commons and Research Library")
@@ -36,7 +40,7 @@ def class_dict_maker():
     class_dictionary["HEDCO"] = class_dictionary.get("HEDCO Education Building")
     class_dictionary["Redwood Room"] = class_dictionary.get("Erb Memorial Union")
     return class_dictionary
-
+    
 def lat_and_long(address: str): 
     """Take an address and return the latitude and longitude"""
     match = None
