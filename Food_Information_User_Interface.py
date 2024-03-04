@@ -158,6 +158,8 @@ def show_resource_list():
         if toplevel_window is None or not toplevel_window.winfo_exists():
             toplevel_window = ctk.CTkToplevel(resource_list_window)
             # Additional configurations for the Toplevel window can be added here
+            resource_label = ctk.CTkLabel(toplevel_window, text='hello', font=('Helvetica', 16))
+            resource_label.pack(padx=20, pady=20)
         else:
             toplevel_window.focus()
 
@@ -169,7 +171,6 @@ def show_resource_list():
 # Create a button to show the free food resources list
 resource_button = ctk.CTkButton(window, text='Additional Resources', command=show_resource_list)
 resource_button.pack(pady=5)
-
 
 #######################################################################
 #                                                                     #
