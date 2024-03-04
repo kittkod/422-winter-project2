@@ -156,22 +156,33 @@ populate_scrollable_frame()
 # FIXME: Simone will make each resource into a linked button! (not cp.)
 
 
+
 def show_resource_list():
     resource_list_window = ctk.CTkToplevel()
     resource_list_window.title('Additional Resources')
     resource_list_window.geometry('333x333')
-    resource_list_window.resizable(False, False) # width, height are constant
+    resource_list_window.resizable(False, False)  # width, height are constant
 
-    resource_box = CTkToplevel(resource_list_window)
+    # Create an instance of CTkToplevel for focus management
+    toplevel_window = None
 
+    def open_toplevel():
+        nonlocal toplevel_window
+        if toplevel_window is None or not toplevel_window.winfo_exists():
+            toplevel_window = ctk.CTkToplevel(resource_list_window)
+            # Additional configurations for the Toplevel window can be added here
+        else:
+            toplevel_window.focus()
+
+    resource_box = ctk.CTkFrame(resource_list_window)
     resource_box.pack(fill='both', expand=True)
 
     resource_list_window.mainloop()
 
-
 # Create a button to show the free food resources list
 resource_button = ctk.CTkButton(window, text='Additional Resources', command=show_resource_list)
 resource_button.pack(pady=5)
+
 
 #######################################################################
 #                                                                     #
