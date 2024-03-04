@@ -210,7 +210,7 @@ resource_button.pack(pady=5)
 
 #######################################################################
 #                                                                     #
-# User Input Section - Admin module                                   #
+# User Input Section                                                  #
 #                                                                     #
 #######################################################################
 
@@ -338,10 +338,36 @@ def show_user_input_window():
     submit_form.pack(padx=5, pady=5)
 
 #######################################################################
-# Add New Event Button on Main Window - Admin mode
+#                                                                     #
+# Admin mode                                                          #
+#                                                                     #
 #######################################################################
-    
-new_event_button = ctk.CTkButton(left_frame, text='Admin Mode', command=show_user_input_window) 
+
+# Function to handle the "Add New Event" button click
+def on_add_new_event_click():
+    show_user_input_window()
+
+# Function to handle the "Refresh Data" button click
+def on_refresh_data_click():
+    populate_scrollable_frame()
+
+
+# Admin mode button
+def show_admin_mode_popup():
+    admin_mode_popup = ctk.CTkToplevel(window)
+    admin_mode_popup.title('Admin Mode')
+    admin_mode_popup.geometry('300x100')
+
+    # Add New Event button
+    add_new_event_button = ctk.CTkButton(admin_mode_popup, text='Add New Event', command=on_add_new_event_click)
+    add_new_event_button.pack(pady=5)
+
+    # Refresh Data button
+    refresh_data_button = ctk.CTkButton(admin_mode_popup, text='Refresh Data', command=on_refresh_data_click)
+    refresh_data_button.pack(pady=5)
+
+# Admin mode button
+new_event_button = ctk.CTkButton(left_frame, text='Admin Mode', command=show_admin_mode_popup) 
 new_event_button.pack(side='bottom', anchor='w', padx=10, pady=10)
 
 #######################################################################
