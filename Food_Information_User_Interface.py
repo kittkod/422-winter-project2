@@ -123,13 +123,13 @@ def populate_scrollable_frame():
     for widget in scrollable_frame_food_list.winfo_children():
         widget.destroy()
     
-    # Create a new widget for each event
     for event in events:
-        event_label = ctk.CTkLabel(
-            scrollable_frame_food_list,
-            text=event['Event Title'],
-            )
-        event_label.pack()
+        event_text = event['Event Title']
+
+        # Create the Tkinter Text widget
+        event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=30, height=2)
+        event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
+        event_textbox.pack()
 
 # Call the populate function to initially populate the frame
 populate_scrollable_frame()
