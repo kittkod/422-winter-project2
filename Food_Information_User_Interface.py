@@ -44,17 +44,13 @@ window.geometry('777x777')
 #                                                                     #
 #######################################################################
 
-#FIXME: Simone wants to put the event list on the left & buttons on the 
-# right s.t. the interface is more readable, and can be resize back to 
-# a small application. <3
-
-# Left Frame for Event List
+# Left Frame
 left_frame = ctk.CTkFrame(window, width=300)
 left_frame.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
 
-# Right Frame for Buttons
-right_frame = ctk.CTkFrame(window)
-right_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=5, pady=5)
+# Right Frame 
+#right_frame = ctk.CTkFrame(window)
+#right_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=5, pady=5)
 
 #######################################################################
 #
@@ -66,22 +62,16 @@ right_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=5, pady=5)
 # Light Mode and Dark Mode Buttons
 #######################################################################
 
-# FIXME: Simone wants to put these on a top 'band' in the upper right
-# along with an 'About' button (not critical path)
-
 # Create a frame for the appearance mode header and buttons
-mode_frame = ctk.CTkFrame(window)
+mode_frame = ctk.CTkFrame(left_frame)
 
 # Light Mode and Dark Mode Buttons
-mode_frame = ctk.CTkFrame(left_frame)
 light_mode_button = ctk.CTkButton(mode_frame, text='☀', width=6, command=lambda: ctk.set_appearance_mode('light'))
 light_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
 
 dark_mode_button = ctk.CTkButton(mode_frame, text='☾', width=6, command=lambda: ctk.set_appearance_mode('dark'))
 dark_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
-mode_frame.pack(side=tk.TOP, padx=10, pady=10)
 
-# Pack the frame containing the header and buttons
 mode_frame.pack(side=tk.TOP, padx=10, pady=10)
 
 #######################################################################
@@ -111,9 +101,10 @@ tomorrow_button.pack(pady=5)
 # Critical Path).
 
 scrollable_frame_food_list = ctk.CTkScrollableFrame(
-    right_frame, 
+    #right_frame
+    window, 
     label_text = 'UO Free Food Resources',
-    width = 222
+    width = 555
     )
 scrollable_frame_food_list.pack(pady=5)
 
@@ -130,7 +121,7 @@ def populate_scrollable_frame():
         event_text = event['Event Title']
 
         # Create the Tkinter Text widget
-        event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=30, height=2)
+        event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
         event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
         event_textbox.pack()
 
@@ -183,7 +174,7 @@ resource_button.pack(pady=5)
 
 #######################################################################
 #                                                                     #
-# User Input Section                                                  #
+# User Input Section - Admin module                                   #
 #                                                                     #
 #######################################################################
 
@@ -311,11 +302,11 @@ def show_user_input_window():
     submit_form.pack(padx=5, pady=5)
 
 #######################################################################
-# Add New Event Button on Main Window
+# Add New Event Button on Main Window - Admin mode
 #######################################################################
     
-new_event_button = ctk.CTkButton(left_frame, text='Add New Event', command=show_user_input_window) 
-new_event_button.pack(padx=10, pady=10)
+new_event_button = ctk.CTkButton(left_frame, text='Admin Mode', command=show_user_input_window) 
+new_event_button.pack(side='bottom', anchor='w', padx=10, pady=10)
 
 #######################################################################
 #                                                                     # 
