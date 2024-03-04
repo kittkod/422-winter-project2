@@ -41,6 +41,7 @@ def run_map(input_csv, start_day, end_day):
         if isinstance(description, str) and description.lower() != 'nan':
             description = description.strip()  # Remove leading/trailing whitespace
             description = clean_description(description)
+            description+='<br>'
             event_dict['text'].append(break_str(description, 40))
         else:
             event_dict['text'].append('')
@@ -48,7 +49,7 @@ def run_map(input_csv, start_day, end_day):
         # Process and add other event details (apply similar validation if necessary)
         event_dict['comment'].append(break_str(row.get('Event Title', ''), 40))
         event_dict['Food Resources'].append(break_str(row.get('Event Title', ''), 25))
-        event_dict['Time'].append(format_time(row))
+        event_dict['Time'].append(break_str(format_time(row), 40))
 
         location = str(row.get('Location', ' '))
         # Check if location is 'nan' which is the string representation of NaN for floats

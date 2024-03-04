@@ -10,7 +10,7 @@
 import customtkinter as ctk
 import tkinter as tk
 import csv
-from database import filter_events, get_all_events, run_map
+from database import get_all_events, run_map
 import Resource_Graph
 
 # Below, imports which may be needed in the future
