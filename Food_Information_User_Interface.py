@@ -48,6 +48,14 @@ window.geometry('777x777')
 # right s.t. the interface is more readable, and can be resize back to 
 # a small application. <3
 
+# Left Frame for Event List
+left_frame = ctk.CTkFrame(window, width=300)
+left_frame.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
+
+# Right Frame for Buttons
+right_frame = ctk.CTkFrame(window)
+right_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=5, pady=5)
+
 #######################################################################
 #
 # Widgets Section:
@@ -65,19 +73,13 @@ window.geometry('777x777')
 mode_frame = ctk.CTkFrame(window)
 
 # Light Mode and Dark Mode Buttons
-light_mode_button = ctk.CTkButton(
-    mode_frame,
-    text='☀',
-    width=6,
-    command=lambda: ctk.set_appearance_mode('light'))
+mode_frame = ctk.CTkFrame(left_frame)
+light_mode_button = ctk.CTkButton(mode_frame, text='☀', width=6, command=lambda: ctk.set_appearance_mode('light'))
 light_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
 
-dark_mode_button = ctk.CTkButton(
-    mode_frame, 
-    text='☾',
-    width=6,
-    command=lambda: ctk.set_appearance_mode('dark'))
+dark_mode_button = ctk.CTkButton(mode_frame, text='☾', width=6, command=lambda: ctk.set_appearance_mode('dark'))
 dark_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
+mode_frame.pack(side=tk.TOP, padx=10, pady=10)
 
 # Pack the frame containing the header and buttons
 mode_frame.pack(side=tk.TOP, padx=10, pady=10)
@@ -86,18 +88,19 @@ mode_frame.pack(side=tk.TOP, padx=10, pady=10)
 # Today and Tomorrow Buttons
 #######################################################################
 
-# Test and implement 'Today button'
+# Today and Tomorrow Buttons
 today_button = ctk.CTkButton(
-    window, 
-    text = 'Today',
-    command = lambda: print('The Today Button was pressed.')) #FIXME Implement this filter
+    left_frame, 
+    text='Today',
+    command=lambda: print('The Today Button was pressed.')
+)
 today_button.pack(pady=5)
 
-# Test and implement 'Tomorrow button'
 tomorrow_button = ctk.CTkButton(
-    window, 
-    text = 'Tomorrow',
-    command = lambda: print('The Tomorrow Button was pressed.')) #FIXME Implement this filter
+    left_frame, 
+    text='Tomorrow',
+    command=lambda: print('The Tomorrow Button was pressed.')
+)
 tomorrow_button.pack(pady=5)
 
 #######################################################################
@@ -108,7 +111,7 @@ tomorrow_button.pack(pady=5)
 # Critical Path).
 
 scrollable_frame_food_list = ctk.CTkScrollableFrame(
-    window,
+    right_frame, 
     label_text = 'UO Free Food Resources',
     width = 222
     )
@@ -118,11 +121,11 @@ scrollable_frame_food_list.pack(pady=5)
 def populate_scrollable_frame():
     # Retrieve all events
     events = get_all_events(csv_file_path)
-    
+
     # Clear existing data in the scrollable frame
     for widget in scrollable_frame_food_list.winfo_children():
         widget.destroy()
-    
+
     for event in events:
         event_text = event['Event Title']
 
@@ -173,8 +176,8 @@ def show_resource_list():
 
     resource_list_window.mainloop()
 
-# Create a button to show the free food resources list
-resource_button = ctk.CTkButton(window, text='Additional Resources', command=show_resource_list)
+# Additional Resources Button
+resource_button = ctk.CTkButton(left_frame, text='Additional Resources', command=show_resource_list) 
 resource_button.pack(pady=5)
 
 
@@ -311,7 +314,7 @@ def show_user_input_window():
 # Add New Event Button on Main Window
 #######################################################################
     
-new_event_button = ctk.CTkButton(window, text='Add New Event', command=show_user_input_window)
+new_event_button = ctk.CTkButton(left_frame, text='Add New Event', command=show_user_input_window) 
 new_event_button.pack(padx=10, pady=10)
 
 #######################################################################
@@ -325,7 +328,7 @@ new_event_button.pack(padx=10, pady=10)
 #######################################################################
 
 view_map_popup_button = ctk.CTkButton(
-    window,
+    left_frame,
     text = 'View Map',
     command = lambda: Resource_Graph.main()
 )
