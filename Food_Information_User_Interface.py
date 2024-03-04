@@ -351,7 +351,6 @@ def on_add_new_event_click():
 def on_refresh_data_click():
     populate_scrollable_frame()
 
-
 # Admin mode button
 def show_admin_mode_popup():
     admin_mode_popup = ctk.CTkToplevel(window)
