@@ -4,11 +4,14 @@ Web Scraper for University of Oregon Club Free Food
 
 from bs4 import BeautifulSoup
 import requests
+from urllib.request import urlopen, Request
 import csv
 import json
 import re
 import coordinate_finder
+
 from selenium import webdriver 
+
 import re
 
 food_CSV_file = "Free_Food_Database.csv"
@@ -378,7 +381,12 @@ def extract_date(string: str):
     result = []
 
     result = string.split()
+
     data = []
+
+    if result[0] == 'Daily':
+        return days_of_week
+    
     for part in result:
         if "-" in part:
             part = part.split("-")
@@ -400,8 +408,6 @@ def extract_date(string: str):
         else:
             data = result
             return data
-
-                
 
 def food_pantry_211_scraper():
     
@@ -490,7 +496,160 @@ def food_pantry_211_scraper():
                         i += 1                   
 
     return 
-                
+
+#########################################
+## Food for Lane County Hot Meal Sites ##
+#########################################
+
+def date_time_splitter(string: str):
+    new_strings = []
+    new_strings = string.split(": ", 1)
+    return new_strings
+
+def string_split(string, separator, position):
+    string = string.split(separator)
+    return separator.join(string[:position]), separator.join(string[position:])
+
+def food_for_lane_scraper():
+
+    raw_link = 'https://www.foodforlanecounty.org/find-a-meal-site/'
+    req = Request(raw_link, headers={'User-Agent': 'Mozilla/5.0'})
+    #avoid error 403
+    webpage = urlopen(req).read()
+    soup = BeautifulSoup(webpage, 'html.parser')
+
+    h2_tag = soup.find('h2', string='Lane County Meal Sites*')
+    #find all <p> text containers between <h2> and <h3>
+
+    meal_sites = []
+    temp_entry = []
+    current_tag = h2_tag.find_next_sibling()
+
+    while current_tag and current_tag.name != 'h3':
+        
+        if len(current_tag.text.split("\n")) != 4:
+            temp_entry.append(current_tag)
+        else:
+            meal_sites.append(current_tag.text)
+            if len(temp_entry) != 0:
+                meal_sites.append(temp_entry)
+            temp_entry = []
+        current_tag = current_tag.find_next_sibling()
+
+    if len(temp_entry) != 0:
+        final = []
+        if '\n' not in temp_entry[0].text and '\n' not in temp_entry[1].text:
+            meal_sites.append(temp_entry[0].text+'\n'+temp_entry[1].text+'\n'+temp_entry[2].text+'\n')
+        else:
+            for text in temp_entry:
+                final.append(text.text)
+            meal_sites.append(" ".join(final))
+
+    for site in meal_sites:
+ 
+            details = site.split("\n")
+ 
+            if details:
+                location_name = details[0].strip()
+
+                address_details = details[0].split(",")
+                if len(address_details) == 2:
+                    location_address = address_details[1].strip()
+                else:
+                    location_address = details[1]+" Eugene OR"
+                lat,long = coordinate_finder.lat_and_long(location_address)
+
+                if lat == 'N/A' or long == 'N/A':
+                    lat, long = coordinate_finder.lat_and_long(location_name+" Eugene OR")
+
+                if len(details) == 4:
+                    location_desc = details[2]
+                    date_details = details[3] 
+                    date_time = date_time_splitter(date_details)
+                    dates = extract_date(date_time[0])
+                    a = 0
+                    times = date_time[1].split("-")
+                    if len(times) > 2: 
+                        new_times = []
+                        for item in times:
+                            if "&" in item:
+                                split_list = item.split("&")
+                                for split in split_list:
+                                    new_times.append(split.strip())
+                            elif "and" in item:
+                                item.split("and")
+                                for split in split_list:
+                                    new_times.append(split.strip())
+                            else:
+                                new_times.append(item)
+                        start_times = []
+                        end_times = []
+                        while a < len(new_times):
+                            start_times.append(new_times[a])
+                            end_times.append(new_times[a+1])
+                            a = a + 2
+                        start_time = ", ".join(start_times)
+                        end_time = ", ".join(end_times)
+                    else:
+                        start_time = times[0]
+                        end_time = times[1]
+                    i = 0
+                    while i < len(dates):
+                        CSV_list = []
+                        CSV_list.append(location_name)
+                        CSV_list.append(dates[i])
+                        CSV_list.append(start_time)
+                        CSV_list.append(end_time)
+                        CSV_list.append(location_address)
+                        CSV_list.append(location_desc)
+                        CSV_list.append(location_name)
+                        CSV_list.append(lat)
+                        CSV_list.append(long)
+                        CSV_list.append(True)
+                        CSV_data_inputter(CSV_list, food_CSV_file)
+                        i += 1        
+                else:
+                #catch off cases of poor HTML tagging
+                    location_desc = details[1]+". "+details[2]
+                    new_details_tuple = string_split(details[2], ".", 2)
+                    new_details=[]
+                    for item in new_details_tuple:
+                        new_details.append(item)
+                    date_details = extract_date(new_details[0])
+                    dates = date_details[0] 
+                    start_time = date_details[1].split("-")[0]+" "+date_details[2]+"."
+                    end_time = date_details[1].split("-")[1]+" "+date_details[2]+"."
+                    i = 0
+                    if type(dates) == str:
+                        CSV_list = []
+                        CSV_list.append(location_name)
+                        CSV_list.append(dates)
+                        CSV_list.append(start_time)
+                        CSV_list.append(end_time)
+                        CSV_list.append(location_address)
+                        CSV_list.append(location_desc)
+                        CSV_list.append(location_name)
+                        CSV_list.append(lat)
+                        CSV_list.append(long)
+                        CSV_list.append(True)
+                        CSV_data_inputter(CSV_list, food_CSV_file)
+                        i += 1     
+                    else:
+                        while i < len(dates):
+                            CSV_list = []
+                            CSV_list.append(location_name)
+                            CSV_list.append(dates[i])
+                            CSV_list.append(start_time)
+                            CSV_list.append(end_time)
+                            CSV_list.append(location_address)
+                            CSV_list.append(location_desc)
+                            CSV_list.append(location_name)
+                            CSV_list.append(lat)
+                            CSV_list.append(long)
+                            CSV_list.append(True)
+                            CSV_data_inputter(CSV_list, food_CSV_file)
+                            i += 1     
+                    
 ######################################
 ## CSV File Creation Function Block ##
 ######################################
@@ -527,3 +686,6 @@ if __name__ == '__main__':
 
     #scrape 211 Food Pantry data
     food_pantry_211_scraper()
+
+    #scape food for lane county hot meal sites
+    food_for_lane_scraper()
