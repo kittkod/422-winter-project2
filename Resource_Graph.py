@@ -3,6 +3,7 @@ Grapher to display free food resources around UO (as well as eugene, if developm
 """
 import plotly.express as px 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 from database import clean_coordinate
 import database # testing - jasmine
 import pandas as pd # testing too - jasmine
@@ -12,6 +13,10 @@ import database # testing - jasmine
 import pandas as pd # testing too - jasmine
 from datetime import date, timedelta
 >>>>>>> Stashed changes
+=======
+import pandas as pd
+import database
+>>>>>>> Stashed changes
 
 def graph_scatterplot(input_data, title_name):
     ''' This function graphs a plotly.express.scatter_mapbox() type with a dictionary
@@ -19,6 +24,7 @@ def graph_scatterplot(input_data, title_name):
     inputs:
         input_data:dict - a dictionary with types 'lat', 'lon', 'sizes', 'text', 'comment', 'Food Resources'
         title_name:str - a string that pertains to the title of the given graph 
+<<<<<<< Updated upstream
     '''
     
     fig = px.scatter_mapbox(input_data, lat="Latitude", lon="Longitude", title=title_name, 
@@ -49,13 +55,50 @@ def graph_scatterplot(input_data, title_name):
 >>>>>>> Stashed changes
 
     fig.update_traces(hovertemplate='<b>%{customdata[4]}</b><br>%{customdata[0]}<br>Start: %{customdata[1]}<br>End: %{customdata[2]}<br>Location: %{customdata[3]}<br>Date: %{customdata[5]}')
+=======
 
+    '''
+    # Convert input_data to a DataFrame first
+    df = pd.DataFrame(input_data)
+    
+    # Create the figure using the DataFrame
+    fig = px.scatter_mapbox(df, lat="lat", lon="lon", title=title_name, height=650, width=1200, zoom=10.5, text="comment",
+                            hover_data={
+                                "comment": True,
+                                "text": True,
+                                "Time": True,
+                                "Location": True,
+                                "Organizer": True,
+                                "Date": True,
+                                "Food Resources": False,
+                                "sizes": False,
+                                "lat": False,
+                                "lon": False},
+                            size='sizes', color="Food Resources", color_continuous_scale="red", labels={'text':''})
+>>>>>>> Stashed changes
+
+    # Custom hovertemplate using the DataFrame column names
+    fig.update_traces(hovertemplate='<b>%{customdata[0]}</b><br>' +  # Event Title
+                  '%{customdata[1]}<br>' +                      # Description
+                  'Time: %{customdata[2]}<br>' +                # Time
+                  'Location: %{customdata[3]}<br>' +            # Location
+                  'Organizer: %{customdata[4]}<br>' +           # Organizer
+                  'Date: %{customdata[5]}<extra></extra>')      # Date
+
+    # Update the layout of the figure
     fig.update_layout(mapbox_style='open-street-map')
     fig.update_layout(margin={"r":0,"t":70,"l":40,"b":0})
+<<<<<<< Updated upstream
     
     fig.show()
 
 <<<<<<< Updated upstream
+=======
+
+    # Display the figure
+    fig.show()
+
+>>>>>>> Stashed changes
 def main():
     df = pd.read_csv('Free_Food_Database.csv')
     dict = {

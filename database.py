@@ -62,12 +62,20 @@ def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
     start_time = datetime.strptime(start_time_str, '%I:&M &p').time()
     end_time = datetime.strptime(end_time_str, '%I:%M %p').time()
 
+<<<<<<< Updated upstream
     # Filter dataframe
     filtered_df = df[
         (pd.to_datetime(df['Date']) == date) &
         (pd.to_datetime(df['Start Time']).dt.time >= start_time) &
         (pd.to_datetime(df['End Time']).dt.time <= end_time)
     ]
+=======
+
+        organizer = row.get('Organizer(s)', '')
+        if pd.isna(organizer):  # If it's NaN, use an empty string instead
+            organizer = ''
+        event_dict['Organizer'].append(break_str(str(organizer), 40))
+>>>>>>> Stashed changes
 
     return filtered_df
 

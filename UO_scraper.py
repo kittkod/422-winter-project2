@@ -513,7 +513,11 @@ def food_pantry_211_scraper():
 ## CSV File Creation Function Block ##
 ######################################
         
+<<<<<<< Updated upstream
 def CSV_file_creator():
+=======
+def CSV_file_creator(CSV_file):
+>>>>>>> Stashed changes
     header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)', 'Latitude', 'Longitude', 'Reoccuring']
     with open(CSV_file, 'w', newline="") as file:
         csvwriter = csv.writer(file)

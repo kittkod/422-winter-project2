@@ -12,15 +12,31 @@ import Resource_Graph
 csv_file_path = 'Free_Food_Database.csv'
 
 #######################################################################
+<<<<<<< Updated upstream
 # Test customtkinter
+=======
+# Implementing customTkinter
+>>>>>>> Stashed changes
 #######################################################################
 
 # Create Dollarless Dining application window
 # This CTk window inherets from the Tk window
 window = ctk.CTk() 
 window.title('Dollarless Dining')
+<<<<<<< Updated upstream
 window.geometry('444x444')
 
+=======
+window.geometry('555x555')
+
+header_label = ctk.CTkLabel(
+    window,
+    text='Dollarless Dining',
+    font=('Helvetica', 25, 'bold'),
+    bg_color='pink')
+header_label.pack(fill=tk.X)  # fill=tk.X expands the label horizontally
+
+>>>>>>> Stashed changes
 # Create widgets for the application
 # Split into multiple lines for readability.
 
@@ -28,6 +44,7 @@ window.geometry('444x444')
 # Light Mode and Dark Mode Buttons
 #######################################################################
 
+<<<<<<< Updated upstream
 # Note capitalization of 'CTkButton'
 light_mode_button = ctk.CTkButton(
     window, # 'window' is master
@@ -44,6 +61,40 @@ dark_mode_button = ctk.CTkButton(
     # hover_color = ('grey', 'white'),
     command = lambda: ctk.set_appearance_mode('dark'))
 dark_mode_button.pack()
+=======
+settings_frame = ctk.CTkScrollableFrame(
+    window,
+    label_text = 'UO Free Food Resources')
+
+# Create a frame for the appearance mode header and buttons
+mode_frame = ctk.CTkFrame(window)
+
+# Appearance Mode Header
+mode_header_label = ctk.CTkLabel(
+    mode_frame,
+    text='Appearance',
+    font=('Helvetica', 15, 'bold'),
+    pady=5)
+mode_header_label.pack(side=tk.TOP)
+
+# Light Mode and Dark Mode Buttons
+light_mode_button = ctk.CTkButton(
+    mode_frame,
+    text='☀',
+    width=6,
+    command=lambda: ctk.set_appearance_mode('light'))
+light_mode_button.pack(side=tk.LEFT, padx=5)
+
+dark_mode_button = ctk.CTkButton(
+    mode_frame, 
+    text='☾',
+    width=6,
+    command=lambda: ctk.set_appearance_mode('dark'))
+dark_mode_button.pack(side=tk.LEFT, padx=5)
+
+# Pack the frame containing the header and buttons
+mode_frame.pack(side=tk.LEFT)
+>>>>>>> Stashed changes
 
 #######################################################################
 
@@ -83,12 +134,23 @@ this_week_button.pack(pady=5)
 >>>>>>> Stashed changes
 
 #######################################################################
+<<<<<<< Updated upstream
 
 scrollable_frame_food_list = ctk.CTkScrollableFrame(
     window,
     label_text = 'UO Free Food Resources'
+=======
+# Scrolling List of Free Food Resources
+#######################################################################
+
+scrollable_frame_food_list = ctk.CTkScrollableFrame(
+    window,
+    label_text = 'UO Free Food'
+>>>>>>> Stashed changes
     )
 scrollable_frame_food_list.pack()
+
+#######################################################################
 
 #######################################################################
 
@@ -109,6 +171,40 @@ def populate_scrollable_frame():
 # Call the populate function to initially populate the frame
 populate_scrollable_frame()
 
+<<<<<<< Updated upstream
+=======
+
+#######################################################################
+# Extra Resources Button
+#######################################################################
+
+def show_resource_list():
+    resource_list_window = ctk.CTkToplevel()
+    resource_list_window.title('Extra Free Food Resources')
+
+    # Use standard Tkinter Listbox instead of CTkListbox
+    resource_listbox = tk.Listbox(resource_list_window)
+
+
+    # Insert some items into the listbox for testing
+    resource_listbox.insert(1, "Resource 1")
+    resource_listbox.insert(2, "Resource 2")
+    resource_listbox.insert(3, "Resource 3")
+
+    resource_listbox.pack(fill='both', expand=True)
+
+    resource_list_window.mainloop()
+
+
+# Create a button to show the free food resources list
+resource_button = ctk.CTkButton(window, text='Extra Resources', command=show_resource_list)
+resource_button.pack(pady=5)
+
+#######################################################################
+# View Map Function
+#######################################################################
+
+>>>>>>> Stashed changes
 # Function to handle View Map button click
 def on_view_map_click():
     # placeholder values:
@@ -138,7 +234,38 @@ view_map_popup_button = ctk.CTkButton(
     text = 'View Map',
     command = lambda: Resource_Graph.main()
 )
+<<<<<<< Updated upstream
 view_map_popup_button.pack()
 
 # run
 window.mainloop()
+=======
+view_map_popup_button.pack(pady=5)
+
+#######################################################################
+# Administrator Pop-up Button
+#######################################################################
+
+#FIXME
+
+#######################################################################
+# Administrator Pop-Up Insert New Event Functionality
+#######################################################################
+
+#FIXME
+
+#######################################################################
+# Administrator Pop-Up Window
+#######################################################################
+
+#FIXME
+
+# Jasmine trying stuff out >:)
+#from tkinterhtml import HtmlFrame
+#frame = HtmlFrame(window, horizontal_scrollbar="auto")
+#frame.set_content("")
+#frame.pack()
+
+# Run canvas
+window.mainloop()
+>>>>>>> Stashed changes
