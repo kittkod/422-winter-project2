@@ -362,6 +362,34 @@ def on_view_map_click():
 #frame = HtmlFrame(window, horizontal_scrollbar="auto")
 #frame.set_content("")
 #frame.pack()
+    
+
+#######################################################################
+# About Pop-up Button
+#######################################################################
+
+def show_about_popup():
+    about_text = """
+    Dollarless Dining
+
+    This program helps you discover free food resources on campus.
+
+    Developed by Simone, Nithi, Max, Jasmine, Kylie
+
+    Copyright © 2024 University of Oregon
+    """
+
+    about_popup = ctk.CTkToplevel(window)
+    about_popup.title('About Dollarless Dining')
+    about_popup.geometry('300x200')
+
+    about_label = ctk.CTkLabel(about_popup, text=about_text, wraplength=280)
+    about_label.pack(padx=10, pady=10)
+
+# Add the About button
+about_button = ctk.CTkButton(left_frame, text='About', command=show_about_popup)
+about_button.pack(pady=5)
+
 
 #######################################################################
 #                                                                     # 
