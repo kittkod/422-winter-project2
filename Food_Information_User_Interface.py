@@ -123,13 +123,15 @@ def populate_scrollable_frame():
     for widget in scrollable_frame_food_list.winfo_children():
         widget.destroy()
     
-    # Create a new widget for each event
+    # Create a new widget for each event with text wrapping
     for event in events:
-        event_label = ctk.CTkLabel(
-            scrollable_frame_food_list,
-            text=event['Event Title'],
-            )
-        event_label.pack()
+        event_text = event['Event Title']
+        
+        # Create the Tkinter Text widget
+        event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=30, height=2)
+        event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
+        event_textbox.pack()
+
 
 # Call the populate function to initially populate the frame
 populate_scrollable_frame()
@@ -143,19 +145,6 @@ populate_scrollable_frame()
 #######################################################################
 # Additional Resources Button from Main to Pop-Up
 #######################################################################
-
-# FIXME: Simone will rework below commented functionality for a 
-# smoother user experience (not critical path currently); 
-#
-# def open_toplevel(self):
-#         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-#             self.toplevel_window = ToplevelWindow(self)  # create window if its None or destroyed
-#         else:
-#             self.toplevel_window.focus()  # if window exists focus it
-#
-# FIXME: Simone will make each resource into a linked button! (not cp.)
-
-
 
 def show_resource_list():
     resource_list_window = ctk.CTkToplevel()
