@@ -14,6 +14,7 @@ def refresh_data():
     events_calendar_URL_scraper()
     food_pantry_211_scraper()
     admin_file_updater()
+    # TODO - print something to terminal when scraping is finished 
 
 if __name__ == "__main__":
     refresh_data()

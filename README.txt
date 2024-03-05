@@ -19,9 +19,9 @@ Installations/Modules needed: Python, Pandas, plotly.express, bs4, requests, cus
 computer
 2) through terminal or a code editor (like virtual studio code), run the Food_Information_User_Interface.py 
 script
-3) if this is the first time running: enter admin mode through the admin portal button on the 
-main page, and click the 'scrape new data' button (?)
-4) wait for output that the scraping has been finished (maybe), and now the program is set up
+3) if this is the first time running: enter admin mode through the 'Admin Mode' button on the 
+main page, and click the 'Refresh Data' button
+4) wait for output that the scraping has been finished, and now the program is set up
 and ready to use
 
 *also add these*
