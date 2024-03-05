@@ -3,19 +3,19 @@ Database for graph function helpers and UI-database connectors
 needs to: sort through data in .csv to look for if user wants specific hours/days 
 '''
 import pandas as pd
-from utils import clean_description, break_str, format_time, get_all_events, get_lat_lon, address_converter, clean_coordinate
+import utils
 
 csv_file_path = 'Free_Food_Database.csv'
 
-def run_map(input_csv, start_day, end_day):
+def run_map(input_csv):
     df = pd.read_csv(input_csv)
 
     event_dict = {
-        'lat': [], 
-        'lon': [], 
+        'lat': [],
+        'lon': [],
         'sizes': [],
         'text': [],
-        'comment': [], 
+        'comment': [],
         'Food Resources': [],
         'Location': [],
         'Time': [],
@@ -26,8 +26,8 @@ def run_map(input_csv, start_day, end_day):
 
     for _, row in df.iterrows():
         # Assuming clean_coordinate handles non-string inputs correctly.
-        latitude_tmp = clean_coordinate(row['Latitude'])
-        longitude_tmp = clean_coordinate(row['Longitude'])
+        latitude_tmp = utils.clean_coordinate(row['Latitude'])
+        longitude_tmp = utils.clean_coordinate(row['Longitude'])
 
         if latitude_tmp is None or longitude_tmp is None:
             continue
@@ -40,21 +40,21 @@ def run_map(input_csv, start_day, end_day):
         description = row.get('Description', '')
         if isinstance(description, str) and description.lower() != 'nan':
             description = description.strip()  # Remove leading/trailing whitespace
-            description = clean_description(description)
+            description = utils.clean_description(description)
             description+='<br>'
-            event_dict['text'].append(break_str(description, 40))
+            event_dict['text'].append(utils.break_str(description, 40))
         else:
             event_dict['text'].append('')
 
         # Process and add other event details (apply similar validation if necessary)
-        event_dict['comment'].append(break_str(row.get('Event Title', ''), 40))
-        event_dict['Food Resources'].append(break_str(row.get('Event Title', ''), 25))
-        event_dict['Time'].append(break_str(format_time(row), 40))
+        event_dict['comment'].append(utils.break_str(row.get('Event Title', ''), 40))
+        event_dict['Food Resources'].append(utils.break_str(row.get('Event Title', ''), 25))
+        event_dict['Time'].append(utils.break_str(utils.format_time(row), 40))
 
         location = str(row.get('Location', ' '))
         # Check if location is 'nan' which is the string representation of NaN for floats
         if location.lower() != 'nan':
-            event_dict['Location'].append(break_str(location, 40))
+            event_dict['Location'].append(utils.break_str(location, 40))
         else:
             event_dict['Location'].append(' ')
 
@@ -62,7 +62,7 @@ def run_map(input_csv, start_day, end_day):
         organizer = row.get('Organizer(s)', '')
         if pd.isna(organizer):  # If it's NaN, use an empty string instead
             organizer = ''
-        event_dict['Organizer'].append(break_str(str(organizer), 40))
+        event_dict['Organizer'].append(utils.break_str(str(organizer), 40))
 
         # Check if the event is reoccurring and adjust the Date field accordingly
         reoccurring = row.get('Reoccurring', False)
@@ -77,11 +77,11 @@ def run_map(input_csv, start_day, end_day):
 
 if __name__ == "__main__":
     print("Running database.py script...")
-    events = get_all_events(csv_file_path)
+    events = utils.get_all_events(csv_file_path)
     print(f"CSV file read successfully. Number of events found: {len(events)}")
     for event in events:
-        converted_address = address_converter(event['Location']) # Using address_converter logic
-        lat, lon = get_lat_lon(converted_address)
+        converted_address = utils.address_converter(event['Location']) # Using address_converter logic
+        lat, lon = utils.get_lat_lon(converted_address)
         if lat is not None and lon is not None:
             print(f"Event Title: {event['Event Title']}, Location: {converted_address}, Latitude: {lat}, Longitude: {lon}")
         else:

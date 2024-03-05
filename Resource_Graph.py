@@ -72,7 +72,7 @@ def graph_scatterplot(input_data, title_name):
     webbrowser.open(url)
 
 def main():
-    event_dict = database.run_map('Free_Food_Database.csv', '2/2/24', '2/5/24')
+    event_dict = database.run_map('Free_Food_Database.csv')
     graph_scatterplot(event_dict, "Food Resources on Specific Date")
 
 if __name__ == "__main__":
