@@ -4,10 +4,16 @@ needs to: sort through data in .csv to look for if user wants specific hours/day
 '''
 import pandas as pd
 import utils
+import datetime
 
 csv_file_path = 'Free_Food_Database.csv'
 
-def run_map(input_csv):
+def run_map(input_csv, input_button):
+    '''function to create a dictionary for a scatterplot map input from data from an input csv.
+    inputs:
+        input_csv:csv - the csv with scraped data
+        input_button:str - the string telling which button was pressed to run the map ('today', 'tomorrow', or 'next week')
+    '''
     df = pd.read_csv(input_csv)
 
     event_dict = {
@@ -23,6 +29,12 @@ def run_map(input_csv):
         'Date': [],
         'Reoccurring': []
     }
+
+    todays_date = datetime.today().strftime('%Y-%m-%d')
+    start_date = ''
+    end_date = ''
+    if input_button.lower() == "today":
+        pass
 
     for _, row in df.iterrows():
         # Assuming clean_coordinate handles non-string inputs correctly.

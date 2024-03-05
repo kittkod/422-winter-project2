@@ -378,7 +378,7 @@ new_event_button.pack(side='bottom', anchor='w', padx=10, pady=10)
 view_map_popup_button = ctk.CTkButton(
     left_frame,
     text = 'View Map',
-    command = lambda: Resource_Graph.main()
+    command = lambda: Resource_Graph.run_map_function("test title map", 'today')
 )
 view_map_popup_button.pack(pady=5)
 
