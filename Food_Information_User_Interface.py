@@ -141,7 +141,7 @@ populate_scrollable_frame()
 def show_resource_list():
     resource_list_window = ctk.CTkToplevel()
     resource_list_window.title('Online Resources')
-    resource_list_window.geometry('888x888')
+    resource_list_window.geometry('666x730')
     resource_list_window.resizable(False, False)  # width, height are constant
 
     # Create a Label to display additional resources
@@ -172,7 +172,7 @@ def show_resource_list():
     open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: show_list_popup(sample_text))
     open_list_button.pack(pady=1)
 
-    #full list as buttons
+    #full list as buttons to be used with wifi
     resource_label1 = ctk.CTkLabel(resource_list_window, text="Only can be used with wifi!")
     resource_label1.pack()
 
@@ -223,7 +223,7 @@ def show_resource_list():
 def show_list_popup(text):
     list_popup = ctk.CTkToplevel()
     list_popup.title('Resource List')
-    list_popup.geometry('400x400')
+    list_popup.geometry('500x500')
 
     list_label = ctk.CTkLabel(list_popup, text="Resource List:")
     list_label.pack(padx=10, pady=10)
