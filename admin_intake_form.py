@@ -81,18 +81,35 @@ def admin_file_updater():
         CSV_file_list = original_admin_df.loc[val, :].values.flatten().tolist()
         CSV_data_inputter(CSV_file_list, admin_CSV_file)
         CSV_data_inputter(CSV_file_list, food_CSV_file)
+
+def delete_from_admin(event_title: str):
+    """Function to remove admin entered data - once admin has selected an event title to delete"""
+    ##should be no errors in event_title because event_title is a button press grab
     
+    df = pd.read_csv(admin_CSV_file)
+    df = pd.DataFrame(df)
+
+    index = df.index.get_loc(df[df['Event Title'] == event_title].index[0])
+
+    df = df.drop([index])
+
+    CSV_file_creator(admin_CSV_file)
+    df.to_csv('admin_info.csv')
+    return
 
 if __name__ == "__main__":
     "Test cases - don't run unless you are prepared to refresh the data afterwards"
 
     CSV_file_creator(admin_CSV_file)
 
-    dictionary_1 = {"title": "Kylie Test", "date": "March 2", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie!", "organizers": "Kylie"}
-    dictionary_2 = {"title": "Kylie Test number 2", "date": "March 4", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie a second time!", "organizers": "Simone :>"}
+    dictionary_1 = {"title": "Kylie Test", "date": "March 4", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie!", "organizers": "Kylie"}
+    dictionary_2 = {"title": "Kylie Test number 2", "date": "March 5", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie a second time!", "organizers": "Simone :>"}
     
     add_to_admin_file(dictionary_1) 
     add_to_admin_file(dictionary_2) 
+
     admin_file_updater()
+
+    delete_from_admin("Kylie Test")
 
     
