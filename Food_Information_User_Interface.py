@@ -30,15 +30,7 @@ csv_file_path = 'Free_Food_Database.csv'
 # This CTk window inherets from the Tk window
 window = ctk.CTk() 
 window.title('Dollarless Dining')
-window.geometry('777x777')
-
-# Commented out to go for consistent user interface idk
-# header_label = ctk.CTkLabel(
-#     window,
-#     text='Dollarless Dining',
-#     font=('Helvetica', 25, 'bold'),
-#     bg_color='pink')
-# header_label.pack(fill=tk.X)  # fill=tk.X expands the label horizontally
+window.geometry('750x500')
 
 #######################################################################
 #                                                                     # 
@@ -46,13 +38,14 @@ window.geometry('777x777')
 #                                                                     #
 #######################################################################
 
+#######################################################################
+#
 # Left Frame
+#   - for various buttons
+#######################################################################
+
 left_frame = ctk.CTkFrame(window, width=300)
 left_frame.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
-
-# Right Frame 
-#right_frame = ctk.CTkFrame(window)
-#right_frame.pack(side=tk.RIGHT, fill=tk.Y, padx=5, pady=5)
 
 #######################################################################
 #
@@ -74,7 +67,7 @@ light_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
 dark_mode_button = ctk.CTkButton(mode_frame, text='☾', width=6, command=lambda: ctk.set_appearance_mode('dark'))
 dark_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
 
-mode_frame.pack(side=tk.TOP, padx=10, pady=10)
+mode_frame.pack(side=tk.TOP, padx=5, pady=5)
 
 #######################################################################
 # Today and Tomorrow Buttons
@@ -99,16 +92,15 @@ tomorrow_button.pack(pady=5)
 # Scrolling List of Free Food Resources
 #######################################################################
 
-# FIXME Simone wants to implement text wrapping with 'textbox' (not 
-# Critical Path).
+# FIXME implement text wrapping without 'textbox' (it is editable unfortunately)
+# instead, let's use 'CTkLabel'
 
 scrollable_frame_food_list = ctk.CTkScrollableFrame(
-    #right_frame
     window, 
     label_text = 'UO Free Food Resources',
-    width = 555
+    width = 450
     )
-scrollable_frame_food_list.pack(pady=5)
+scrollable_frame_food_list.pack(anchor="n", pady=5, expand=True)
 
 # Function to populate the scrollable frame with data
 def populate_scrollable_frame():
@@ -122,10 +114,15 @@ def populate_scrollable_frame():
     for event in events:
         event_text = event['Event Title']
 
-        # Create the Tkinter Text widget
+        # Create the Tkinter Text widget 
         event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
         event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
         event_textbox.pack()
+
+        # #FIXME CHANGING THE ABOVE TO CTkLabel instead
+        # event_label = ctk.CTkLabel(scrollable_frame_food_list, text=event_text)
+        
+
 
 # Call the populate function to initially populate the frame
 populate_scrollable_frame()
@@ -142,12 +139,12 @@ populate_scrollable_frame()
 
 def show_resource_list():
     resource_list_window = ctk.CTkToplevel()
-    resource_list_window.title('Additional Resources')
+    resource_list_window.title('Online Resources')
     resource_list_window.geometry('555x555')
     resource_list_window.resizable(False, False)  # width, height are constant
 
     # Create a Label to display additional resources
-    resource_label = ctk.CTkLabel(resource_list_window, text="Additional Resources:")
+    resource_label = ctk.CTkLabel(resource_list_window, text="Online Resources:")
     resource_label.pack(padx=10, pady=10)
 
     # Create a Text widget to display sample text with hyperlinks
@@ -206,7 +203,6 @@ def show_resource_list():
 # Additional Resources Button
 resource_button = ctk.CTkButton(left_frame, text='Additional Resources', command=show_resource_list) 
 resource_button.pack(pady=5)
-
 
 #######################################################################
 #                                                                     #
