@@ -31,7 +31,7 @@ csv_file_path = 'Free_Food_Database.csv'
 # This CTk window inherets from the Tk window
 window = ctk.CTk() 
 window.title('Dollarless Dining')
-window.geometry('750x500')
+window.geometry('850x700')
 
 #######################################################################
 #                                                                     # 
@@ -166,55 +166,55 @@ def show_resource_list():
 
     #to show the full list
     resource_label2 = ctk.CTkLabel(resource_list_window, text="Can be used without wifi")
-    resource_label2.pack(padx=5, pady=5)
+    resource_label2.pack()
 
     # Create a button to open a new popup with the list
     open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: show_list_popup(sample_text))
-    open_list_button.pack(pady=5)
+    open_list_button.pack(pady=1)
 
     #full list as buttons
     resource_label1 = ctk.CTkLabel(resource_list_window, text="Only can be used with wifi!")
-    resource_label1.pack(padx=5, pady=5)
+    resource_label1.pack()
 
     # Create a button linked to 211info.com
     info_button = ctk.CTkButton(resource_list_window, text='211info', command=lambda: webbrowser.open('https://www.211info.org/get-help/food/'))
-    info_button.pack(padx=5, pady=5)
+    info_button.pack(pady=1)
 
     # Create a button linked to uoregon engage
     engage_button = ctk.CTkButton(resource_list_window, text='UOregon Engage', command=lambda: webbrowser.open('https://uoregon.campuslabs.com/engage/events?categories=16973'))
-    engage_button.pack(padx=5, pady=5)
+    engage_button.pack(pady=1)
 
     # Create a button linked to food for lane county - meal sites
     meal_site_button = ctk.CTkButton(resource_list_window, text='Food for Lane County: Meal Sites', command=lambda: webbrowser.open('https://www.foodforlanecounty.org/find-a-meal-site/'))
-    meal_site_button.pack(padx=5, pady=5)
+    meal_site_button.pack(pady=1)
 
     # Create a button linked to food for lane county - mobile food pantry
     mobile_food_button = ctk.CTkButton(resource_list_window, text='Food for Lane County: Mobile Food Pantry', command=lambda: webbrowser.open('https://www.foodforlanecounty.org/mobile-pantry/'))
-    mobile_food_button.pack(padx=5, pady=5)
+    mobile_food_button.pack(pady=1)
 
     # Create a button linked to food for lane county - Trillium Produce Plus
     trillium_button = ctk.CTkButton(resource_list_window, text='Food for Lane County: Trillium Produce Plus', command=lambda: webbrowser.open(' https://www.foodforlanecounty.org/get-help/trillium-produce-plus/'))
-    trillium_button.pack(padx=5, pady=5)
+    trillium_button.pack(pady=1)
 
     # Create a button linked to UOregon Basic Needs Program
     basic_button = ctk.CTkButton(resource_list_window, text='UOregon Basic Needs Program', command=lambda: webbrowser.open('https://basicneeds.uoregon.edu/food'))
-    basic_button.pack(padx=5, pady=5)
+    basic_button.pack(pady=1)
 
     # Create a button linked to UOregon Free Food Events
     free_events_button = ctk.CTkButton(resource_list_window, text='UOregon Free Food Events', command=lambda: webbrowser.open('https://calendar.uoregon.edu/search/events?event_types[]=15630'))
-    free_events_button.pack(padx=5, pady=5)
+    free_events_button.pack(pady=1)
 
     # Create a button linked to Burrito Brigade: Waste to Taste - Free Food Boxes
     burrito_button = ctk.CTkButton(resource_list_window, text='Burrito Brigade: Waste to Taste - Free Food Boxes', command=lambda: webbrowser.open('https://burritobrigade.org/waste-to-taste/'))
-    burrito_button.pack(padx=5, pady=5)
+    burrito_button.pack(pady=1)
 
     # Create a button linked to SNAP Food Benefits
     snap_button = ctk.CTkButton(resource_list_window, text='SNAP Food Benefits', command=lambda: webbrowser.open('https://www.oregon.gov/odhs/food/pages/snap.aspx'))
-    snap_button.pack(padx=5, pady=5)
+    snap_button.pack(pady=1)
 
     # Create a button linked to UOregon Leftover Textover
     textover_button = ctk.CTkButton(resource_list_window, text='UOregon Leftover Textover', command=lambda: webbrowser.open('https://emu.uoregon.edu/leftover-textover'))
-    textover_button.pack(padx=5, pady=5)
+    textover_button.pack(pady=1)
 
 
     resource_list_window.mainloop()
