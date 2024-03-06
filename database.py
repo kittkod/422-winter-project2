@@ -4,15 +4,21 @@ needs to: sort through data in .csv to look for if user wants specific hours/day
 '''
 import pandas as pd
 import utils
+import re
 import datetime
 
 csv_file_path = 'Free_Food_Database.csv'
+
 
 def run_map(input_csv, input_button):
     '''function to create a dictionary for a scatterplot map input from data from an input csv.
     inputs:
         input_csv:csv - the csv with scraped data
-        input_button:str - the string telling which button was pressed to run the map ('today', 'tomorrow', or 'next week')
+        input_button:str - the string telling which button was pressed to run the map
+                            input_button can be 'today', 'tomorrow' or 'next 7 days'
+    outputs:
+        event_dict:dict - the created dictionary with scatterplot points
+        map_name:str - the name of the map with corresponding dates
     '''
     df = pd.read_csv(input_csv)
 
@@ -30,13 +36,24 @@ def run_map(input_csv, input_button):
         'Reoccurring': []
     }
 
-    todays_date = datetime.today().strftime('%Y-%m-%d')
-    start_date = ''
-    end_date = ''
-    if input_button.lower() == "today":
-        pass
-
+    start_date, end_date, weekday_date, is_week, map_name = utils.find_ranges(input_button.lower())
+    
+    # looping through each row in the input csv
     for _, row in df.iterrows():
+        
+        # if this row is out of the filtered range, skip
+        if utils.in_filter(row, start_date, end_date, weekday_date, is_week) == False:
+            continue
+      
+        # title with dates if is_week is true
+        new_event_title = ''
+        if is_week == True and str(row["Reoccurring"]).strip().lower() == "false":
+            new_event_title = utils.break_str((row.get('Event Title', '')+' - '+row['Date']), 28)#'+str(row_month)+'/'+str(row_day)+'/'+datetime.date.today().strftime('%y')), 28)
+        if is_week == True and str(row["Reoccurring"]).strip().lower() == "true":
+            new_event_title = utils.break_str((row.get('Event Title', '')+' - '+ row['Date']), 28)
+        if is_week == False:
+            new_event_title = utils.break_str(row.get('Event Title', ''), 28)
+
         # Assuming clean_coordinate handles non-string inputs correctly.
         latitude_tmp = utils.clean_coordinate(row['Latitude'])
         longitude_tmp = utils.clean_coordinate(row['Longitude'])
@@ -59,8 +76,8 @@ def run_map(input_csv, input_button):
             event_dict['text'].append('')
 
         # Process and add other event details (apply similar validation if necessary)
-        event_dict['comment'].append(utils.break_str(row.get('Event Title', ''), 40))
-        event_dict['Food Resources'].append(utils.break_str(row.get('Event Title', ''), 25))
+        event_dict['comment'].append(new_event_title)
+        event_dict['Food Resources'].append(new_event_title)
         event_dict['Time'].append(utils.break_str(utils.format_time(row), 40))
 
         location = str(row.get('Location', ' '))
@@ -83,9 +100,9 @@ def run_map(input_csv, input_button):
         date = str(row.get('Date', '')).strip()
         if reoccurring and date.lower() != 'nan' and date:
             date = f"Every {date}"
-        event_dict['Date'].append(date)
+        event_dict['Date'].append(utils.break_str(date, 40))
 
-    return event_dict
+    return event_dict, map_name
 
 if __name__ == "__main__":
     print("Running database.py script...")

@@ -71,12 +71,13 @@ def graph_scatterplot(input_data, title_name):
         f.write(custom_html)
     webbrowser.open(url)
 
-def run_map_function(title_name, input_button):
-    event_dict = database.run_map("Free_Food_Database.csv", input_button)
-    graph_scatterplot(event_dict, title_name)
+def run_map_function(input_button):
+    event_dict, mapname = database.run_map("Free_Food_Database.csv", input_button)
+    graph_scatterplot(event_dict, mapname)
     
 def main():
-    run_map_function("Stuff on specifc date", 'today')
+    # soley for testing
+    run_map_function('today')
 
 if __name__ == "__main__":
     main()

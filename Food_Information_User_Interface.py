@@ -78,6 +78,7 @@ mode_frame.pack(side=tk.TOP, padx=5, pady=5)
 today_button = ctk.CTkButton(
     left_frame, 
     text='Today',
+    #TODO: when the button is pressed, it stores the 'today' value in a global variable that can be accessed by another function.
     command=lambda: print('The Today Button was pressed.')
 )
 today_button.pack(pady=5)
@@ -85,6 +86,7 @@ today_button.pack(pady=5)
 tomorrow_button = ctk.CTkButton(
     left_frame, 
     text='Tomorrow',
+    #TODO: same as above
     command=lambda: print('The Tomorrow Button was pressed.')
 )
 tomorrow_button.pack(pady=5)
@@ -105,15 +107,16 @@ scrollable_frame_food_list.pack(anchor="n", pady=5, expand=True)
 
 # Function to populate the scrollable frame with data
 def populate_scrollable_frame():
+    #TODO: the get_all_events second argument is the global variable that stores words like 'today' based on button input
     # Retrieve all events
-    events = get_all_events(csv_file_path)
+    events = get_all_events(csv_file_path, 'all') # second argument can be 'all', 'today', 'tomorrow', or 'next 7 days'
 
     # Clear existing data in the scrollable frame
     for widget in scrollable_frame_food_list.winfo_children():
         widget.destroy()
 
     for event in events:
-        event_text = event['Event Title']
+        event_text = event['Event Title'] + '-' + event['Date']
 
         # Create the Tkinter Text widget 
         event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
@@ -471,14 +474,16 @@ new_event_button.pack(side='bottom', anchor='w', padx=10, pady=10)
 view_map_popup_button = ctk.CTkButton(
     left_frame,
     text = 'View Map',
-    command = lambda: Resource_Graph.run_map_function("test title map", 'today')
+    #TODO: instead of 'next 7 days' the argument should be the global variable that stores things like 'today' made when the button is pressed
+    command = lambda: Resource_Graph.run_map_function('next 7 days') # arguments can be 'today', 'tomorrow', or 'next 7 days'
 )
+
 view_map_popup_button.pack(pady=5)
 
 #######################################################################
 # View Map Function
 #######################################################################
-
+# TODO: we don't need this function!
 # Function to handle View Map button click
 def on_view_map_click():
     # placeholder values:

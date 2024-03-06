@@ -2,6 +2,20 @@ import json
 import re
 import pandas as pd
 from datetime import datetime
+from datetime import date
+import re
+
+### DICTIONARIES
+weekday_dict = {0:"monday", 1:"tuesday", 2:"wednesday", 3:"thursday", 
+                4:"friday", 5:"saturday", 6:"sunday"}
+days_in_month = {1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
+month_dict = {"january":1, "february":2, "march":3, "april":4, "may":5,
+                "june":6, "july":7, "august":8, "september":9, "october":10,
+                    "november":11, "december":12}
+# this is kind of a bad dictionary, theres probably better ways of doing this
+abbr_mon = {'jan':'january', 'feb':'february', 'mar':'march', 'apr':'april', 'jun':'june', 'jul':'july',
+            'aug':'august', 'sep':'september', 'sept':'september', 'oct':'october'}
+
 
 # Load campus buildings data
 with open('campus_buildings.txt') as f:
@@ -82,6 +96,7 @@ def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
 
     return filtered_df
 
+#TODO: i don't think we need this ?
 # Function to convert filtered dataframe to dictionary
 def convert_to_dict(filtered_df):
     event_data = {
@@ -102,11 +117,6 @@ def convert_to_dict(filtered_df):
         event_data['Food Resources'].append(row['Event Title'])
 
     return event_data
-
-def get_all_events(csv_file_path):
-    df = pd.read_csv(csv_file_path)
-    df['sizes'] = 8
-    return df.to_dict(orient='records')
 
 def clean_description(description):
     patterns_to_remove = ['==> Eligibility:', '=', '=Eligibility:', 'Eligibility:']
@@ -142,3 +152,120 @@ def clean_coordinate(value):
     else:
         # If value is already a float (or other non-string), return it directly
         return value
+
+def get_all_events(csv_file_path, filtered_by):
+    ''' *description*
+    filtered_by:str - either 'all', 'today', 'tomorrow', or 'next 7 days'. controlls what events are shown.
+    '''
+    df = pd.read_csv(csv_file_path)
+    df['sizes'] = 8
+    new_dict = []
+
+    is_all = False
+    if filtered_by.lower() == "all":
+        is_all = True
+    else:
+        start_date, end_date, weekday_date, is_week, _ = find_ranges(filtered_by)
+    
+    for event in df.to_dict(orient='records'):
+        # if there is a filter and the events is not in the filter range
+        if is_all == False:
+            if in_filter(event, start_date, end_date, weekday_date, is_week) == False:
+                continue
+        new_dict.append(event)
+
+    return new_dict
+
+# function to find the ranges of days from an input button press
+def find_ranges(button_press):
+    curr_year = date.today().strftime('%y')
+    todays_month = date.today().strftime('%m')
+    todays_day = date.today().strftime('%d')
+    # inclusive start and end date
+    start_date = None # a list of ints: [date, month]
+    end_date = None # a list of ints: [date, month]
+    weekday_date = '' # a string of the weekday
+    is_week = False
+    map_name = 'Free Food Resources ' # name of map
+    
+    if button_press == "today":
+        start_date = [int(todays_day), int(todays_month)] # to get rid of the leading '0'
+        end_date = [int(todays_day), int(todays_month)]
+        weekday_date = weekday_dict[date.today().weekday()]
+        map_name += 'on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
+        
+    elif button_press == "tomorrow":
+        month_days = days_in_month[int(todays_month)] # how many days in the current month
+        # if tomorrow goes into the next month
+        if int(todays_day) + 1 > month_days:
+            start_date = [1, int(todays_month)+1]
+            end_date = [1, int(todays_month) + 1]
+        # if tomorrow is in the same month
+        else:
+            start_date = [int(todays_day) + 1, int(todays_month)]
+            end_date = [int(todays_day) + 1, int(todays_month)]
+        weekday_date = weekday_dict[date.today().weekday() + 1]
+        map_name += 'on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
+    
+    elif button_press == "next 7 days":
+        month_days = days_in_month[int(todays_month)]
+        # if the next 6 days go into the next month
+        if int(todays_day) + 6 > month_days:
+            days_forward = (int(todays_day) + 6) - month_days
+            start_date = [int(todays_day), int(todays_month)]
+            end_date = [int(days_forward), int(todays_month) + 1]
+        # if the next 6 days stay in the current month
+        else:
+            start_date = [int(todays_day), int(todays_month)]
+            end_date = [int(todays_day) + 6, int(todays_month)]
+        is_week = True
+        map_name += 'from ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+    
+    return start_date, end_date, weekday_date, is_week, map_name
+
+# for a single row, see if it satisfies the filter
+def in_filter(row, start_date, end_date, weekday_date, is_week):
+    ''' returns True or False'''
+    # if its not reoccurring event
+    if str(row["Reoccurring"]).strip().lower() == "false":
+        row_day = 0 # int of the row's day
+        row_month = 0 # int of the row's month
+        find_list = re.findall("[a-zA-Z]+\s\d{1,2}", row["Date"])
+        if len(find_list) > 0:
+            # getting the day from the date string
+            row_day = int((re.findall("\d{1,2}", find_list[0]))[0])
+            # getting the month string (full month name) from date string
+            str_month = find_list[0].replace(str(row_day), '').strip().lower()
+            if str_month not in month_dict:
+                if str_month in abbr_mon:
+                    tmp = abbr_mon[str_month]
+                    str_month = tmp
+                else:
+                    return False
+            # getting the month number from the month string
+            row_month = month_dict[str_month]
+        else:
+            return False
+
+        # seeing if the date is in the range 
+    
+        # if the row's month is larger than the starting range month and the row's date is less than the ending range date
+        if (start_date[1] < row_month and (end_date[1] == row_month and end_date[0] >= row_day)):
+            pass
+        # if the row's month is in the starting and ending range and the row's day is within range 
+        elif (start_date[1] == row_month and start_date[0] <= row_day) and (end_date[1] == row_month and end_date[0] >= row_day):
+            pass
+        # if the row's month is less than the ending range month and the row's date is more than the starting range date
+        elif (start_date[1] == row_month and start_date[0] <= row_day) and (end_date[1] > row_month):
+            pass
+        # not in date bounds
+        else:
+            return False
+
+    # if its reocurring
+    else:
+        # if the graph output is for a single day and the day's weekday does not match with the event's weekdays
+        if is_week == False and weekday_date not in row["Date"].lower():
+            return False
+    
+    return True
