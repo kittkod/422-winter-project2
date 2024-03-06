@@ -141,7 +141,7 @@ populate_scrollable_frame()
 def show_resource_list():
     resource_list_window = ctk.CTkToplevel()
     resource_list_window.title('Online Resources')
-    resource_list_window.geometry('666x730')
+    resource_list_window.geometry('666x666')
     resource_list_window.resizable(False, False)  # width, height are constant
 
     # Create a Label to display additional resources
