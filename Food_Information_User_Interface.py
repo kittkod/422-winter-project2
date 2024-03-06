@@ -153,13 +153,41 @@ def show_resource_list():
     resource_text.pack(padx=10, pady=10)
 
     # Insert text into the Text widget
-    sample_text = """
-    1. 211info
+    description_text = """
+    1. 211info: 
+        More than 1,000 food services in Oregon and Southwest Washington, such as food pantries, farmers markets, community gardens, fresh food distribution, and summer feeding programs for children, are listed and referred to by 211info.
+
+    2. UOregon Engage: 
+        Shows all the events that the University of Oregon organizes for thier students!
+
+    3. FOOD FOR LANE COUNTY:
+        FOOD For Lane County is committed to getting fruits and vegetables to community members who cannot typically afford such nutritious food. This is part of the solution to fighting both hunger and obesity and establishing positive lifelong eating habits.
+
+        - Meal Sites:
+            The meal sites are dedicated to providing hot and nutritious meals to individuals in need. 
+        
+        - Mobile Food Pantry:
+            Mobile Pantry will provide a three- to five-day supply of nutritionally balanced groceries. 
+
+        - Trillium Produce Plus
+            Trillium Produce Plus brings high-quality fresh fruits and vegetables to people in need at community and neighborhood locations free of charge.
+
+    4. UOregon Basic Needs Program:
+        Provides people, espeically students, a list of resources to get free food!
+
+    5. Burrito Brigade: Waste to Taste - Free Food Boxes
+        Waste to Taste is a food rescue and free food box program through Burrito Brigade. We work in collaboration with local grocery stores, bakeries, restaurants, and farms to rescue food and redistribute it to the community.
+
+    6. SNAP Food Benefits
+        SNAP is a federal program that provides individuals and families with financial support that can be used to purchase a variety of foods. 
+
+    7. UOregon Leftover Textover
+        The Leftover Textover program alerts current UO students via text message when leftover, free food is available on campus. These leftover portions come from campus events where food was ordered from UO Catering, but not all of it was consumed. 
    
     """
 
     # Add sample text with hyperlinks
-    resource_text.insert(tk.END, sample_text)
+    resource_text.insert(tk.END, description_text)
 
     # Create an instance of CTkToplevel for focus management
     toplevel_window = None
@@ -169,7 +197,7 @@ def show_resource_list():
     resource_label2.pack()
 
     # Create a button to open a new popup with the list
-    open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: show_list_popup(sample_text))
+    open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: show_list_popup(description_text))
     open_list_button.pack(pady=1)
 
     # Full list as buttons to be used with wifi
