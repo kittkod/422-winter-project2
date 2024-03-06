@@ -577,21 +577,19 @@ def food_pantry_211_scraper():
                         lat, long = coordinate_finder.lat_and_long(fixed_address)
                     else:
                         lat, long = "N/A"
-                    i = 0
-                    while i < len(pantry_date):
-                        CSV_list = []
-                        CSV_list.append(pantry_name)
-                        CSV_list.append(pantry_date[i])
-                        CSV_list.append(pantry_hours)
-                        CSV_list.append("N/A")
-                        CSV_list.append(pantry_address)
-                        CSV_list.append(pantry_description)
-                        CSV_list.append(pantry_organizer)
-                        CSV_list.append(lat)
-                        CSV_list.append(long)
-                        CSV_list.append(True)
-                        CSV_data_inputter(CSV_list, food_CSV_file)
-                        i += 1                   
+                    pantry_date = ", ".join(pantry_date)
+                    CSV_list = []
+                    CSV_list.append(pantry_name)
+                    CSV_list.append(pantry_date)
+                    CSV_list.append(pantry_hours)
+                    CSV_list.append("N/A")
+                    CSV_list.append(pantry_address)
+                    CSV_list.append(pantry_description)
+                    CSV_list.append(pantry_organizer)
+                    CSV_list.append(lat)
+                    CSV_list.append(long)
+                    CSV_list.append(True)
+                    CSV_data_inputter(CSV_list, food_CSV_file)                 
 
     return 
 
@@ -691,21 +689,20 @@ def food_for_lane_scraper():
                     else:
                         start_time = times[0]
                         end_time = times[1]
-                    i = 0
-                    while i < len(dates):
-                        CSV_list = []
-                        CSV_list.append(location_name)
-                        CSV_list.append(dates[i])
-                        CSV_list.append(start_time)
-                        CSV_list.append(end_time)
-                        CSV_list.append(location_address)
-                        CSV_list.append(location_desc)
-                        CSV_list.append(location_name)
-                        CSV_list.append(lat)
-                        CSV_list.append(long)
-                        CSV_list.append(True)
-                        CSV_data_inputter(CSV_list, food_CSV_file)
-                        i += 1        
+
+                    dates = ", ".join(dates)
+                    CSV_list = []
+                    CSV_list.append(location_name)
+                    CSV_list.append(dates)
+                    CSV_list.append(start_time)
+                    CSV_list.append(end_time)
+                    CSV_list.append(location_address)
+                    CSV_list.append(location_desc)
+                    CSV_list.append(location_name)
+                    CSV_list.append(lat)
+                    CSV_list.append(long)
+                    CSV_list.append(True)
+                    CSV_data_inputter(CSV_list, food_CSV_file)     
                 else:
                 #catch odd cases of poor HTML tagging
                     location_desc = details[1]+". "+details[2]
@@ -733,20 +730,20 @@ def food_for_lane_scraper():
                         CSV_data_inputter(CSV_list, food_CSV_file)
                         i += 1     
                     else:
-                        while i < len(dates):
-                            CSV_list = []
-                            CSV_list.append(location_name)
-                            CSV_list.append(dates[i])
-                            CSV_list.append(start_time)
-                            CSV_list.append(end_time)
-                            CSV_list.append(location_address)
-                            CSV_list.append(location_desc)
-                            CSV_list.append(location_name)
-                            CSV_list.append(lat)
-                            CSV_list.append(long)
-                            CSV_list.append(True)
-                            CSV_data_inputter(CSV_list, food_CSV_file)
-                            i += 1     
+                        dates = ", ".join(dates)
+                        CSV_list = []
+                        CSV_list.append(location_name)
+                        CSV_list.append(dates)
+                        CSV_list.append(start_time)
+                        CSV_list.append(end_time)
+                        CSV_list.append(location_address)
+                        CSV_list.append(location_desc)
+                        CSV_list.append(location_name)
+                        CSV_list.append(lat)
+                        CSV_list.append(long)
+                        CSV_list.append(True)
+                        CSV_data_inputter(CSV_list, food_CSV_file)
+    return  
                     
 ######################################
 ## CSV File Creation Function Block ##
