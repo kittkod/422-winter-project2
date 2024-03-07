@@ -1,6 +1,6 @@
 """Function to refresh data if option is chosen by admin"""
 
-from UO_scraper import food_CSV_file, CSV_file_creator, engage_URL_web_scraper, engage_site_scraper, events_calendar_URL_scraper,food_pantry_211_scraper
+from UO_scraper import food_CSV_file, CSV_file_creator, engage_URL_web_scraper, engage_site_scraper, events_calendar_URL_scraper,food_pantry_211_scraper, student_life_scraper
 import coordinate_finder
 from admin_intake_form import admin_file_updater
 
@@ -12,9 +12,10 @@ def refresh_data():
     URL_list = engage_URL_web_scraper()
     engage_site_scraper(URL_list)
     events_calendar_URL_scraper()
+    student_life_scraper()
     food_pantry_211_scraper()
     admin_file_updater()
-    # TODO - print something to terminal when scraping is finished 
+    print("Data has been refreshed.")
 
 if __name__ == "__main__":
     refresh_data()
