@@ -296,7 +296,6 @@ def show_list_popup(text):
 resource_button = ctk.CTkButton(left_frame, text='Additional Resources', command=show_resource_list) 
 resource_button.pack(pady=5)
 
-
 #######################################################################
 #                                                                     #
 # User Input Section                                                  #
