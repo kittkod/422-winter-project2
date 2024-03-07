@@ -235,6 +235,8 @@ class AdminModeButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
                          text='Admin Mode')
+        
+        #FIXME add Nithi's the fuctionality from og :D
     
 #######################################################################
 # Resources Button                                                    #   
@@ -243,6 +245,8 @@ class ResourcesButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
                          text='Resources')
+        
+        #FIXME add Nithi's the fuctionality from og :D
         
 #######################################################################
 # About Pop-up Button
