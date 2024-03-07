@@ -15,6 +15,7 @@ from database import run_map
 import Resource_Graph
 
 import webbrowser
+import pandas as pd
 
 # Below, imports which may be needed in the future
 # from tkinter import ttk
@@ -123,8 +124,6 @@ def populate_scrollable_frame():
         # #FIXME CHANGING THE ABOVE TO CTkLabel instead
         # event_label = ctk.CTkLabel(scrollable_frame_food_list, text=event_text)
         
-
-
 # Call the populate function to initially populate the frame
 populate_scrollable_frame()
 
@@ -227,8 +226,8 @@ def show_resource_list():
         button = ctk.CTkButton(wifi_frame, text=button_text, command=lambda u=url: webbrowser.open(u),  fg_color="#9c27b0")
         button.grid(row=row // 2, column=row % 2, padx=5, pady=5)
 
-
     resource_list_window.mainloop()
+
 
 # Function to show a popup with a list
 def show_list_popup(text):
@@ -295,6 +294,7 @@ def show_list_popup(text):
 # Additional Resources Button
 resource_button = ctk.CTkButton(left_frame, text='Additional Resources', command=show_resource_list) 
 resource_button.pack(pady=5)
+
 
 #######################################################################
 #                                                                     #
@@ -425,6 +425,10 @@ def show_user_input_window():
     )
     submit_form.pack(padx=5, pady=5)
 
+    # Create a button to close the popup window
+    close_button = ctk.CTkButton(show_user_input_window, text='Close', command=show_user_input_window.destroy)
+    close_button.pack(pady=5)
+
 #######################################################################
 #                                                                     #
 # Admin mode                                                          #
@@ -439,11 +443,32 @@ def on_add_new_event_click():
 def on_refresh_data_click():
     populate_scrollable_frame()
 
+def on_delete_data_click():
+    # Load the admin_info.csv file into a DataFrame
+    admin_df = pd.read_csv('admin_info.csv')
+
+    # Create a new popup window to display the contents
+    delete_data_popup = ctk.CTkToplevel(window)
+    delete_data_popup.title('Admin Data Contents')
+    delete_data_popup.geometry('600x400')
+
+    # Create a Text widget to display the contents
+    contents_text = tk.Text(delete_data_popup, wrap=tk.WORD, height=20, width=50)
+    contents_text.pack(padx=10, pady=10)
+
+    # Insert the contents into the Text widget
+    contents_text.insert(tk.END, admin_df.to_string(index=False))
+
+    # Create a button to close the popup window
+    close_button = ctk.CTkButton(delete_data_popup, text='Close', command=delete_data_popup.destroy)
+    close_button.pack(pady=5)
+
+
 # Admin mode button
 def show_admin_mode_popup():
     admin_mode_popup = ctk.CTkToplevel(window)
     admin_mode_popup.title('Admin Mode')
-    admin_mode_popup.geometry('300x100')
+    admin_mode_popup.geometry('300x200')
 
     # Add New Event button
     add_new_event_button = ctk.CTkButton(admin_mode_popup, text='Add New Event', command=on_add_new_event_click)
@@ -452,6 +477,14 @@ def show_admin_mode_popup():
     # Refresh Data button
     refresh_data_button = ctk.CTkButton(admin_mode_popup, text='Refresh Data', command=on_refresh_data_click)
     refresh_data_button.pack(pady=5)
+
+    # Refresh Data button
+    delete_data_button = ctk.CTkButton(admin_mode_popup, text='Delete Data', command=on_delete_data_click)
+    delete_data_button.pack(pady=5)
+
+    # Create a button to close the popup window
+    close_button = ctk.CTkButton(admin_mode_popup, text='Close', command=admin_mode_popup.destroy)
+    close_button.pack(pady=5)
 
 # Admin mode button
 new_event_button = ctk.CTkButton(left_frame, text='Admin Mode', command=show_admin_mode_popup) 
