@@ -112,8 +112,6 @@ def populate_scrollable_frame():
     # Retrieve all events
     events = get_all_events(csv_file_path, 'all') # second argument can be 'all', 'today', 'tomorrow', or 'next 7 days'
 
-    #event_font = ('Helvetica', 12) 
-
     # Clear existing data in the scrollable frame
     for widget in scrollable_frame_food_list.winfo_children():
         widget.destroy()
@@ -151,7 +149,7 @@ def show_resource_list():
     resource_list_window.resizable(False, False)  # width, height are constant
 
     # Create a Label to display additional resources
-    resource_label = ctk.CTkLabel(resource_list_window, text="Online Resources", font=("Helvetica", 30, "bold"))
+    resource_label = ctk.CTkLabel(resource_list_window, text="Online Resources", font=("bold", 30))
     resource_label.pack(padx=10, pady=10)
 
     # Create a Text widget to display sample text with hyperlinks
@@ -199,15 +197,15 @@ def show_resource_list():
     toplevel_window = None
 
     #to show the full list
-    resource_label2 = ctk.CTkLabel(resource_list_window, text="Can be used without wifi", font=("Helvetica", 20, "bold"))
+    resource_label2 = ctk.CTkLabel(resource_list_window, text="Can be used without wifi", font=("bold", 20))
     resource_label2.pack()
 
     # Create a button to open a new popup with the list
-    open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: show_list_popup(description_text))
+    open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: show_list_popup(description_text), fg_color="#7e57c2")
     open_list_button.pack(pady=1)
 
     # Full list as buttons to be used with wifi
-    resource_label1 = ctk.CTkLabel(resource_list_window, text="Only can be used with wifi!", font=("Helvetica", 20, "bold"))
+    resource_label1 = ctk.CTkLabel(resource_list_window, text="Only can be used with wifi!", font=("bold", 20))
     resource_label1.pack()
 
     # Create a frame to contain the wifi buttons in a grid
@@ -230,7 +228,7 @@ def show_resource_list():
 
     # Create buttons in a grid
     for row, (button_text, url) in enumerate(wifi_buttons_data.items()):
-        button = ctk.CTkButton(wifi_frame, text=button_text, command=lambda u=url: webbrowser.open(u))
+        button = ctk.CTkButton(wifi_frame, text=button_text, command=lambda u=url: webbrowser.open(u),  fg_color="#9c27b0")
         button.grid(row=row // 2, column=row % 2, padx=5, pady=5)
 
 
