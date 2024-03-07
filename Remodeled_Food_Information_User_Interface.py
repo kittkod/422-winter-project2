@@ -47,7 +47,7 @@ class App(ctk.CTk):
         self.title("Dollarless Dining")
         self.geometry("440x300")
         self.minsize(440, 300)
-        self.maxsize(700, 900)
+        self.maxsize(700, 550)
 
         ###############################################################
         # Create the Grid System for the entire App                   #   
@@ -85,6 +85,8 @@ class App(ctk.CTk):
 #                                                                     #
 # Contains:                                                           #   
 #   - Light and Dark Appearance Mode Buttons                          #
+#   - Administrator Mode Button                                       #
+#   - Resources Button                                                #
 #   - About Button                                                    #    
 #######################################################################
 class LeftSideBar(ctk.CTkFrame):
@@ -108,9 +110,9 @@ class LeftSideBar(ctk.CTkFrame):
                                         column=0, 
                                         padx=(5), 
                                         pady=(5),
-                                        sticky="news")
+                                        sticky="n")
         
-        # Spacing Block 1, a disabled button
+        # Spacing Block 1, a disabled and transparent button
         self.spacing_frame_1 = SpacingOne(self)
         self.spacing_frame_1.grid(row=1, 
                                   column=0, 
@@ -118,7 +120,7 @@ class LeftSideBar(ctk.CTkFrame):
                                   pady=(5),
                                   sticky="news")
         
-        # Spacing Block 2, a disabled button
+        # Spacing Block 2, a disabled and transparent button
         self.spacing_frame_1 = SpacingTwo(self)
         self.spacing_frame_1.grid(row=2, 
                                   column=0, 
@@ -126,9 +128,17 @@ class LeftSideBar(ctk.CTkFrame):
                                   pady=(5),
                                   sticky="news")
         
+        # Spacing Block 3, a disabled and transparent button
+        self.spacing_frame_3 = SpacingThree(self)
+        self.spacing_frame_3.grid(row=3, 
+                                  column=0, 
+                                  padx=(5), 
+                                  pady=(5),
+                                  sticky="news")
+        
         # Admin Mode Button Frame
         self.admin_mode_frame = AdminModeButton(self)
-        self.admin_mode_frame.grid(row=3, 
+        self.admin_mode_frame.grid(row=4, 
                                     column=0, 
                                     padx=5, 
                                     pady=5, 
@@ -163,7 +173,7 @@ class AppearanceModeFrame(ctk.CTkFrame):
         self.grid_columnconfigure((0, 1), 
                                   weight=1)
         self.grid_rowconfigure((0), 
-                               weight=1)
+                               weight=0)
 
         ###############################################################
         # Place Light and Dark Mode Buttons onto Mode Grid System     #   
@@ -174,9 +184,9 @@ class AppearanceModeFrame(ctk.CTkFrame):
                                                command=lambda: ctk.set_appearance_mode('light'))
         self.light_mode_button.grid(row=0, 
                                     column=0, 
-                                    padx=(5, 5), 
+                                    padx=5, 
                                     pady=5, 
-                                    sticky="news")
+                                    sticky="ns")
 
         self.dark_mode_button = ctk.CTkButton(self, 
                                               text='☾', 
@@ -184,9 +194,9 @@ class AppearanceModeFrame(ctk.CTkFrame):
                                               command=lambda: ctk.set_appearance_mode('dark'))
         self.dark_mode_button.grid(row=0, 
                                    column=1, 
-                                   padx=(5, 5), 
+                                   padx=5, 
                                    pady=5, 
-                                   sticky="news")
+                                   sticky="ns")
         
 ########################################################################
 # Spacing Frame 1                                                      #   
@@ -208,6 +218,16 @@ class SpacingTwo(ctk.CTkButton):
                          state="disabled",
                          fg_color="transparent")
         
+########################################################################
+# Spacing Frame 3                                                      #   
+# ######################################################################
+class SpacingThree(ctk.CTkButton):
+    def __init__(self, master):
+        super().__init__(master,
+                         text="",
+                         state="disabled",
+                         fg_color="transparent")
+        
 #######################################################################
 # Admin Mode Button                                                   #   
 #######################################################################
@@ -215,7 +235,15 @@ class AdminModeButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
                          text='Admin Mode')
-
+    
+#######################################################################
+# Resources Button                                                    #   
+#######################################################################
+class ResourcesButton(ctk.CTkButton):
+    def __init__(self, master):
+        super().__init__(master,
+                         text='Resources')
+        
 #######################################################################
 # About Pop-up Button
 #######################################################################
@@ -239,26 +267,20 @@ def show_about_popup():
     about_popup = ctk.CTkToplevel()
     about_popup.title('About Dollarless Dining')
     about_popup.geometry('300x200')
+    about_popup.resizable(False, False)
 
     about_label = ctk.CTkLabel(about_popup, 
                                text=about_text, 
                                wraplength=280)
-    about_label.pack(padx=10, 
-                     pady=10)
-    
-#######################################################################
-# Additional Resources Button                                                   #   
-#######################################################################
-class ResourcesButton(ctk.CTkButton):
-    def __init__(self, master):
-        super().__init__(master,
-                         text='More Resources')
+    about_label.pack(padx=5, 
+                     pady=5)
         
 #######################################################################
-# Main Area                   (containing Free Food Events List)      #
+# Main Area                                                           #
 #                                                                     #       
 # Contains:                                                           #   
-#   1. Free Food Events Lists                                         #
+#   1. Free Food Events Lists with Tab View                           #
+#   2. View Map Button                                                #
 #######################################################################
 class MainArea(ctk.CTkFrame):
     def __init__(self, master):
@@ -279,9 +301,9 @@ class MainArea(ctk.CTkFrame):
         self.food_event_tabs = FoodEventTabs(self)
         self.food_event_tabs.grid(row=0, 
                                   column=0, 
-                                  padx=(5, 5), 
-                                  pady=(5, 5), 
-                                  sticky="nesw",
+                                  padx=5, 
+                                  pady=5, 
+                                  sticky="news",
                                   rowspan=2)
 
         # View Map Button
@@ -290,7 +312,7 @@ class MainArea(ctk.CTkFrame):
                                   column=0, 
                                   padx=5, 
                                   pady=5, 
-                                  sticky="ew")
+                                  sticky="sew")
 
 #######################################################################
 # Free Food Event Tab View                                            #   
@@ -314,38 +336,30 @@ class FoodEventTabs(ctk.CTkTabview):
         self.grid_rowconfigure(0, weight=1)
 
         #######################################################################
-        # Tab Listing                                                         #   
+        # Tabs Funcitonality                                                  #   
         #######################################################################
-        # Function to populate the scrollable frame with data
+        # Today Tab
+        # def populate_scrollable_frame():
+        #     # Retrieve all events
+        #     events = get_all_events(csv_file_path)
 
-#FIXME :/ sorry abt this one 
+        #     # Clear existing data in the scrollable frame
+        #     for widget in scrollable_frame_food_list.winfo_children():
+        #         widget.destroy()
 
-# def populate_scrollable_frame():
-#     # Retrieve all events
-#     events = get_all_events(csv_file_path)
+        #     for event in events:
+        #         event_text = event['Event Title']
 
-#     # Clear existing data in the scrollable frame
-#     for widget in scrollable_frame_food_list.winfo_children():
-#         widget.destroy()
-
-#     for event in events:
-#         event_text = event['Event Title']
-
-#         # Create the Tkinter Text widget 
-#         event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
-#         event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
-#         event_textbox.pack()
-  
+        #         # Create the Tkinter Text widget 
+        #         event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
+        #         event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
+        #         event_textbox.pack()
         
+                
 
 
-# # Call the populate function to initially populate the frame
-# populate_scrollable_frame()
-
-
-
-
-
+        # # Call the populate function to initially populate the frame
+        # populate_scrollable_frame()
 
 ########################################################################
 # View Map Function                                                    #
@@ -370,21 +384,6 @@ def on_view_map_click():
     # plot_events(event_dict)  # This function should handle the plotting
     
     print(event_dict)  # Placeholder to show the dictionary in the console
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #######################################################################
 # Run application :)                                                  #   
