@@ -284,7 +284,7 @@ def show_about_popup():
 #                                                                     #       
 # Contains:                                                           #   
 #   1. Free Food Events Lists with Tab View                           #
-#   2. View Map Button                                                #
+#   2. Pop-Up Descriptions for events on click    #FIXME              #
 #######################################################################
 class MainArea(ctk.CTkFrame):
     def __init__(self, master):
@@ -319,7 +319,13 @@ class MainArea(ctk.CTkFrame):
                                   sticky="sew")
 
 #######################################################################
-# Free Food Event Tab View                                            #   
+#                                                                     #
+# Free Food Event Tab View                                            #
+#                                                                     # 
+# Contains:                                                           #
+#   1. Scrollable Frame Events by timeframe                           #   
+#   2. View Map Button                                                # 
+#                                                                     # 
 #######################################################################
 class FoodEventTabs(ctk.CTkTabview):
     def __init__(self, master):
@@ -340,31 +346,66 @@ class FoodEventTabs(ctk.CTkTabview):
         self.grid_rowconfigure(0, weight=1)
 
         #######################################################################
-        # Tabs Funcitonality                                                  #   
+        # Add a scrollable frame to each tab                                  #   
         #######################################################################
         # Today Tab
+        self.today_scrollable_frame = TodayFrame(self.tab("Today"))
+        self.today_scrollable_frame.grid(row=0, column=0, padx=5, pady=5)
 
-        # def populate_scrollable_frame():
-        #     # Retrieve all events
-        #     events = get_all_events(csv_file_path)
+#######################################################################
+# Today Tab                                                           #
+#                                                                     # 
+# Contains:                                                           #
+#   1. Scrollable Frame of Today's Events                             #   
+#   2. View Map Button of Today's Events                              #   
+#######################################################################
+class TodayFrame(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
 
-        #     # Clear existing data in the scrollable frame
-        #     for widget in scrollable_frame_food_list.winfo_children():
-        #         widget.destroy()
+        ###############################################################
+        # Create the Grid System for the Today Scrollable Frame       #   
+        ###############################################################
+        self.grid_columnconfigure(0, 
+                                  weight=1)
+        self.grid_rowconfigure(0, 
+                               weight=1)
 
-        #     for event in events:
-        #         event_text = event['Event Title']
-
-        #         # Create the Tkinter Check Box widget 
-        #         event_textbox = ctk.CTkCheckBox(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
-        #         event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
-        #         event_textbox.pack()
-        
-                
+        ###############################################################
+        # Place Events as Buttons onto the Today Scrollable Frame      #   
+        ###############################################################
 
 
-        # # Call the populate function to initially populate the frame
-        # populate_scrollable_frame()
+        scrollable_frame_food_list = ctk.CTkScrollableFrame(self, label_text = 'UO Free Food Resources')
+        scrollable_frame_food_list.grid(row=0,
+                                        padx=5,
+                                        pady=5,
+                                        sticky="news")
+
+        # Function to populate the scrollable frame with data
+        def populate_scrollable_frame():
+            events = get_all_events(csv_file_path, 'today') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
+
+            # Clear existing data in the scrollable frame
+            for widget in scrollable_frame_food_list.winfo_children():
+                widget.destroy()
+
+            for event in events:
+                event_text = event['Event Title'] #+ '-' + event['Date']
+
+                # Create the Tkinter Text widget 
+                event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
+                event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
+                event_textbox.pack()
+
+        # Call the populate function to initially populate the frame
+        populate_scrollable_frame()
+
+        #FIXME: Finish Tomorrow Tab
+
+        #FIXME: Finish This Week Tab
+
+        #FIXME: Finish  Next Week Tab
 
 ########################################################################
 # View Map Function                                                    #
