@@ -506,8 +506,7 @@ def on_view_map_click():
 #######################################################################
 
 def show_about_popup():
-    about_text = 
-    """
+    about_text = """
     Dollarless Dining
 
     This program helps you find free food resources on campus.
