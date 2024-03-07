@@ -33,6 +33,17 @@ window = ctk.CTk()
 window.title('Dollarless Dining')
 window.geometry('850x700')
 
+# Header for the main window
+header_label = ctk.CTkLabel(
+    window,
+    text='Welcome to Dollarless Dining',
+    text_color= 'purple',
+    font=(30, 'bold'),
+    padx=10,
+    pady=10
+)
+header_label.pack(fill=tk.X)
+
 #######################################################################
 #                                                                     # 
 # Interface Section                                                   #   
@@ -60,6 +71,7 @@ left_frame.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
 
 # Create a frame for the appearance mode header and buttons
 mode_frame = ctk.CTkFrame(left_frame)
+
 
 # Light Mode and Dark Mode Buttons
 light_mode_button = ctk.CTkButton(mode_frame, text='☀', width=6, command=lambda: ctk.set_appearance_mode('light'))
@@ -111,6 +123,8 @@ def populate_scrollable_frame():
     # Retrieve all events
     events = get_all_events(csv_file_path, 'all') # second argument can be 'all', 'today', 'tomorrow', or 'next 7 days'
 
+    event_font = ('Helvetica', 12) 
+
     # Clear existing data in the scrollable frame
     for widget in scrollable_frame_food_list.winfo_children():
         widget.destroy()
@@ -119,7 +133,7 @@ def populate_scrollable_frame():
         event_text = event['Event Title'] + '-' + event['Date']
 
         # Create the Tkinter Text widget 
-        event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
+        event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2, font = event_font)
         event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
         event_textbox.pack()
 
