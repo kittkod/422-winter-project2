@@ -38,7 +38,7 @@ abbr_mon = {'jan':'january', 'feb':'february', 'mar':'march', 'apr':'april', 'ju
 
 
 
-input_button = "today"
+input_button = "next week"
 
 df = pd.read_csv('Free_Food_Database.csv')
 
@@ -60,6 +60,7 @@ todays_date = datetime.date.today().strftime('%m-%d')
 curr_year = datetime.date.today().strftime('%y')
 todays_month = todays_date[:2]
 todays_day = todays_date[-2:]
+
 # inclusive start and end date
 start_date = None # a list of ints: [date, month]
 end_date = None # a list of ints: [date, month]
@@ -86,19 +87,41 @@ if input_button.lower() == "tomorrow":
     weekday_date = weekday_dict[datetime.date.today().weekday() + 1]
     map_name += 'on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
 
-if input_button.lower() == "next 7 days":
+if input_button.lower() == "this week":
+    days_till_weekend = 6 - datetime.date.today().weekday()
     month_days = days_in_month[int(todays_month)]
     # if the next 6 days go into the next month
-    if int(todays_day) + 6 > month_days:
-        days_forward = (int(todays_day) + 6) - month_days
+    if int(todays_day) + days_till_weekend > month_days:
+        days_forward = (int(todays_day) + days_till_weekend) - month_days
         start_date = [int(todays_day), int(todays_month)]
         end_date = [int(days_forward), int(todays_month) + 1]
     # if the next 6 days stay in the current month
     else:
         start_date = [int(todays_day), int(todays_month)]
-        end_date = [int(todays_day) + 6, int(todays_month)]
+        end_date = [int(todays_day) + days_till_weekend, int(todays_month)]
     is_week = True
-    map_name += 'from ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+    map_name += 'for the week of Monday ' + str(start_date[1]) + '/' + str(int(start_date[0]) -int(datetime.date.today().weekday())) + '/' + curr_year + ' to Sunday ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+
+if input_button.lower() == "next week":
+    starting_day = int(todays_day) + (6 - datetime.date.today().weekday() + 1)
+    #starting_day = int(todays_day) + 6
+    month_days = days_in_month[int(todays_month)]
+    # if the starting day is past this month
+    if starting_day > month_days:
+        days_forward = starting_day-month_days 
+        start_date = [days_forward, int(todays_month)+1]
+        end_date = [days_forward+6, int(todays_month)+1]
+    # if the ending day is past this month
+    elif starting_day + 6 > month_days:
+        days_forward = (starting_day + 6) - month_days
+        start_date = [starting_day, int(todays_month)]
+        end_date = [int(days_forward), int(todays_month) + 1]
+    # if next week stays within this current month
+    else:
+        start_date = [starting_day, int(todays_month)]
+        end_date = [starting_day+6, int(todays_month)]
+    is_week = True
+    map_name += 'for the week of Monday ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to Sunday ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
 
 print(str(start_date) + ' ' + str(end_date) + ' ' +  str(weekday_date))
 print(map_name)

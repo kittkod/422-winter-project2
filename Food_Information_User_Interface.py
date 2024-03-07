@@ -110,14 +110,14 @@ scrollable_frame_food_list.pack(anchor="n", pady=5, expand=True)
 def populate_scrollable_frame():
     #TODO: the get_all_events second argument is the global variable that stores words like 'today' based on button input
     # Retrieve all events
-    events = get_all_events(csv_file_path, 'all') # second argument can be 'all', 'today', 'tomorrow', or 'next 7 days'
+    events = get_all_events(csv_file_path, 'all') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
 
     # Clear existing data in the scrollable frame
     for widget in scrollable_frame_food_list.winfo_children():
         widget.destroy()
 
     for event in events:
-        event_text = event['Event Title'] + '-' + event['Date']
+        event_text = event['Event Title'] #+ '-' + event['Date']
 
         # Create the Tkinter Text widget 
         event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
@@ -476,7 +476,7 @@ view_map_popup_button = ctk.CTkButton(
     left_frame,
     text = 'View Map',
     #TODO: instead of 'next 7 days' the argument should be the global variable that stores things like 'today' made when the button is pressed
-    command = lambda: Resource_Graph.run_map_function('next 7 days') # arguments can be 'today', 'tomorrow', or 'next 7 days'
+    command = lambda: Resource_Graph.run_map_function('next week') # arguments can be 'today', 'tomorrow', 'this week', or 'next week'
 )
 
 view_map_popup_button.pack(pady=5)

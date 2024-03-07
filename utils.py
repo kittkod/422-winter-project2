@@ -207,19 +207,40 @@ def find_ranges(button_press):
         weekday_date = weekday_dict[date.today().weekday() + 1]
         map_name += 'on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
     
-    elif button_press == "next 7 days":
+    elif button_press == "this week":
+        days_till_weekend = 6 - date.today().weekday()
         month_days = days_in_month[int(todays_month)]
         # if the next 6 days go into the next month
-        if int(todays_day) + 6 > month_days:
-            days_forward = (int(todays_day) + 6) - month_days
+        if int(todays_day) + days_till_weekend > month_days:
+            days_forward = (int(todays_day) + days_till_weekend) - month_days
             start_date = [int(todays_day), int(todays_month)]
             end_date = [int(days_forward), int(todays_month) + 1]
         # if the next 6 days stay in the current month
         else:
             start_date = [int(todays_day), int(todays_month)]
-            end_date = [int(todays_day) + 6, int(todays_month)]
+            end_date = [int(todays_day) + days_till_weekend, int(todays_month)]
         is_week = True
-        map_name += 'from ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+        map_name += 'for the week of Monday ' + str(start_date[1]) + '/' + str(int(start_date[0]) -int(date.today().weekday())) + '/' + curr_year + ' to Sunday ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+
+    elif button_press == "next week":
+        starting_day = int(todays_day) + (6 - date.today().weekday() + 1)
+        month_days = days_in_month[int(todays_month)]
+        # if the starting day is past this month
+        if starting_day > month_days:
+            days_forward = starting_day-month_days 
+            start_date = [days_forward, int(todays_month)+1]
+            end_date = [days_forward+6, int(todays_month)+1]
+        # if the ending day is past this month
+        elif starting_day + 6 > month_days:
+            days_forward = (starting_day + 6) - month_days
+            start_date = [starting_day, int(todays_month)]
+            end_date = [int(days_forward), int(todays_month) + 1]
+        # if next week stays within this current month
+        else:
+            start_date = [starting_day, int(todays_month)]
+            end_date = [starting_day+6, int(todays_month)]
+        is_week = True
+        map_name += 'for the week of Monday ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to Sunday ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
     
     return start_date, end_date, weekday_date, is_week, map_name
 
