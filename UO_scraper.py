@@ -607,41 +607,51 @@ def string_split(string, separator, position):
     return separator.join(string[:position]), separator.join(string[position:])
 
 def food_for_lane_scraper():
+    """
+    Function to scrape foodforlanecounty.org -- searches for key words and non-repeating events
+    -- internet connection required --
+    """
 
     raw_link = 'https://www.foodforlanecounty.org/find-a-meal-site/'
+
     req = Request(raw_link, headers={'User-Agent': 'Mozilla/5.0'})
     #avoid error 403
     webpage = urlopen(req).read()
+
     soup = BeautifulSoup(webpage, 'html.parser')
+    #create a soup object of webpage
 
     h2_tag = soup.find('h2', string='Lane County Meal Sites*')
     #find all <p> text containers between <h2> and <h3>
 
     meal_sites = []
     temp_entry = []
-    current_tag = h2_tag.find_next_sibling()
+
+    current_tag = h2_tag.find_next_sibling() #cycle through <p> containers
 
     while current_tag and current_tag.name != 'h3':
-        
+        #checks for correct amount of <p> tags -- accounts for split up text
         if len(current_tag.text.split("\n")) != 4:
             temp_entry.append(current_tag)
         else:
             meal_sites.append(current_tag.text)
             if len(temp_entry) != 0:
-                meal_sites.append(temp_entry)
+                meal_sites.append(temp_entry) #append the current meal site
             temp_entry = []
         current_tag = current_tag.find_next_sibling()
 
     if len(temp_entry) != 0:
         final = []
         if '\n' not in temp_entry[0].text and '\n' not in temp_entry[1].text:
-            meal_sites.append(temp_entry[0].text+'\n'+temp_entry[1].text+'\n'+temp_entry[2].text+'\n')
+            #format strings in the case that temp_entry collected some poorly formatted data
+            meal_sites.append(temp_entry[0].text+' '+temp_entry[1].text+' '+temp_entry[2].text+' ')
         else:
             for text in temp_entry:
                 final.append(text.text)
             meal_sites.append(" ".join(final))
 
     for site in meal_sites:
+            #go through each entry in the meal_sites list (
  
             details = site.split("\n")
  
@@ -750,6 +760,9 @@ def food_for_lane_scraper():
 ######################################
         
 def CSV_file_creator(CSV_file):
+    """Creates an empty CSV file with specific event headers
+    CSV_file: str - name of CSV file to be created
+    """
     header = ['Event Title', 'Date', 'Start Time', 'End Time', 'Location', 'Description', 'Organizer(s)', 'Latitude', 'Longitude', 'Reoccurring']
     with open(CSV_file, 'w', newline="") as file:
         csvwriter = csv.writer(file)
@@ -757,12 +770,17 @@ def CSV_file_creator(CSV_file):
         return
     
 def CSV_data_inputter(data, CSV_file):
+    """Adds a list to a CSV file
+    data: list - containing data formatted for CSV file
+    CSV_file: str - name of CSV file to be added to
+    """
     with open(CSV_file, 'a', newline="") as file:
         csvwriter = csv.writer(file)
         csvwriter.writerow(data)
         return
 
 if __name__ == '__main__':
+    """Testing purposes only"""
 
     #create CSV file
     CSV_file_creator(food_CSV_file)
