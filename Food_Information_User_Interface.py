@@ -40,9 +40,7 @@ window.geometry('850x700')
 #######################################################################
 
 #######################################################################
-#
-# Left Frame
-#   - for various buttons
+# Left Frame - for various buttons
 #######################################################################
 
 left_frame = ctk.CTkFrame(window, width=300)
@@ -61,7 +59,6 @@ left_frame.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
 # Create a frame for the appearance mode header and buttons
 mode_frame = ctk.CTkFrame(left_frame)
 
-
 # Light Mode and Dark Mode Buttons
 light_mode_button = ctk.CTkButton(mode_frame, text='☀', width=6, command=lambda: ctk.set_appearance_mode('light'))
 light_mode_button.pack(side=tk.LEFT, padx=5, pady=5)
@@ -75,7 +72,6 @@ mode_frame.pack(side=tk.TOP, padx=5, pady=5)
 # Today and Tomorrow Buttons
 #######################################################################
 
-# Today and Tomorrow Buttons
 today_button = ctk.CTkButton(
     left_frame, 
     text='Today',
@@ -419,9 +415,9 @@ def show_user_input_window():
         placeholder_text="Description")
     desc_input.pack(padx=10, pady=10)
 
-#######################################################################
-# Input Submission Button
-#######################################################################
+    ############################################################
+    # Input Submission Button
+    ############################################################
 
     submit_form = ctk.CTkButton(
         inputs_frame,
@@ -510,7 +506,8 @@ def on_view_map_click():
 #######################################################################
 
 def show_about_popup():
-    about_text = """
+    about_text = 
+    """
     Dollarless Dining
 
     This program helps you find free food resources on campus.
