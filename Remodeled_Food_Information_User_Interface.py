@@ -204,7 +204,7 @@ class AppearanceModeFrame(ctk.CTkFrame):
 class SpacingOne(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
-                         text="",
+                         text=".",
                          state="disabled",
                          fg_color="transparent")
         
@@ -214,7 +214,7 @@ class SpacingOne(ctk.CTkButton):
 class SpacingTwo(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
-                         text="",
+                         text=".",
                          state="disabled",
                          fg_color="transparent")
         
@@ -224,7 +224,7 @@ class SpacingTwo(ctk.CTkButton):
 class SpacingThree(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
-                         text="",
+                         text=".",
                          state="disabled",
                          fg_color="transparent")
         
