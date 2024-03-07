@@ -33,17 +33,6 @@ window = ctk.CTk()
 window.title('Dollarless Dining')
 window.geometry('850x700')
 
-# Header for the main window
-header_label = ctk.CTkLabel(
-    window,
-    text='Welcome to Dollarless Dining',
-    text_color= 'purple',
-    font=(30, 'bold'),
-    padx=10,
-    pady=10
-)
-header_label.pack(fill=tk.X)
-
 #######################################################################
 #                                                                     # 
 # Interface Section                                                   #   
