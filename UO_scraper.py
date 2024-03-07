@@ -291,6 +291,10 @@ def event_calender_site_scraper(list_of_links):
     driver = webdriver.Chrome(options=chrome_options)
     link_list = []
 
+    df = pd.read_csv('Free_Food_Database.csv')
+    df = pd.DataFrame(df)
+    list_of_event_titles = df['Event Title'].to_list()
+
     for link in list_of_links:
         link_list.append("https://calendar.uoregon.edu/event/"+link)
 
@@ -304,64 +308,65 @@ def event_calender_site_scraper(list_of_links):
         total_info = soup.find('div', class_='box_content vevent grid_8')
         event_name = total_info.find('h1', class_='summary')
         event_name = event_calendar_fixup(event_name.text)
-        CSV_data.append(event_name)
+        if event_name not in list_of_event_titles:
+            CSV_data.append(event_name)
 
-        date_and_time = total_info.find('p', class_='dateright')
-        date, start_time, end_time = events_calendar_time_fixup(date_and_time.text)
+            date_and_time = total_info.find('p', class_='dateright')
+            date, start_time, end_time = events_calendar_time_fixup(date_and_time.text)
 
-        CSV_data.append(date)
-        CSV_data.append(start_time)
-        CSV_data.append(end_time)
+            CSV_data.append(date)
+            CSV_data.append(start_time)
+            CSV_data.append(end_time)
 
-        event_location = total_info.find('p', class_='location')
-        event_location = event_calendar_fixup(event_location.text)
-        if event_location:
-            CSV_data.append(event_location) 
-        else:
-            CSV_data.append("N/A")
+            event_location = total_info.find('p', class_='location')
+            event_location = event_calendar_fixup(event_location.text)
+            if event_location:
+                CSV_data.append(event_location) 
+            else:
+                CSV_data.append("N/A")
 
-        event_description = total_info.find('div', class_='description')
-        event_description = event_calendar_fixup(event_description.text)
-        CSV_data.append(event_description)
+            event_description = total_info.find('div', class_='description')
+            event_description = event_calendar_fixup(event_description.text)
+            CSV_data.append(event_description)
 
-        event_organizer = soup.find('dd', class_='filter-departments')
+            event_organizer = soup.find('dd', class_='filter-departments')
 
-        event_organizer = event_calendar_fixup(event_organizer.text)
+            event_organizer = event_calendar_fixup(event_organizer.text)
 
-        CSV_data.append(event_organizer)
+            CSV_data.append(event_organizer)
 
-        matched_location = None
+            matched_location = None
 
-        if event_location:
-            for location in class_dictionary.keys():
-                if location in event_location:
-                    matched_location = location
-                    break
-            if matched_location == None:
-                new_location = coordinate_finder.address_converter(event_location)
-                lat, long = coordinate_finder.lat_and_long(new_location)
-                try:
-                    isinstance(lat, int) == True
-                except:
-                    lat, long = ["N/A", "N/A"]
+            if event_location:
+                for location in class_dictionary.keys():
+                    if location in event_location:
+                        matched_location = location
+                        break
+                if matched_location == None:
+                    new_location = coordinate_finder.address_converter(event_location)
+                    lat, long = coordinate_finder.lat_and_long(new_location)
+                    try:
+                        isinstance(lat, int) == True
+                    except:
+                        lat, long = ["N/A", "N/A"]
+                        CSV_data.append(lat)
+                        CSV_data.append(long)
+                    else:
+                        CSV_data.append(lat)
+                        CSV_data.append(long)
+                else: 
+                    latlong = class_dictionary.get(matched_location).split(" ")
+                    lat = latlong[0]
+                    long = latlong[1]
                     CSV_data.append(lat)
                     CSV_data.append(long)
-                else:
-                    CSV_data.append(lat)
-                    CSV_data.append(long)
-            else: 
-                latlong = class_dictionary.get(matched_location).split(" ")
-                lat = latlong[0]
-                long = latlong[1]
-                CSV_data.append(lat)
-                CSV_data.append(long)
-        else:
-            CSV_data.append("N/A")
-            CSV_data.append("N/A")
+            else:
+                CSV_data.append("N/A")
+                CSV_data.append("N/A")
         
-        CSV_data.append("False")
+            CSV_data.append("False")
             
-        CSV_data_inputter(CSV_data, food_CSV_file)
+            CSV_data_inputter(CSV_data, food_CSV_file)
 
 
 ############################################
