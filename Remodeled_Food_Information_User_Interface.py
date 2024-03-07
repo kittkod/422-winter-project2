@@ -108,56 +108,56 @@ class LeftSideBar(ctk.CTkFrame):
         self.appearance_mode_frame = AppearanceModeFrame(self)
         self.appearance_mode_frame.grid(row=0, 
                                         column=0, 
-                                        padx=(5), 
-                                        pady=(5),
+                                        padx=(5, 5), 
+                                        pady=(5, 5),
                                         sticky="n")
         
         # Spacing Block 1, a disabled and transparent button
         self.spacing_frame_1 = SpacingOne(self)
         self.spacing_frame_1.grid(row=1, 
                                   column=0, 
-                                  padx=(5), 
-                                  pady=(5),
+                                  padx=(5, 5), 
+                                  pady=(5, 5),
                                   sticky="news")
         
         # Spacing Block 2, a disabled and transparent button
         self.spacing_frame_1 = SpacingTwo(self)
         self.spacing_frame_1.grid(row=2, 
                                   column=0, 
-                                  padx=(5), 
-                                  pady=(5),
+                                  padx=(5, 5), 
+                                  pady=(5, 5),
                                   sticky="news")
         
         # Spacing Block 3, a disabled and transparent button
         self.spacing_frame_3 = SpacingThree(self)
         self.spacing_frame_3.grid(row=3, 
                                   column=0, 
-                                  padx=(5), 
-                                  pady=(5),
+                                  padx=(5, 5), 
+                                  pady=(5, 5),
                                   sticky="news")
         
         # Admin Mode Button Frame
         self.admin_mode_frame = AdminModeButton(self)
         self.admin_mode_frame.grid(row=4, 
                                     column=0, 
-                                    padx=5, 
-                                    pady=5, 
+                                    padx=(5, 5), 
+                                    pady=(5, 5), 
                                     sticky="news")
 
         # Additional Resources Button Frame
         self.resources_button = ResourcesButton(self)
         self.resources_button.grid(row=5, 
                                column=0, 
-                               padx=5, 
-                               pady=5, 
+                               padx=(5, 5), 
+                               pady=(5, 5), 
                                sticky="news")
 
         # About Button Frame
         self.about_button = AboutButton(self)
         self.about_button.grid(row=6, 
                                column=0, 
-                               padx=5, 
-                               pady=5, 
+                               padx=(5, 5), 
+                               pady=(5, 5), 
                                sticky="news")
 
 #######################################################################
