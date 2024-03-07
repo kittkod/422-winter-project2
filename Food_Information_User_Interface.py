@@ -112,7 +112,7 @@ def populate_scrollable_frame():
     # Retrieve all events
     events = get_all_events(csv_file_path, 'all') # second argument can be 'all', 'today', 'tomorrow', or 'next 7 days'
 
-    event_font = ('Helvetica', 12) 
+    #event_font = ('Helvetica', 12) 
 
     # Clear existing data in the scrollable frame
     for widget in scrollable_frame_food_list.winfo_children():
@@ -122,7 +122,7 @@ def populate_scrollable_frame():
         event_text = event['Event Title'] + '-' + event['Date']
 
         # Create the Tkinter Text widget 
-        event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2, font = event_font)
+        event_textbox = tk.Text(scrollable_frame_food_list, wrap=tk.WORD, width=60, height=2)
         event_textbox.insert(tk.END, event_text)  # Insert the text into the Text widget
         event_textbox.pack()
 
