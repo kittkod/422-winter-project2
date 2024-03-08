@@ -1,8 +1,8 @@
 #######################################################################
 # Remodeled Food Information User Interface                           # 
-# Authors:                                                            #
+# Authors: All team                                                   #
 #                                                                     #
-# Last Edited: 05/03/2024 by: sb                                      #   
+# Last Edited: 05/08/2024 by: sb                                      #   
 # Log: Added classes functionality                                    # 
 #######################################################################
 
@@ -105,8 +105,8 @@ class LeftSideBar(ctk.CTkFrame):
         self.appearance_mode_frame = AppearanceModeFrame(self)
         self.appearance_mode_frame.grid(row=0, 
                                         column=0, 
-                                        padx=(5, 5), 
-                                        pady=(5, 5),
+                                        padx=(10, 10), 
+                                        pady=(10, 10),
                                         sticky="n")
         
         # Admin Mode Button Frame
@@ -206,7 +206,7 @@ def show_about_popup():
 
     This program helps you find free food resources on campus.
 
-    Developed by Simone Badaruddin, Nithi Deivanayagam, Kylie Griffiths, Max Hermens, Jasmine Wallin
+    Developed by Simone Badaruddin, Nithi Deivanayagam, Kylie Griffiths, Max Hermens, and Jasmine Wallin
 
     Copyright © 2024 University of Oregon
     """
@@ -287,34 +287,34 @@ class FoodEventTabs(ctk.CTkTabview):
         # #############################################################
         # Today
         self.view_map_button = ctk.CTkButton(self.tab("Today"), 
-                                             text="View Map",
+                                             text="View Today's Food Map",
+                                             corner_radius=360,
                                              command=lambda: Resource_Graph.main())
-        self.view_map_button.pack(padx=5, 
-                                  pady=5, 
+        self.view_map_button.pack(padx=50, 
                                   expand=True) 
         
         # Tomorrow
         self.view_map_button = ctk.CTkButton(self.tab("Tomorrow"), 
-                                             text='View Map', 
+                                             text="View Tomorrow's Food Map", 
+                                             corner_radius=360,
                                              command=lambda: Resource_Graph.main())
-        self.view_map_button.pack(padx=5, 
-                                  pady=5,
+        self.view_map_button.pack(padx=50, 
                                   expand=True)
         
         # This Week
-        self.view_map_button = ctk.CTkButton(self.tab("This Week"), 
-                                             text='View Map', 
+        self.view_map_button = ctk.CTkButton(self.tab("This Week"), bg_color="transparent",
+                                             text="View This Week's Food Map", 
+                                             corner_radius=360,
                                              command=lambda: Resource_Graph.main())
-        self.view_map_button.pack(padx=5, 
-                                  pady=5, 
+        self.view_map_button.pack(padx=50, 
                                   expand=True)
 
         # Next Week
         self.view_map_button = ctk.CTkButton(self.tab("Next Week"), 
-                                             text='View Map', 
+                                             text="View Next Week's Food Map", 
+                                             corner_radius=360,
                                              command=lambda: Resource_Graph.main())
-        self.view_map_button.pack(padx=5, 
-                                  pady=5, 
+        self.view_map_button.pack(padx=50,
                                   expand=True)
         
         ###############################################################
@@ -353,6 +353,7 @@ class TodayFrame(ctk.CTkFrame):
         ###############################################################
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
+                                                            bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
                                                             label_text = 'UO Free Food Resources', 
                                                             label_text_color=("grey", "lightgrey")) #maybe make fg transparent
@@ -373,7 +374,8 @@ class TodayFrame(ctk.CTkFrame):
                 event_text = event['Event Title'] #+ '-' + event['Date']
 
                 # Create the Tkinter Text widget 
-                event_button = ctk.CTkButton(scrollable_frame_food_list, 
+                event_button = ctk.CTkButton(scrollable_frame_food_list,
+                                             anchor="nw", 
                                              text= event_text, 
                                              fg_color=("darkgrey", "gray33"),  
                                              hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
@@ -406,6 +408,7 @@ class TomorrowFrame(ctk.CTkFrame):
         ###############################################################
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
+                                                            bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
                                                             label_text = 'UO Free Food Resources', 
                                                             label_text_color=("grey", "lightgrey"))
@@ -427,6 +430,7 @@ class TomorrowFrame(ctk.CTkFrame):
 
                 # Create the Tkinter Text widget 
                 event_button = ctk.CTkButton(scrollable_frame_food_list, 
+                                             anchor="nw",
                                              text= event_text, 
                                              fg_color=("darkgrey", "gray33"),  
                                              hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
@@ -459,6 +463,7 @@ class ThisWeekFrame(ctk.CTkFrame):
         ###############################################################
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
+                                                            bg_color="transparent",
                                                             fg_color=("grey88", "grey28"),
                                                             label_text = 'UO Free Food Resources', 
                                                             label_text_color=("grey", "lightgrey"))
@@ -480,6 +485,7 @@ class ThisWeekFrame(ctk.CTkFrame):
 
                 # Create the Tkinter Text widget 
                 event_button = ctk.CTkButton(scrollable_frame_food_list, 
+                                             anchor="nw",
                                              text= event_text, 
                                              fg_color=("darkgrey", "gray22"),  
                                              hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
@@ -512,6 +518,7 @@ class NextWeekFrame(ctk.CTkFrame):
         ###############################################################
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
+                                                            bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
                                                             label_text = 'UO Free Food Resources', 
                                                             label_text_color=("grey", "lightgrey"))
@@ -533,6 +540,7 @@ class NextWeekFrame(ctk.CTkFrame):
 
                 # Create the Tkinter Text widget 
                 event_button = ctk.CTkButton(scrollable_frame_food_list, 
+                                             anchor="nw",
                                              text= event_text, 
                                              fg_color=("darkgrey", "gray33"),  
                                              hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
