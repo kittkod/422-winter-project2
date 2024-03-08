@@ -95,8 +95,8 @@ class LeftSideBar(ctk.CTkFrame):
         ###############################################################
         self.grid_columnconfigure(0,
                                   weight=1)
-        self.grid_rowconfigure((0, 7), 
-                               weight=2)
+        self.grid_rowconfigure((0, 1), 
+                               weight=1)
 
         ###############################################################
         # Place Internal Frames onto the Left Sidebar Grid System     #   
@@ -108,30 +108,6 @@ class LeftSideBar(ctk.CTkFrame):
                                         padx=(5, 5), 
                                         pady=(5, 5),
                                         sticky="n")
-        
-        # Spacing Block 1, a disabled and transparent button
-        self.spacing_frame_1 = SpacingOne(self)
-        self.spacing_frame_1.grid(row=1, 
-                                  column=0, 
-                                  padx=(5, 5), 
-                                  pady=(5, 5),
-                                  sticky="news")
-        
-        # Spacing Block 2, a disabled and transparent button
-        self.spacing_frame_1 = SpacingTwo(self)
-        self.spacing_frame_1.grid(row=2, 
-                                  column=0, 
-                                  padx=(5, 5), 
-                                  pady=(5, 5),
-                                  sticky="news")
-        
-        # Spacing Block 3, a disabled and transparent button
-        self.spacing_frame_3 = SpacingThree(self)
-        self.spacing_frame_3.grid(row=3, 
-                                  column=0, 
-                                  padx=(5, 5), 
-                                  pady=(5, 5),
-                                  sticky="news")
         
         # Admin Mode Button Frame
         self.admin_mode_frame = AdminModeButton(self)
@@ -195,36 +171,6 @@ class AppearanceModeFrame(ctk.CTkFrame):
                                    pady=5, 
                                    sticky="ns")
         
-########################################################################
-# Spacing Frame 1                                                      #   
-# ######################################################################
-class SpacingOne(ctk.CTkButton):
-    def __init__(self, master):
-        super().__init__(master,
-                         text=" ",
-                         state="disabled",
-                         fg_color="transparent")
-        
-########################################################################
-# Spacing Frame 2                                                      #   
-# ######################################################################
-class SpacingTwo(ctk.CTkButton):
-    def __init__(self, master):
-        super().__init__(master,
-                         text=" ",
-                         state="disabled",
-                         fg_color="transparent")
-        
-########################################################################
-# Spacing Frame 3                                                      #   
-# ######################################################################
-class SpacingThree(ctk.CTkButton):
-    def __init__(self, master):
-        super().__init__(master,
-                         text=" ",
-                         state="disabled",
-                         fg_color="transparent")
-        
 #######################################################################
 # Admin Mode Button                                                   #   
 #######################################################################
@@ -233,7 +179,7 @@ class AdminModeButton(ctk.CTkButton):
         super().__init__(master,
                          text='Admin Mode')
         
-        #FIXME add Nithi's the fuctionality from og :D
+        #FIXME add Nithi's frame
     
 #######################################################################
 # Resources Button                                                    #   
@@ -243,7 +189,7 @@ class ResourcesButton(ctk.CTkButton):
         super().__init__(master,
                          text='Resources')
         
-        #FIXME add Nithi's the fuctionality from og :D
+        #FIXME add Nithi's frame
         
 #######################################################################
 # About Pop-up Button
