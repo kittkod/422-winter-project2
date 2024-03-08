@@ -14,7 +14,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events
+from utils import get_all_events, filter_events
 from database import run_map
 import Resource_Graph
 
