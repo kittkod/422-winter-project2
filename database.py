@@ -33,8 +33,9 @@ def run_map(input_csv, input_button):
         'Date': [],
         'Reoccurring': []
     }
-
+    
     start_date, end_date, weekday_date, is_week, map_name = utils.find_ranges(input_button.lower())
+    
     
     # looping through each row in the input csv
     for _, row in df.iterrows():

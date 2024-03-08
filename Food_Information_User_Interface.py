@@ -13,6 +13,7 @@ import csv
 from utils import get_all_events
 from database import run_map
 import Resource_Graph
+import admin_intake_form
 
 import webbrowser
 import pandas as pd
@@ -306,47 +307,10 @@ resource_button.pack(pady=5)
 # Create dictionary to append user's New Event to the csv.
 #######################################################################
 
-new_event = {'title': '',
-             'date': '',
-             'start_time': '',
-             'end_time': '',
-             'loc': '',
-             'desc': '',
-             'org': ''}
 
 #######################################################################
 # Input Submission Button Functionality
 #######################################################################
-
-#FIXME Simone's current critical path is getting this to work :)
-
-def submit_form():
-    event_title = {event_title_input.get()}
-    date = {date_input.get()}
-    start_time = {start_time_input.get()}
-    end_time = {end_time_input.get()}
-    loc = {location_input.get()}
-    desc = {description_input.get()}
-    org = {organizers_input.get()}
-
-    # Create New Event as a dictionary 
-    new_event['title'] = event_title
-    new_event['date'] = date
-    new_event['start_time'] = start_time
-    new_event['end_time'] = end_time
-    new_event['location'] = loc
-    new_event['desc'] = desc
-    new_event['organizers'] = org
-
-    event_title_input.delete()
-    date_input.delete()
-    start_time_input.delete()
-    end_time_input.delete()
-    location_input.delete()
-    description_input.delete()
-    organizers_input.delete()
-
-    return(new_event)
 
 #######################################################################
 # User Input Event Entry Fields
@@ -355,8 +319,21 @@ def submit_form():
 def show_user_input_window():
     # Set up New Event User Input Window
     user_input_window = ctk.CTkToplevel(window)
-    user_input_window.title('New Event')
+    user_input_window.title('')
     user_input_window.geometry('555x555')
+
+    # title and description
+    text_var = ctk.StringVar(value="Add New Event")
+    label = ctk.CTkLabel(user_input_window,
+                               textvariable=text_var,
+                               width=120,
+                               height=25,
+                               fg_color=("white", "gray75"),
+                               corner_radius=8)
+    label.configure(font = ("TkDefaultFont", 25))
+    desc = ctk.CTkLabel(user_input_window, text="Input a new Free Food resource into our database. \nAll resources inputted by admins will be reviewed prior to being displayed.")
+    label.pack(pady=20)
+    desc.pack()
 
     # Make a frame to hold all input boxes
     inputs_frame = ctk.CTkFrame(
@@ -417,11 +394,52 @@ def show_user_input_window():
     ############################################################
     # Input Submission Button
     ############################################################
+    new_event = {'title': '',
+             'date': '',
+             'start_time': '',
+             'end_time': '',
+             'loc': '',
+             'desc': '',
+             'org': ''}
+
+#######################################################################
+# Input Submission Button
+#######################################################################
+
+    def my_function():
+        event_title = event_title_input.get()
+        date = date_input.get()
+        start_time = start_time_input.get()
+        end_time = end_time_input.get()
+        organizers = organizers_input.get()
+        location = location_input.get()
+        desc = desc_input.get()
+        new_event['title'] = str(event_title)
+        new_event['date'] = str(date)
+        new_event['start_time'] = str(start_time)
+        new_event['end_time'] = str(end_time)
+        new_event['location'] = str(location)
+        new_event['desc'] = str(desc)
+        new_event['organizers'] = str(organizers)
+        event_title_input.delete(0, len(event_title))
+        date_input.delete(0, len(date))
+        start_time_input.delete(0, len(start_time))
+        end_time_input.delete(0, len(end_time))
+        location_input.delete(0, len(location))
+        desc_input.delete(0, len(desc))
+        organizers_input.delete(0, len(organizers))
+        admin_intake_form.add_to_admin_file(new_event) 
+        succ = ctk.CTkToplevel()
+        succ.geometry("300x100")
+        succ.configure(bg="gray92")
+        succ.wm_title("Success")
+        l = ctk.CTkLabel(succ, text="'" + event_title + "' has been added and \nis waiting to be approved.")
+        l.pack(padx=20, pady=10)
 
     submit_form = ctk.CTkButton(
         inputs_frame,
-        text="Submit Event"
-        #command=submit_form
+        text="Submit Event",
+        command=lambda:my_function()
     )
     submit_form.pack(padx=5, pady=5)
 
@@ -460,7 +478,7 @@ def on_delete_data_click():
     contents_text.insert(tk.END, admin_df.to_string(index=False))
 
     # Create a button to close the popup window
-    close_button = ctk.CTkButton(delete_data_popup, text='Close', command=delete_data_popup.destroy)
+    close_button = ctk.CTkButton(delete_data_popup, text='Close', command=delete_data_popup.destroy())
     close_button.pack(pady=5)
 
 
@@ -504,7 +522,7 @@ view_map_popup_button = ctk.CTkButton(
     left_frame,
     text = 'View Map',
     #TODO: instead of 'next week' the argument should be the global variable that stores things like 'today' made when the button is pressed
-    command = lambda: Resource_Graph.run_map_function('next week') # arguments can be 'today', 'tomorrow', 'this week', or 'next week'
+    command = lambda:Resource_Graph.run_map_function('next week') # arguments can be 'today', 'tomorrow', 'this week', or 'next week'
 )
 
 view_map_popup_button.pack(pady=5)
