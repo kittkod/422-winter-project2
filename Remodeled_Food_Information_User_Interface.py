@@ -24,8 +24,6 @@ csv_file_path = 'Free_Food_Database.csv'
 # Imports which may be helpful in the future                          #
 #######################################################################
 
-# from tkinter import ttk
-# from tkinter import filedialog
 # from PIL import ImageTk, Image
 
 #######################################################################
@@ -256,7 +254,7 @@ class MainArea(ctk.CTkFrame):
         self.event_description = EventDescription(self)
         self.event_description.grid(row=2,
                                     column=0,
-                                    padx=5,
+                                    padx=33,
                                     pady=5,
                                     sticky="news",
                                     rowspan=1)
@@ -288,7 +286,6 @@ class FoodEventTabs(ctk.CTkTabview):
         # Today
         self.view_map_button = ctk.CTkButton(self.tab("Today"), 
                                              text="View Today's Food Map",
-                                             corner_radius=360,
                                              command=lambda: Resource_Graph.main())
         self.view_map_button.pack(padx=50, 
                                   expand=True) 
@@ -296,7 +293,6 @@ class FoodEventTabs(ctk.CTkTabview):
         # Tomorrow
         self.view_map_button = ctk.CTkButton(self.tab("Tomorrow"), 
                                              text="View Tomorrow's Food Map", 
-                                             corner_radius=360,
                                              command=lambda: Resource_Graph.main())
         self.view_map_button.pack(padx=50, 
                                   expand=True)
@@ -304,7 +300,6 @@ class FoodEventTabs(ctk.CTkTabview):
         # This Week
         self.view_map_button = ctk.CTkButton(self.tab("This Week"), bg_color="transparent",
                                              text="View This Week's Food Map", 
-                                             corner_radius=360,
                                              command=lambda: Resource_Graph.main())
         self.view_map_button.pack(padx=50, 
                                   expand=True)
@@ -312,7 +307,6 @@ class FoodEventTabs(ctk.CTkTabview):
         # Next Week
         self.view_map_button = ctk.CTkButton(self.tab("Next Week"), 
                                              text="View Next Week's Food Map", 
-                                             corner_radius=360,
                                              command=lambda: Resource_Graph.main())
         self.view_map_button.pack(padx=50,
                                   expand=True)
@@ -570,15 +564,11 @@ class NextWeekFrame(ctk.CTkFrame):
 #      most recently clicked.                                         # 
 #                                                                     # 
 #######################################################################
-class EventDescription(ctk.CTkButton):
+class EventDescription(ctk.CTkLabel):
     def __init__(self, master):
-        super().__init__(master)
-
-        self.text="hey"
-        self.command= lambda: get_event_desc()
-
-    def get_event_desc():
-        pass
+        super().__init__(master, 
+                         justify="left",
+                         text= "Description here. <3")
   
 #######################################################################
 # Run application                                                     #   
