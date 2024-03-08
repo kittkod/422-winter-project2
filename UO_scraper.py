@@ -11,10 +11,7 @@ import json
 import re
 import coordinate_finder
 import pandas as pd
-
 from selenium import webdriver 
-
-import re
 
 food_CSV_file = "Free_Food_Database.csv"
 
@@ -86,12 +83,12 @@ def remove_desc_details(string):
     return cleaned_text.strip()
 
 def engage_URL_web_scraper():
-
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--offline")
     chrome_options.add_argument("--headless")  # Enable headless mode
     proxy = "user:pass@myproxy:8080"
     chrome_options.add_argument(f"--proxy={proxy}")
+
     # Initialize the WebDriver with Chrome options
     driver = webdriver.Chrome(options=chrome_options)
 
@@ -113,7 +110,6 @@ def engage_URL_web_scraper():
     return new_data
 
 def engage_site_scraper(list):
-
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--offline")
     chrome_options.add_argument("--headless")  # Enable headless mode
@@ -122,6 +118,7 @@ def engage_site_scraper(list):
 
     # Initialize the WebDriver with Chrome options
     driver = webdriver.Chrome(options=chrome_options)
+
     for link in list:
         CSV_data = []
         new_link = "https://uoregon.campuslabs.com"+link
@@ -140,9 +137,7 @@ def engage_site_scraper(list):
             pass
         
         event_description = soup.find('meta', property="og:description")
-
         list_of_event_data = soup.find_all('strong')
-
         raw_organizer = soup.find_all('a', href=lambda href: href and '/engage/organization/' in href)
 
         if list_of_event_data:
@@ -222,7 +217,6 @@ def engage_site_scraper(list):
 ################################################################
 
 def events_calendar_time_fixup(date_and_time):
-
     date_and_time = date_and_time.replace("\n", "").replace(",", "")
     date_and_time = date_and_time.split()
 
@@ -248,20 +242,17 @@ def events_calendar_time_fixup(date_and_time):
         return date, start_time, end_time
 
 def event_calendar_fixup(string):
-
     cleaned_text = re.sub(r'\xa0|\n', ' ', string)
     cleaned_text = re.sub(r'\s+', ' ', string)
     return cleaned_text.strip()
 
 def event_calendar_URL_fixup(link):
-    
     # Split the link by '/'
     parts = link.split('/')
     URL = parts[-1]
     return URL
 
 def events_calendar_URL_scraper():
-
     starting_link = 'https://calendar.uoregon.edu/search/events?event_types[]=15630'
     link_list = []
     chrome_options = webdriver.ChromeOptions()
@@ -272,9 +263,7 @@ def events_calendar_URL_scraper():
     
     driver.get(starting_link)
     page_source = driver.page_source
-
-    soup = BeautifulSoup(page_source, 'html.parser')
-    
+    soup = BeautifulSoup(page_source, 'html.parser') 
     list_of_data = soup.find_all('div', class_= "item event_item vevent")
 
     for link in list_of_data: 
@@ -283,6 +272,7 @@ def events_calendar_URL_scraper():
         new_link = event_calendar_URL_fixup(new_link)
         link_list.append(new_link)
     event_calender_site_scraper(link_list)
+
     return
 
 def event_calender_site_scraper(list_of_links):
@@ -390,7 +380,6 @@ def time_compare(current_date, event_date, event_start_time):
         return None, None
                     
 def student_life_scraper():
-
     current_date = datetime.datetime.now().date()
     food_terms = ['snack', 'snacks', 'treat', 'treats', 'refreshment', 'refreshments', 'food']
 
@@ -407,6 +396,7 @@ def student_life_scraper():
 
     list_of_events = soup.find("div",class_="uo__calender-default-wrapper")
     list_of_all_events = list_of_events.find_all("div", class_="event-cell active photo_default")
+
     for event in list_of_all_events:
         list_of_details = event.find("div", class_="event-header")
         event_title_tag = list_of_details.find("div", class_='event-title')
@@ -474,7 +464,6 @@ def pantry_address_splitter(address: str):
     return result
 
 def extract_date(string: str):
-
     length = 0
     delimiters = ["/",","]
  
@@ -482,9 +471,7 @@ def extract_date(string: str):
         string = " ".join(string.split(delimiter))
         
     result = []
-
     result = string.split()
-
     data = []
 
     if result[0] == 'Daily':
@@ -513,10 +500,8 @@ def extract_date(string: str):
             return data
 
 def food_pantry_211_scraper():
-    
     #scrape food pantry data from 211
     raw_link = 'https://www.211info.org/search/97408/10/?search_term=Food%20Pantries'
-    #
     link = requests.get(raw_link)
     soup = BeautifulSoup(link.text, 'html.parser')
     #create soup object from data
@@ -810,5 +795,3 @@ if __name__ == '__main__':
 
     #scrape food for lane county hot meal sites
     food_for_lane_scraper()
-
-    

@@ -4,8 +4,6 @@ needs to: sort through data in .csv to look for if user wants specific hours/day
 '''
 import pandas as pd
 import utils
-import re
-import datetime
 
 csv_file_path = 'Free_Food_Database.csv'
 

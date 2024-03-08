@@ -14,11 +14,9 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-import csv
 from utils import get_all_events
 from database import run_map
 import Resource_Graph
-import webbrowser
 
 csv_file_path = 'Free_Food_Database.csv'
 

@@ -1,9 +1,7 @@
 import json
 import re
 import pandas as pd
-from datetime import datetime
-from datetime import date
-import re
+from datetime import date, datetime
 
 ### DICTIONARIES
 weekday_dict = {0:"monday", 1:"tuesday", 2:"wednesday", 3:"thursday", 
@@ -63,7 +61,6 @@ def get_lat_lon(address):
         return None, None
     
 def address_converter(initial_address: str):
-
     if not isinstance(initial_address, str):
         initial_address = str(initial_address)
         
@@ -95,28 +92,6 @@ def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
     ]
 
     return filtered_df
-
-#TODO: i don't think we need this ?
-# Function to convert filtered dataframe to dictionary
-def convert_to_dict(filtered_df):
-    event_data = {
-        'lat': [],
-        'lon': [],
-        'sizes': [],
-        'text': [],
-        'comment': [],
-        'Food Resources': []
-    }
-    for _, row in filtered_df.iterrows():
-        lat, lon = get_lat_lon(row['Location'])
-        event_data['lat'].append(lat)
-        event_data['lon'].append(lon)
-        event_data['sizes'].append(8)  # Static size for all points
-        event_data['text'].append(row['Description'])
-        event_data['comment'].append(row['Location'])
-        event_data['Food Resources'].append(row['Event Title'])
-
-    return event_data
 
 def clean_description(description):
     patterns_to_remove = ['==> Eligibility:', '=', '=Eligibility:', 'Eligibility:']

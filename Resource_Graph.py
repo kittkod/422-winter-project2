@@ -32,11 +32,11 @@ def graph_scatterplot(input_data, title_name):
                             size='sizes', color="Food Resources", color_continuous_scale="red", labels={'text':''})
 
     fig.update_traces(hovertemplate='<b>%{customdata[0]}</b><br>' +  # Event Title
-                  '%{customdata[1]}<br>' +                      # Description
-                  'Time: %{customdata[2]}<br>' +                # Time
-                  'Location: %{customdata[3]}<br>' +            # Location
-                  'Organizer: %{customdata[4]}<br>' +           # Organizer
-                  'Date: %{customdata[5]}<extra></extra>')      # Date
+                  '%{customdata[1]}<br>' +                           # Description
+                  'Time: %{customdata[2]}<br>' +                     # Time
+                  'Location: %{customdata[3]}<br>' +                 # Location
+                  'Organizer: %{customdata[4]}<br>' +                # Organizer
+                  'Date: %{customdata[5]}<extra></extra>')           # Date
 
     fig.update_layout(mapbox_style='open-street-map')
     fig.update_layout(margin={"r":0,"t":70,"l":40,"b":0})
