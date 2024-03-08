@@ -406,6 +406,7 @@ def show_user_input_window():
 # Input Submission Button
 #######################################################################
 
+    # TODO: make comments on lines -- make it legible
     def my_function():
         event_title = event_title_input.get()
         date = date_input.get()
@@ -428,13 +429,21 @@ def show_user_input_window():
         location_input.delete(0, len(location))
         desc_input.delete(0, len(desc))
         organizers_input.delete(0, len(organizers))
-        admin_intake_form.add_to_admin_file(new_event) 
-        succ = ctk.CTkToplevel()
-        succ.geometry("300x100")
-        succ.configure(bg="gray92")
-        succ.wm_title("Success")
-        l = ctk.CTkLabel(succ, text="'" + event_title + "' has been added and \nis waiting to be approved.")
-        l.pack(padx=20, pady=10)
+        if event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != '':
+            succ = ctk.CTkToplevel()
+            succ.geometry("300x100")
+            succ.configure(bg="gray92")
+            succ.wm_title("Success")
+            l = ctk.CTkLabel(succ, text="'" + event_title + "' has been added and \nis waiting to be approved.")
+            l.pack(padx=20, pady=10)
+            admin_intake_form.add_to_admin_file(new_event)
+        else:
+            err = ctk.CTkToplevel()
+            err.geometry("300x100")
+            err.configure(bg="gray92")
+            err.wm_title("Error")
+            l = ctk.CTkLabel(err, text="please input all fields.")
+            l.pack(padx=20, pady=10)
 
     submit_form = ctk.CTkButton(
         inputs_frame,
@@ -444,8 +453,8 @@ def show_user_input_window():
     submit_form.pack(padx=5, pady=5)
 
     # Create a button to close the popup window
-    close_button = ctk.CTkButton(show_user_input_window, text='Close', command=show_user_input_window.destroy())
-    close_button.pack(pady=5)
+    #close_button = ctk.CTkButton(show_user_input_window, text='Close', command=show_user_input_window.destroy())
+    #close_button.pack(pady=5)
 
 #######################################################################
 #                                                                     #
@@ -478,8 +487,8 @@ def on_delete_data_click():
     contents_text.insert(tk.END, admin_df.to_string(index=False))
 
     # Create a button to close the popup window
-    close_button = ctk.CTkButton(delete_data_popup, text='Close', command=delete_data_popup.destroy())
-    close_button.pack(pady=5)
+    #close_button = ctk.CTkButton(delete_data_popup, text='Close', command=delete_data_popup.destroy())
+    #close_button.pack(pady=5)
 
 
 # Admin mode button
@@ -501,8 +510,8 @@ def show_admin_mode_popup():
     delete_data_button.pack(pady=5)
 
     # Create a button to close the popup window
-    close_button = ctk.CTkButton(admin_mode_popup, text='Close', command=admin_mode_popup.destroy)
-    close_button.pack(pady=5)
+    #close_button = ctk.CTkButton(admin_mode_popup, text='Close', command=admin_mode_popup.destroy())
+    #close_button.pack(pady=5)
 
 # Admin mode button
 new_event_button = ctk.CTkButton(left_frame, text='Admin Mode', command=show_admin_mode_popup) 
