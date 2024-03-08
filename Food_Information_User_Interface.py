@@ -444,7 +444,7 @@ def show_user_input_window():
     submit_form.pack(padx=5, pady=5)
 
     # Create a button to close the popup window
-    close_button = ctk.CTkButton(show_user_input_window, text='Close', command=show_user_input_window.destroy)
+    close_button = ctk.CTkButton(show_user_input_window, text='Close', command=show_user_input_window.destroy())
     close_button.pack(pady=5)
 
 #######################################################################
