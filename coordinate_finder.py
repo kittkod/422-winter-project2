@@ -43,6 +43,9 @@ def class_dict_maker():
     class_dictionary["ASUO"] = class_dictionary.get("Erb Memorial Union")
     class_dictionary["Bartolotti's"] = class_dictionary.get("Erb Memorial Union")
     class_dictionary["Bartolotti"] = class_dictionary.get("Erb Memorial Union")
+    class_dictionary["Barn"] = '44.04102377844486, -123.07411695536857'
+    class_dictionary["Lylle Reynolds-Parker"] = '44.04321043698473, -123.06539574909931'
+    class_dictionary["Black Cultural Center"] = class_dictionary.get("Lylle Reynolds-Parker")
     return class_dictionary
 
 def address_converter(initial_address: str):
