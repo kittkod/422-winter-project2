@@ -18,6 +18,7 @@ from utils import get_all_events, filter_events
 from database import run_map
 import Resource_Graph
 import pandas as pd
+import webbrowser
 
 csv_file_path = 'Free_Food_Database.csv'
 
@@ -400,10 +401,162 @@ class AdminModeButton(ctk.CTkButton):
 class ResourcesButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
-                         text='Resources')
-        
-        #FIXME add Nithi's frame
-        
+                         text='Resources',
+                         command=self.show_resource_list)  # Set the command to open the resource list
+
+    # Function to show the resource list
+    def show_resource_list(self):
+        resource_list_window = ctk.CTkToplevel()
+        resource_list_window.title('Online Resources')
+        resource_list_window.geometry('666x666')
+        resource_list_window.resizable(False, False)  # width, height are constant
+
+        # Create a Label to display additional resources
+        resource_label = ctk.CTkLabel(resource_list_window, text="Online Resources", font=("bold", 30))
+        resource_label.pack(padx=10, pady=10)
+
+        # Create a Text widget to display sample text with hyperlinks
+        resource_text = tk.Text(resource_list_window, wrap=tk.WORD, height=20, width=80)
+        resource_text.pack(padx=10, pady=10)
+
+        # Insert text into the Text widget
+        description_text = """
+        1. 211info: 
+            More than 1,000 food services in Oregon and Southwest Washington, such as food pantries, farmers markets, community gardens, fresh food distribution, and summer feeding programs for children, are listed and referred to by 211info.
+
+        2. UOregon Engage: 
+            Shows all the events that the University of Oregon organizes for thier students!
+
+        3. FOOD FOR LANE COUNTY:
+            FOOD For Lane County is committed to getting fruits and vegetables to community members who cannot typically afford such nutritious food. This is part of the solution to fighting both hunger and obesity and establishing positive lifelong eating habits.
+
+            - Meal Sites:
+                The meal sites are dedicated to providing hot and nutritious meals to individuals in need. 
+            
+            - Mobile Food Pantry:
+                Mobile Pantry will provide a three- to five-day supply of nutritionally balanced groceries. 
+
+            - Trillium Produce Plus
+                Trillium Produce Plus brings high-quality fresh fruits and vegetables to people in need at community and neighborhood locations free of charge.
+
+        4. UOregon Basic Needs Program:
+            Provides people, espeically students, a list of resources to get free food!
+
+        5. Burrito Brigade: Waste to Taste - Free Food Boxes
+            Waste to Taste is a food rescue and free food box program through Burrito Brigade. We work in collaboration with local grocery stores, bakeries, restaurants, and farms to rescue food and redistribute it to the community.
+
+        6. SNAP Food Benefits
+            SNAP is a federal program that provides individuals and families with financial support that can be used to purchase a variety of foods. 
+
+        7. UOregon Leftover Textover
+            The Leftover Textover program alerts current UO students via text message when leftover, free food is available on campus. These leftover portions come from campus events where food was ordered from UO Catering, but not all of it was consumed. 
+       
+        """
+
+        # Add sample text with hyperlinks
+        resource_text.insert(tk.END, description_text)
+
+        # Create an instance of CTkToplevel for focus management
+        toplevel_window = None
+
+        # to show the full list
+        resource_label2 = ctk.CTkLabel(resource_list_window, text="Can be used without wifi", font=("bold", 20))
+        resource_label2.pack()
+
+        # Create a button to open a new popup with the list
+        open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: self.show_list_popup(description_text), fg_color="#7e57c2")
+        open_list_button.pack(pady=1)
+
+        # Full list as buttons to be used with wifi
+        resource_label1 = ctk.CTkLabel(resource_list_window, text="Only can be used with wifi!", font=("bold", 20))
+        resource_label1.pack()
+
+        # Create a frame to contain the wifi buttons in a grid
+        wifi_frame = ctk.CTkFrame(resource_list_window)
+        wifi_frame.pack()
+
+        # Create a dictionary with button text and corresponding URLs
+        wifi_buttons_data = {
+            '211info': 'https://www.211info.org/get-help/food/',
+            'UOregon Engage': 'https://uoregon.campuslabs.com/engage/events?categories=16973',
+            'Food for Lane County: Meal Sites': 'https://www.foodforlanecounty.org/find-a-meal-site/',
+            'Food for Lane County: Mobile Food Pantry': 'https://www.foodforlanecounty.org/mobile-pantry/',
+            'Food for Lane County: Trillium Produce Plus': 'https://www.foodforlanecounty.org/get-help/trillium-produce-plus/',
+            'UOregon Basic Needs Program': 'https://basicneeds.uoregon.edu/food',
+            'UOregon Free Food Events': 'https://calendar.uoregon.edu/search/events?event_types[]=15630',
+            'Burrito Brigade: Waste to Taste - Free Food Boxes': 'https://burritobrigade.org/waste-to-taste/',
+            'SNAP Food Benefits': 'https://www.oregon.gov/odhs/food/pages/snap.aspx',
+            'UOregon Leftover Textover': 'https://emu.uoregon.edu/leftover-textover',
+        }
+
+        # Create buttons in a grid
+        for row, (button_text, url) in enumerate(wifi_buttons_data.items()):
+            button = ctk.CTkButton(wifi_frame, text=button_text, command=lambda u=url: webbrowser.open(u),  fg_color="#9c27b0")
+            button.grid(row=row // 2, column=row % 2, padx=5, pady=5)
+
+        resource_list_window.mainloop()
+
+    # Function to show a popup with a list
+    def show_list_popup(self, text):
+        list_popup = ctk.CTkToplevel()
+        list_popup.title('Resource List')
+        list_popup.geometry('500x500')
+
+        list_label = ctk.CTkLabel(list_popup, text="Resource List:")
+        list_label.pack(padx=10, pady=10)
+
+        # Create a Text widget to display sample text with hyperlinks
+        resource_text = tk.Text(list_popup, wrap=tk.WORD, height=20, width=80)
+        resource_text.pack(padx=10, pady=10)
+
+        # Insert text into the Text widget
+        sample_text = """
+        1. 211info
+        - Link: 
+            https://www.211info.org/get-help/food/
+
+        2. UOregon Engage
+        - Link: 
+            https://uoregon.campuslabs.com/engage/events?categories=16973
+
+        3. Food for Lane County
+        - Meal Sites: 
+            https://www.foodforlanecounty.org/find-a-meal-site/
+
+        - Mobile Food Pantry: 
+            https://www.foodforlanecounty.org/mobile-pantry/ 
+
+        - Trillium Produce Plus: 
+            https://www.foodforlanecounty.org/get-help/trillium-produce-plus/ 
+
+        4. UOregon Basic Needs Program
+        - Link: 
+            https://basicneeds.uoregon.edu/food
+
+        5. UOregon Free Food Events
+        - Link: 
+            https://calendar.uoregon.edu/search/events?event_types[]=15630
+
+        6. Burrito Brigade: Waste to Taste - Free Food Boxes
+        - Link: 
+            https://burritobrigade.org/waste-to-taste/ 
+
+        7. SNAP Food Benefits:
+        - Link: 
+            https://www.oregon.gov/odhs/food/pages/snap.aspx
+
+        8. UOregon Leftover Textover:
+        - Link: 
+            https://emu.uoregon.edu/leftover-textover 
+        """
+
+        # Add sample text with hyperlinks
+        resource_text.insert(tk.END, sample_text)
+
+        # Create an instance of CTkToplevel for focus management
+        toplevel_window = None
+
+        list_popup.mainloop()
 #######################################################################
 # About Pop-up Button
 #######################################################################
