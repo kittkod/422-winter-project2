@@ -84,7 +84,7 @@ def run_map(input_csv, input_button):
         
         event_dict['lat'].append(latitude_tmp)
         event_dict['lon'].append(longitude_tmp)
-        event_dict['sizes'].append(8)
+        event_dict['sizes'].append(100)
 
         # Process and validate the Description field
         description = row.get('Description', '')
