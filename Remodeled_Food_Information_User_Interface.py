@@ -348,11 +348,29 @@ class AdminModeButton(ctk.CTkButton):
         delete_data_popup.geometry('600x400')
 
         # Create a Text widget to display the contents
-        contents_text = tk.Text(delete_data_popup, wrap=tk.WORD, height=20, width=50)
+        contents_text = ctk.CTkTextbox(delete_data_popup)
         contents_text.pack(padx=10, pady=10)
 
         # Insert the contents into the Text widget
-        contents_text.insert(tk.END, admin_df.to_string(index=False))
+        contents_text.insert(ctk.END, admin_df.to_string(index=False))
+
+        # Function to delete selected data
+        def delete_selected_data():
+            selected_indices = contents_text.tag_ranges('sel')
+            if selected_indices:
+                start_index, end_index = selected_indices
+                start_line, _ = map(int, start_index.split('.'))
+                end_line, _ = map(int, end_index.split('.'))
+                admin_df.drop(admin_df.index[start_line - 1:end_line], inplace=True)
+                admin_df.to_csv('admin_info.csv', index=False)
+                # Reload the updated content after deletion
+                contents_text.delete(1.0, ctk.END)
+                contents_text.insert(ctk.END, admin_df.to_string(index=False))
+
+        # Button to delete selected data
+        delete_selected_button = ctk.CTkButton(delete_data_popup, text='Delete Selected Data', command=delete_selected_data)
+        delete_selected_button.pack(pady=5)
+
 
 
     def show_admin_mode_popup(self):
