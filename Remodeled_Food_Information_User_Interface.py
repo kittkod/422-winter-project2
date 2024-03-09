@@ -759,7 +759,7 @@ class TodayFrame(ctk.CTkFrame):
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
                 
-                event_button._text_label.configure(wraplength=270)
+                event_button._text_label.configure(wraplength=267)
 
                 # A disabled, invisible button with a small font acts 
                 # as a spacer between each event button!
@@ -829,7 +829,7 @@ class TomorrowFrame(ctk.CTkFrame):
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
                 
-                event_button._text_label.configure(wraplength=270)
+                event_button._text_label.configure(wraplength=267)
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -896,7 +896,7 @@ class ThisWeekFrame(ctk.CTkFrame):
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
                 
-                event_button._text_label.configure(wraplength=270)
+                event_button._text_label.configure(wraplength=267)
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -963,7 +963,7 @@ class NextWeekFrame(ctk.CTkFrame):
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
                 
-                event_button._text_label.configure(wraplength=270)
+                event_button._text_label.configure(wraplength=267)
                 
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
