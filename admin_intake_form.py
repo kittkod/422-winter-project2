@@ -16,7 +16,7 @@ import re
 import os.path
 import json
 
-from coordinate_finder import lat_and_long, class_dictionary, address_converter
+from coordinate_finder import lat_and_long, address_converter
 from UO_scraper import CSV_file_creator, CSV_data_inputter, food_CSV_file
 
 admin_CSV_file = "admin_info.csv"
@@ -147,6 +147,6 @@ if __name__ == "__main__":
 
     delete_from_admin("Kylie Test")
     '''
-    delete_from_admin('test #2')
+    add_to_admin_file({"title": "Kylie Test", "date": "March 4", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "Knight Library", "desc": "Climb with Kylie!", "organizers": "Kylie"})
 
     

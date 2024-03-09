@@ -93,11 +93,29 @@ def lat_and_long(address: str):
                 return ["N/A", "N/A"]
                 
             return [response[0]["lat"], response[0]["lon"]]
+        
+def coordinate_validity(address: str):
+    """Ensure the validity of an address - check if coordinates exist"""
+    if address != '':
+        for location in class_dictionary.keys():
+            if location in address:
+                matched_location = location
+                break
+        if matched_location == None:
+            new_location = address_converter(address)
+            lat, long = lat_and_long(new_location)
+        else:
+            latlong = class_dictionary.get(matched_location).split(" ")
+            lat = latlong[0]
+            long = latlong[1]
+    if lat != "N/A" and long != "N/A": 
+        return True
 
 def main():
     class_dict = class_dict_maker()
     with open('campus_buildings.txt', 'w') as convert_file: 
         convert_file.write(json.dumps(class_dict))
+    print(coordinate_validity("Knight Library"))
 
 if __name__ == '__main__':
     main()
