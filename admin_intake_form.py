@@ -1,7 +1,7 @@
 #######################################################################
 # UO_scraper.py                                                       #
 # created: TODO                                                       # 
-# Authors: TODO                                                       #
+# Authors: Kylie Griffiths                                                     #
 #                                                                     #
 # Description: Form to take in administrative input and add to        #
 # database.                                                           #                             
@@ -14,24 +14,45 @@ from datetime import datetime
 import pandas as pd
 import re
 import os.path
+import json
 
-from coordinate_finder import lat_and_long
+from coordinate_finder import lat_and_long, class_dictionary, address_converter
 from UO_scraper import CSV_file_creator, CSV_data_inputter, food_CSV_file
 
 admin_CSV_file = "admin_info.csv"
 
 def add_to_admin_file(dictionary):
-    "Called by the Food Information User Interface when an admin user enters input"
+
+    with open('campus_buildings.txt') as f: 
+        data = f.read() 
+    #pull data to be read from
+      
+    #reconstructing the data as a dictionary 
+    js_file = json.loads(data) 
+    class_dictionary = js_file
 
     admin_CSV_entry = []
+    admin_location = dictionary.get("location")
     admin_CSV_entry.append(dictionary.get("title"))
     admin_CSV_entry.append(dictionary.get("date"))
     admin_CSV_entry.append(dictionary.get("start_time"))
     admin_CSV_entry.append(dictionary.get("end_time"))
-    admin_CSV_entry.append(dictionary.get("location"))
+    admin_CSV_entry.append(admin_location)
     admin_CSV_entry.append(dictionary.get("desc"))
     admin_CSV_entry.append(dictionary.get("organizers"))
-    lat, long = lat_and_long(dictionary.get("location"))
+    matched_location = None
+    if admin_location:
+        for location in class_dictionary.keys():
+            if location in admin_location:
+                matched_location = location
+                break
+        if matched_location == None:
+            new_location = address_converter(admin_location)
+            lat, long = lat_and_long(new_location)
+        else:
+            latlong = class_dictionary.get(matched_location).split(" ")
+            lat = latlong[0]
+            long = latlong[1]
     admin_CSV_entry.append(lat)
     admin_CSV_entry.append(long)
     admin_CSV_entry.append(False)
@@ -96,30 +117,23 @@ def delete_from_admin(event_title: str):
     """Function to remove admin entered data - once admin has selected an event title to delete"""
     ##should be no errors in event_title because event_title is a button press grab
     
-    df = pd.read_csv(admin_CSV_file)
-    df = pd.DataFrame(df)
-
-    index = df.index.get_loc(df[df['Event Title'] == event_title].index[0])
-
-    df = df.drop([index])
+    df_admin = pd.read_csv(admin_CSV_file)
+    df_food = pd.read_csv(food_CSV_file)
+    df_admin = pd.DataFrame(df_admin)
+    df_food = pd.DataFrame(df_food)
+    admin_index = df_admin.index.get_loc(df_admin[df_admin['Event Title'] == event_title].index[0])
+    food_index = df_food.index.get_loc(df_food[df_food['Event Title'] == event_title].index[0])
+    print(food_index)
+    df_admin = df_admin.drop([admin_index])
+    df_food = df_food.drop([food_index])
 
     CSV_file_creator(admin_CSV_file)
-    df.to_csv('admin_info.csv')
+    df_admin.to_csv('admin_info.csv')
+    CSV_file_creator(food_CSV_file)
+    df_food.to_csv('Free_Food_Database.csv')
     return
 
 if __name__ == "__main__":
-    "Test cases - don't run unless you are prepared to refresh the data afterwards"
-
-    CSV_file_creator(admin_CSV_file)
-
-    dictionary_1 = {"title": "Kylie Test", "date": "March 4", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie!", "organizers": "Kylie"}
-    dictionary_2 = {"title": "Kylie Test number 2", "date": "March 5", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie a second time!", "organizers": "Simone :>"}
-    
-    add_to_admin_file(dictionary_1) 
-    add_to_admin_file(dictionary_2) 
-
-    admin_file_updater()
-
-    delete_from_admin("Kylie Test")
-
-    
+    "Test cases - don't run unless you are prepared to refresh the data afterwards" 
+    add_to_admin_file({"title": "Kylie", "date": "March 9 2024", "start_time": "1:45 PM", "end_time": "2:00 PM","location": "EMU", "desc": "test delete","organizers":"mee maw"})
+    delete_from_admin("Kylie")

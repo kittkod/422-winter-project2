@@ -1,12 +1,12 @@
 #######################################################################
 # UO_scraper.py                                                       #
-# created: TODO                                                       # 
+# created:                                                          # 
 # Authors: Kylie Griffiths                                            #
 #                                                                     #
 # Description: Function to refresh data if option is chosen by admin  #                             
 #                                                                     #
 # Interactions:                                                       #
-# - TODO                                                              #
+# - UO_scraper.py: Calls CSV_file_creator to and populates the CSV                                                       #
 ####################################################################### 
 
 from UO_scraper import food_CSV_file, CSV_file_creator, engage_URL_web_scraper, engage_site_scraper, events_calendar_URL_scraper,food_pantry_211_scraper, student_life_scraper
