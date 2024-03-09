@@ -117,21 +117,20 @@ def delete_from_admin(event_title: str):
     """Function to remove admin entered data - once admin has selected an event title to delete"""
     ##should be no errors in event_title because event_title is a button press grab
     
-    df_admin = pd.read_csv(admin_CSV_file)
-    df_food = pd.read_csv(food_CSV_file)
-    df_admin = pd.DataFrame(df_admin)
-    df_food = pd.DataFrame(df_food)
+    df_admin_1 = pd.read_csv(admin_CSV_file)
+    df_admin = pd.DataFrame(df_admin_1)
+    df_food_1 = pd.read_csv(food_CSV_file)
+    df_food = pd.DataFrame(df_food_1)
     admin_index = df_admin.index.get_loc(df_admin[df_admin['Event Title'] == event_title].index[0])
     food_index = df_food.index.get_loc(df_food[df_food['Event Title'] == event_title].index[0])
-    print(food_index)
     df_admin = df_admin.drop([admin_index])
     df_food = df_food.drop([food_index])
 
     CSV_file_creator(admin_CSV_file)
-    df_admin.to_csv('admin_info.csv')
+    df_admin.to_csv('admin_info.csv', index=False)
     CSV_file_creator(food_CSV_file)
-    df_food.to_csv('Free_Food_Database.csv')
-    return
+    df_food.to_csv('Free_Food_Database.csv', index=False)
+    return  
 
 if __name__ == "__main__":
     "Test cases - don't run unless you are prepared to refresh the data afterwards" 
