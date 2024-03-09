@@ -23,7 +23,11 @@ import admin_intake_form
 import Resource_Graph
 import pandas as pd
 import webbrowser
+<<<<<<< Updated upstream
 import tkinter.messagebox as messagebox
+=======
+from coordinate_finder import lat_and_long
+>>>>>>> Stashed changes
 
 csv_file_path = 'Free_Food_Database.csv'
 
@@ -300,30 +304,50 @@ class AdminModeButton(ctk.CTkButton):
             location_input.delete(0, len(location))
             desc_input.delete(0, len(desc))
             organizers_input.delete(0, len(organizers))
-            # checking if all inputs have been placed
-            if event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != '':
-                succ = ctk.CTkToplevel()
-                succ.geometry("300x100")
-                succ.configure(bg="gray92")
-                succ.wm_title("Success")
-                l = ctk.CTkLabel(
-                    succ,
-                    text="'" + event_title + "' has been added."
-                )
-                l.pack(padx=20, pady=10)
-                # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
-                # and it is available in the scope
-                admin_intake_form.add_to_admin_file(new_event)
-            else:
-                err = ctk.CTkToplevel()
-                err.geometry("300x100")
-                err.configure(bg="gray92")
-                err.wm_title("Error")
-                l = ctk.CTkLabel(
-                    err,
-                    text="please input all fields."
-                )
-                l.pack(padx=20, pady=10)
+
+            checked_loc = False # boolean to quit if invalid lat and long
+            # checking if location can become valid coordinate
+            if location != '':
+                print(location)
+                lat, long = lat_and_long(location)
+                print(lat, long)
+                if str(lat) == "N/A" or str(long) == "N/A":
+                    err1 = ctk.CTkToplevel()
+                    err1.geometry("300x100")
+                    err1.configure(bg="gray92")
+                    err1.wm_title("Error")
+                    l = ctk.CTkLabel(
+                        err1,
+                        text="location is invalid."
+                    )
+                    l.pack(padx=20, pady=10)
+                checked_loc = True
+
+            if checked_loc != True:
+                # checking if all inputs have been placed
+                if (event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != ''):
+                    succ = ctk.CTkToplevel()
+                    succ.geometry("300x100")
+                    succ.configure(bg="gray92")
+                    succ.wm_title("Success")
+                    l = ctk.CTkLabel(
+                        succ,
+                        text="'" + event_title + "' has been added."
+                    )
+                    l.pack(padx=20, pady=10)
+                    # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
+                    # and it is available in the scope
+                    admin_intake_form.add_to_admin_file(new_event)
+                else:
+                    err = ctk.CTkToplevel()
+                    err.geometry("300x100")
+                    err.configure(bg="gray92")
+                    err.wm_title("Error")
+                    l = ctk.CTkLabel(
+                        err,
+                        text="please input all fields."
+                    )
+                    l.pack(padx=20, pady=10)
 
         # submit buttom
         submit_form = ctk.CTkButton(
