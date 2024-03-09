@@ -23,7 +23,7 @@ import admin_intake_form
 import Resource_Graph
 import pandas as pd
 import webbrowser
-from coordinate_finder import lat_and_long
+from coordinate_finder import coordinate_validity
 
 csv_file_path = 'Free_Food_Database.csv'
 
@@ -304,8 +304,8 @@ class AdminModeButton(ctk.CTkButton):
             checked_loc = False # boolean to quit if invalid lat and long
             # checking if location can become valid coordinate
             if location != '':
-                lat, long = lat_and_long(location)
-                if str(lat) == "N/A" or str(long) == "N/A":
+                yes_no = coordinate_validity(str(location))
+                if yes_no == False:
                     err1 = ctk.CTkToplevel()
                     err1.geometry("300x100")
                     err1.configure(bg="gray92")
@@ -315,7 +315,7 @@ class AdminModeButton(ctk.CTkButton):
                         text="location is invalid."
                     )
                     l.pack(padx=20, pady=10)
-                checked_loc = True
+                    checked_loc = True
 
             if checked_loc != True:
                 # checking if all inputs have been placed
