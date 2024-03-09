@@ -6,7 +6,7 @@
 # Description: Web Scraper for University of Oregon Club Free Food    #                             
 #                                                                     #
 # Interactions:                                                       #
-# - TODO                                                              #
+# -                                                              #
 ####################################################################### 
 
 from bs4 import BeautifulSoup
