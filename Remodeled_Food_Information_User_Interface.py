@@ -307,7 +307,7 @@ class AdminModeButton(ctk.CTkButton):
                 succ.wm_title("Success")
                 l = ctk.CTkLabel(
                     succ,
-                    text="'" + event_title + "' has been added and \nis waiting to be approved."
+                    text="'" + event_title + "' has been added."
                 )
                 l.pack(padx=20, pady=10)
                 # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
