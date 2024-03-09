@@ -20,6 +20,7 @@ raw_link = "https://en.wikipedia.org/wiki/List_of_University_of_Oregon_buildings
 class_dictionary = {}
 address_exceptions = {"Grace Evangelical Church": [44.0408363098272, -123.08166553148503]}
 
+
 def class_dict_maker():
 
     link = requests.get(raw_link)
@@ -93,11 +94,22 @@ def lat_and_long(address: str):
                 return ["N/A", "N/A"]
                 
             return [response[0]["lat"], response[0]["lon"]]
-        
+
+# creating the class dictionary
+'''
+class_dict = class_dict_maker()
+with open('campus_buildings.txt', 'w') as convert_file: 
+    convert_file.write(json.dumps(class_dict))
+'''
+
 def coordinate_validity(address: str):
     """Ensure the validity of an address - check if coordinates exist"""
+    matched_location = None
+    class_dict = class_dict_maker()
+    with open('campus_buildings.txt', 'w') as convert_file: 
+        convert_file.write(json.dumps(class_dict))
     if address != '':
-        for location in class_dictionary.keys():
+        for location in class_dict.keys():
             if location in address:
                 matched_location = location
                 break
@@ -105,16 +117,19 @@ def coordinate_validity(address: str):
             new_location = address_converter(address)
             lat, long = lat_and_long(new_location)
         else:
-            latlong = class_dictionary.get(matched_location).split(" ")
+            latlong = class_dict.get(matched_location).split(" ")
             lat = latlong[0]
             long = latlong[1]
     if lat != "N/A" and long != "N/A": 
         return True
+    else:
+        return False
 
 def main():
-    class_dict = class_dict_maker()
-    with open('campus_buildings.txt', 'w') as convert_file: 
-        convert_file.write(json.dumps(class_dict))
+    class_dict_maker()
+    #class_dict = class_dict_maker()
+    #with open('campus_buildings.txt', 'w') as convert_file: 
+    #    convert_file.write(json.dumps(class_dict))
     print(coordinate_validity("Knight Library"))
 
 if __name__ == '__main__':

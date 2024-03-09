@@ -42,9 +42,11 @@ abbr_mon = {'jan':'january', 'feb':'february', 'mar':'march', 'apr':'april', 'ju
 # FUNCTIONS                                                                      #
 ##################################################################################  
 
+'''
 # Load campus buildings data
 with open('campus_buildings.txt') as f:
     campus_buildings = json.load(f)
+'''
 
 # Function to break up long strings
 def break_str(input_string, size):
@@ -93,6 +95,9 @@ def get_lat_lon(address):
     ''' Convert address to latitude and longitude
     inputs: address:str - a string
     '''
+    # Load campus buildings data
+    with open('campus_buildings.txt') as f:
+        campus_buildings = json.load(f)
     transformed_address = address_converter(address)  # Use existing address transformation
 
     # Attempt to find the transformed address in the campus buildings data
