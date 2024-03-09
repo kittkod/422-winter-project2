@@ -23,11 +23,7 @@ import admin_intake_form
 import Resource_Graph
 import pandas as pd
 import webbrowser
-<<<<<<< Updated upstream
-import tkinter.messagebox as messagebox
-=======
 from coordinate_finder import lat_and_long
->>>>>>> Stashed changes
 
 csv_file_path = 'Free_Food_Database.csv'
 
@@ -308,9 +304,7 @@ class AdminModeButton(ctk.CTkButton):
             checked_loc = False # boolean to quit if invalid lat and long
             # checking if location can become valid coordinate
             if location != '':
-                print(location)
                 lat, long = lat_and_long(location)
-                print(lat, long)
                 if str(lat) == "N/A" or str(long) == "N/A":
                     err1 = ctk.CTkToplevel()
                     err1.geometry("300x100")
