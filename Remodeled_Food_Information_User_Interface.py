@@ -16,6 +16,7 @@ import customtkinter as ctk
 import tkinter as tk
 from utils import get_all_events, filter_events
 from database import run_map
+import admin_intake_form
 import Resource_Graph
 import pandas as pd
 import webbrowser
@@ -276,8 +277,8 @@ class AdminModeButton(ctk.CTkButton):
                     'desc': '',
                     'organizers': ''}
 
-        # TODO: make comments on lines -- make it legible
         def my_function():
+            # getting the input box elements
             event_title = event_title_input.get()
             date = date_input.get()
             start_time = start_time_input.get()
@@ -285,6 +286,7 @@ class AdminModeButton(ctk.CTkButton):
             organizers = organizers_input.get()
             location = location_input.get()
             desc = desc_input.get()
+            # adding them to the new dictionary
             new_event['title'] = str(event_title)
             new_event['date'] = str(date)
             new_event['start_time'] = str(start_time)
@@ -292,6 +294,7 @@ class AdminModeButton(ctk.CTkButton):
             new_event['location'] = str(location)
             new_event['desc'] = str(desc)
             new_event['organizers'] = str(organizers)
+            # deleting the input values (so new values can be inputted)
             event_title_input.delete(0, len(event_title))
             date_input.delete(0, len(date))
             start_time_input.delete(0, len(start_time))
@@ -299,6 +302,7 @@ class AdminModeButton(ctk.CTkButton):
             location_input.delete(0, len(location))
             desc_input.delete(0, len(desc))
             organizers_input.delete(0, len(organizers))
+            # checking if all inputs have been placed
             if event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != '':
                 succ = ctk.CTkToplevel()
                 succ.geometry("300x100")
@@ -309,7 +313,7 @@ class AdminModeButton(ctk.CTkButton):
                     text="'" + event_title + "' has been added and \nis waiting to be approved."
                 )
                 l.pack(padx=20, pady=10)
-                # Assuming admin_intake_form is an instance of a class with the method add_to_admin_file
+                # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
                 # and it is available in the scope
                 admin_intake_form.add_to_admin_file(new_event)
             else:
@@ -323,6 +327,7 @@ class AdminModeButton(ctk.CTkButton):
                 )
                 l.pack(padx=20, pady=10)
 
+        # submit buttom
         submit_form = ctk.CTkButton(
             inputs_frame,
             text="Submit Event",
@@ -720,7 +725,7 @@ class TodayFrame(ctk.CTkFrame):
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources' + title_name, 
+                                                            label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey")) #maybe make fg transparent
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
@@ -775,7 +780,7 @@ class TomorrowFrame(ctk.CTkFrame):
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources' + title_name, 
+                                                            label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
@@ -829,7 +834,7 @@ class ThisWeekFrame(ctk.CTkFrame):
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color="transparent",
                                                             fg_color=("grey88", "grey28"),
-                                                            label_text = 'UO Free Food Resources' + title_name, 
+                                                            label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
@@ -885,7 +890,7 @@ class NextWeekFrame(ctk.CTkFrame):
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources' + title_name, 
+                                                            label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 

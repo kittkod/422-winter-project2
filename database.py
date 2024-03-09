@@ -1,7 +1,8 @@
-'''
-Database for graph function helpers and UI-database connectors
-needs to: sort through data in .csv to look for if user wants specific hours/days 
-'''
+#################################################################
+#                               
+#Database for graph function helpers and UI-database connectors
+#needs to: sort through data in .csv to look for if user wants specific hours/days 
+#
 import pandas as pd
 import utils
 
