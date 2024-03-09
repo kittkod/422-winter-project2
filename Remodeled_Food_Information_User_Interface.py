@@ -6,7 +6,7 @@
 # Description/Interactions:                                           #
 # TODO                                                                #
 # Last Edited: 05/08/2024 by: sb                                      #   
-# Log: Added classes functionality                                    # 
+# Log: Added description functionality                                # 
 #######################################################################
 
 #######################################################################
@@ -25,12 +25,6 @@ import pandas as pd
 import webbrowser
 
 csv_file_path = 'Free_Food_Database.csv'
-
-#######################################################################
-# Imports which may be helpful in the future                          #
-#######################################################################
-
-# from PIL import ImageTk, Image
 
 #######################################################################
 # Overall Application Section:                                        #
