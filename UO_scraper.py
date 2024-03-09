@@ -21,13 +21,16 @@ import pandas as pd
 from selenium import webdriver 
 
 food_CSV_file = "Free_Food_Database.csv"
+#CSV file to store Food data
 
 days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+#to be used when parsing date strings
 
 with open('campus_buildings.txt') as f: 
     data = f.read() 
+#pull data to be read from
       
-# reconstructing the data as a dictionary 
+#reconstructing the data as a dictionary 
 js_file = json.loads(data) 
 class_dictionary = js_file
 
@@ -36,6 +39,10 @@ class_dictionary = js_file
 ################################################################
 
 def extract_date_time(string):
+    """Function for the Engage Free Food Club Events scraping to extract date and time
+    Input: string: str -- string containing date and time
+    """
+
     # Define regular expressions to match date, start time, and end time
     date_pattern = r'(\w+\s+\d{1,2}\s+\d{4})'  
     time_pattern = r'(\d{1,2}:\d{2}\s+[AP]M)'  
@@ -46,11 +53,12 @@ def extract_date_time(string):
     
     # Combine date and time information into a list of tuples
     extracted_info = []
-    extracted_info.append(dates[0])
+    extracted_info.append(dates[0]) #dates[0] has the event date
 
     for vals in times: #add start and end times 
         extracted_info.append(vals)
     
+    #return list of date, start time, end time 
     return extracted_info
 
 def remove_location_info(string):
