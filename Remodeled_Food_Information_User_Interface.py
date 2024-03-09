@@ -23,6 +23,7 @@ import admin_intake_form
 import Resource_Graph
 import pandas as pd
 import webbrowser
+from coordinate_finder import lat_and_long
 
 csv_file_path = 'Free_Food_Database.csv'
 
@@ -299,30 +300,48 @@ class AdminModeButton(ctk.CTkButton):
             location_input.delete(0, len(location))
             desc_input.delete(0, len(desc))
             organizers_input.delete(0, len(organizers))
-            # checking if all inputs have been placed
-            if event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != '':
-                succ = ctk.CTkToplevel()
-                succ.geometry("300x100")
-                succ.configure(bg="gray92")
-                succ.wm_title("Success")
-                l = ctk.CTkLabel(
-                    succ,
-                    text="'" + event_title + "' has been added."
-                )
-                l.pack(padx=20, pady=10)
-                # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
-                # and it is available in the scope
-                admin_intake_form.add_to_admin_file(new_event)
-            else:
-                err = ctk.CTkToplevel()
-                err.geometry("300x100")
-                err.configure(bg="gray92")
-                err.wm_title("Error")
-                l = ctk.CTkLabel(
-                    err,
-                    text="please input all fields."
-                )
-                l.pack(padx=20, pady=10)
+
+            checked_loc = False # boolean to quit if invalid lat and long
+            # checking if location can become valid coordinate
+            if location != '':
+                lat, long = lat_and_long(location)
+                if str(lat) == "N/A" or str(long) == "N/A":
+                    err1 = ctk.CTkToplevel()
+                    err1.geometry("300x100")
+                    err1.configure(bg="gray92")
+                    err1.wm_title("Error")
+                    l = ctk.CTkLabel(
+                        err1,
+                        text="location is invalid."
+                    )
+                    l.pack(padx=20, pady=10)
+                checked_loc = True
+
+            if checked_loc != True:
+                # checking if all inputs have been placed
+                if (event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != ''):
+                    succ = ctk.CTkToplevel()
+                    succ.geometry("300x100")
+                    succ.configure(bg="gray92")
+                    succ.wm_title("Success")
+                    l = ctk.CTkLabel(
+                        succ,
+                        text="'" + event_title + "' has been added."
+                    )
+                    l.pack(padx=20, pady=10)
+                    # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
+                    # and it is available in the scope
+                    admin_intake_form.add_to_admin_file(new_event)
+                else:
+                    err = ctk.CTkToplevel()
+                    err.geometry("300x100")
+                    err.configure(bg="gray92")
+                    err.wm_title("Error")
+                    l = ctk.CTkLabel(
+                        err,
+                        text="please input all fields."
+                    )
+                    l.pack(padx=20, pady=10)
 
         # submit buttom
         submit_form = ctk.CTkButton(
@@ -341,38 +360,72 @@ class AdminModeButton(ctk.CTkButton):
         #populate_scrollable_frame()
         pass
 
+    def populate_delete_buttons(self):
+        # Clear existing data in the scrollable frame
+        for widget in self.scrollable_frame_delete_list.winfo_children():
+            widget.destroy()
+
+        try:
+            # Load the admin_info.csv file into a DataFrame
+            admin_df = pd.read_csv('admin_info.csv')
+ 
+            for _, row in admin_df.iterrows():
+                print(row)
+
+            # Check if the DataFrame is not empty
+            if not admin_df.empty:
+                # Use the first column as the event_text (change this if needed)
+                event_text_column = admin_df.columns[0]
+
+                # Create the Tkinter Text widgets for the scrollable frame
+                for index, event in admin_df.iterrows():
+                    event_text = str(event[event_text_column])  # Convert to string
+                    event_button = ctk.CTkButton(self.scrollable_frame_delete_list,
+                                                 text=event_text,
+                                                 text_color=("black", "white"),
+                                                 command=lambda i=index: self.delete_selected_data(i),
+                                                 fg_color=("grey88", "gray33"),
+                                                 hover_color=("lightgrey", "grey"))
+                    event_button.pack(fill=tk.X)
+            else:
+                print("DataFrame is empty.")
+                # Display a message in the scrollable frame
+                empty_label = ctk.CTkLabel(self.scrollable_frame_delete_list,
+                                           text="No events to display.")
+                empty_label.pack()
+
+        except FileNotFoundError:
+            print("CSV file not found.")
+        except pd.errors.EmptyDataError:
+            print("CSV file is empty.")
+        except pd.errors.ParserError:
+            print("Error parsing CSV file.")
+
     def on_delete_data_click(self):
-        # Load the admin_info.csv file into a DataFrame
-        admin_df = pd.read_csv('admin_info.csv')
-
-        # Create a new popup window to display the contents
         delete_data_popup = ctk.CTkToplevel(self.master)
-        delete_data_popup.title('Admin Data Contents')
-        delete_data_popup.geometry('600x400')
+        delete_data_popup.title('Admin Delete Events')
+        delete_data_popup.geometry('400x300')
 
-        # Create a Text widget to display the contents
-        contents_text = ctk.CTkTextbox(delete_data_popup)
-        contents_text.pack(padx=10, pady=10)
+        self.scrollable_frame_delete_list = ctk.CTkScrollableFrame(delete_data_popup,    
+                                                                    label_text='Delete Events')
+        self.scrollable_frame_delete_list.pack(fill=tk.BOTH, expand=True)
 
-        # Insert the contents into the Text widget
-        contents_text.insert(ctk.END, admin_df.to_string(index=False))
+        self.populate_delete_buttons()
 
-        # Function to delete selected data
-        def delete_selected_data():
-            selected_indices = contents_text.tag_ranges('sel')
-            if selected_indices:
-                start_index, end_index = selected_indices
-                start_line, _ = map(int, start_index.split('.'))
-                end_line, _ = map(int, end_index.split('.'))
-                admin_df.drop(admin_df.index[start_line - 1:end_line], inplace=True)
+    def delete_selected_data(self, index):
+        confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete this event?")
+        if confirmation:
+            try:
+                admin_df = pd.read_csv('admin_info.csv')
+                admin_df.drop(index, inplace=True)
                 admin_df.to_csv('admin_info.csv', index=False)
-                # Reload the updated content after deletion
-                contents_text.delete(1.0, ctk.END)
-                contents_text.insert(ctk.END, admin_df.to_string(index=False))
-
-        # Button to delete selected data
-        delete_selected_button = ctk.CTkButton(delete_data_popup, text='Delete Selected Data', command=delete_selected_data)
-        delete_selected_button.pack(pady=5)
+                self.populate_delete_buttons()
+            except FileNotFoundError:
+                print("CSV file not found.")
+            except pd.errors.EmptyDataError:
+                print("CSV file is empty.")
+            except pd.errors.ParserError:
+                print("Error parsing CSV file.")
 
 
 

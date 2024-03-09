@@ -133,6 +133,20 @@ def delete_from_admin(event_title: str):
     return  
 
 if __name__ == "__main__":
-    "Test cases - don't run unless you are prepared to refresh the data afterwards" 
-    add_to_admin_file({"title": "Kylie", "date": "March 9 2024", "start_time": "1:45 PM", "end_time": "2:00 PM","location": "EMU", "desc": "test delete","organizers":"mee maw"})
-    delete_from_admin("Kylie")
+    "Test cases - don't run unless you are prepared to refresh the data afterwards"
+    '''
+    CSV_file_creator(admin_CSV_file)
+
+    dictionary_1 = {"title": "Kylie Test", "date": "March 4", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie!", "organizers": "Kylie"}
+    dictionary_2 = {"title": "Kylie Test number 2", "date": "March 5", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie a second time!", "organizers": "Simone :>"}
+    
+    add_to_admin_file(dictionary_1) 
+    add_to_admin_file(dictionary_2) 
+
+    admin_file_updater()
+
+    delete_from_admin("Kylie Test")
+    '''
+    delete_from_admin('test #2')
+
+    
