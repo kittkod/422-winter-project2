@@ -364,7 +364,7 @@ class AdminModeButton(ctk.CTkButton):
                     event_text = str(event[event_text_column])  # Convert to string
                     event_button = ctk.CTkButton(self.scrollable_frame_delete_list,
                                                  text=event_text,
-                                                 text_color=("darkgrey", "white"),
+                                                 text_color=("black", "white"),
                                                  command=lambda i=index: self.delete_selected_data(i),
                                                  fg_color=("grey88", "gray33"),
                                                  hover_color=("lightgrey", "grey"))
@@ -373,8 +373,7 @@ class AdminModeButton(ctk.CTkButton):
                 print("DataFrame is empty.")
                 # Display a message in the scrollable frame
                 empty_label = ctk.CTkLabel(self.scrollable_frame_delete_list,
-                                           text="No events to display.",
-                                           fg_color=("darkgrey", "white"))
+                                           text="No events to display.")
                 empty_label.pack()
 
         except FileNotFoundError:
@@ -389,11 +388,8 @@ class AdminModeButton(ctk.CTkButton):
         delete_data_popup.title('Admin Delete Events')
         delete_data_popup.geometry('400x300')
 
-        self.scrollable_frame_delete_list = ctk.CTkScrollableFrame(delete_data_popup,
-                                                                    bg_color=("#cfcfce", "#333333"),
-                                                                    fg_color=("grey88", "grey33"),
-                                                                    label_text='Delete Events',
-                                                                    label_text_color=("grey", "lightgrey"))
+        self.scrollable_frame_delete_list = ctk.CTkScrollableFrame(delete_data_popup,    
+                                                                    label_text='Delete Events')
         self.scrollable_frame_delete_list.pack(fill=tk.BOTH, expand=True)
 
         self.populate_delete_buttons()
