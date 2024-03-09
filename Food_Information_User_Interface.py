@@ -24,7 +24,7 @@ import pandas as pd
 # from tkinter import filedialog
 # from PIL import ImageTk, Image
 
-csv_file_path = 'Free_Food_Database.csv'
+csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 
 #######################################################################
 # Main Canvas Section
@@ -477,7 +477,7 @@ def on_refresh_data_click():
 
 def on_delete_data_click():
     # Load the admin_info.csv file into a DataFrame
-    admin_df = pd.read_csv('admin_info.csv')
+    admin_df = pd.read_csv('./dollarless_database_files/admin_info.csv')
 
     # Create a new popup window to display the contents
     delete_data_popup = ctk.CTkToplevel(window)
@@ -553,7 +553,7 @@ def on_view_map_click():
     end_time = "7:00 PM"
     
     # Path to CSV file
-    csv_file_path = 'Free_Food_Database.csv'
+    csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
     
     # Filter events and convert to dictionary
     filtered_df = filter_events(csv_file_path, date, start_time, end_time)

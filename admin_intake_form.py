@@ -19,11 +19,11 @@ import json
 from coordinate_finder import lat_and_long, address_converter
 from UO_scraper import CSV_file_creator, CSV_data_inputter, food_CSV_file
 
-admin_CSV_file = "admin_info.csv"
+admin_CSV_file = "dollarless_database_files/admin_info.csv"
 
 def add_to_admin_file(dictionary):
 
-    with open('campus_buildings.txt') as f: 
+    with open('dollarless_database_files/campus_buildings.txt') as f: 
         data = f.read() 
     #pull data to be read from
       
@@ -57,7 +57,7 @@ def add_to_admin_file(dictionary):
     admin_CSV_entry.append(long)
     admin_CSV_entry.append(False)
 
-    if os.path.isfile("./admin_info.csv") is False:
+    if os.path.isfile("./dollarless_database_files/admin_info.csv") is False:
         CSV_file_creator(admin_CSV_file)
         CSV_data_inputter(admin_CSV_entry, admin_CSV_file)
     else: 
@@ -76,7 +76,7 @@ def admin_file_updater():
     """Checks if admin file contains out-of-date data
     - should only be called in conjunction with updating data"""
 
-    original_admin_df = pd.read_csv("admin_info.csv")
+    original_admin_df = pd.read_csv("./dollarless_database_files/admin_info.csv")
     admin_df = original_admin_df[["Date", "Start Time", "End Time"]]
     admin_df = pd.DataFrame(admin_df)
     time = datetime.now()
@@ -127,9 +127,9 @@ def delete_from_admin(event_title: str):
     df_food = df_food.drop([food_index])
 
     CSV_file_creator(admin_CSV_file)
-    df_admin.to_csv('admin_info.csv', index=False)
+    df_admin.to_csv('./dollarless_database_files/admin_info.csv', index=False)
     CSV_file_creator(food_CSV_file)
-    df_food.to_csv('Free_Food_Database.csv', index=False)
+    df_food.to_csv('./dollarless_database_files/Free_Food_Database.csv', index=False)
     return  
 
 if __name__ == "__main__":

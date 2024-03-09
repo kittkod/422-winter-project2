@@ -106,7 +106,7 @@ def coordinate_validity(address: str):
     """Ensure the validity of an address - check if coordinates exist"""
     matched_location = None
     class_dict = class_dict_maker()
-    with open('campus_buildings.txt', 'w') as convert_file: 
+    with open('dollarless_database_files/campus_buildings.txt', 'w') as convert_file: 
         convert_file.write(json.dumps(class_dict))
     if address != '':
         for location in class_dict.keys():

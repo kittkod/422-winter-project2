@@ -11,7 +11,12 @@ view current and upcoming free food resources through the information menu and
 interactive map, or add their own free food resources and refresh the database 
 (if they are administrators). 
 
-All files are within the main folder
+- all working files (.py and README.txt) are in the main folder (422-winter-project2):
+admin_intake_form.py, coordinate_finder.py, database.py, Remodeled_Food_Information_User_Interface.py, 
+refresh_data.py, Resource_Graph.py, UO_scraper.py, utils.py, README.txt
+- all database files are in (422-winter-project2/dollarless_database_files):
+admin_info.csv, campus_buildings.txt, Free_Food_Database.csv
+
 
 Running Instructions:
 ---------------------

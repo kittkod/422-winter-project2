@@ -20,13 +20,13 @@ import coordinate_finder
 import pandas as pd
 from selenium import webdriver 
 
-food_CSV_file = "Free_Food_Database.csv"
+food_CSV_file = "./dollarless_database_files/Free_Food_Database.csv"
 #CSV file to store Food data
 
 days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 #to be used when parsing date strings
 
-with open('campus_buildings.txt') as f: 
+with open('dollarless_database_files/campus_buildings.txt') as f: 
     data = f.read() 
 #pull data to be read from
       
@@ -296,7 +296,7 @@ def event_calender_site_scraper(list_of_links):
     driver = webdriver.Chrome(options=chrome_options)
     link_list = []
 
-    df = pd.read_csv('Free_Food_Database.csv')
+    df = pd.read_csv('./dollarless_database_files/Free_Food_Database.csv')
     df = pd.DataFrame(df)
     list_of_event_titles = df['Event Title'].to_list()
 
@@ -398,7 +398,7 @@ def student_life_scraper():
     current_date = datetime.datetime.now().date()
     food_terms = ['snack', 'snacks', 'treat', 'treats', 'refreshment', 'refreshments', 'food']
 
-    df = pd.read_csv('Free_Food_Database.csv')
+    df = pd.read_csv('./dollarless_database_files/Free_Food_Database.csv')
     df = pd.DataFrame(df)
     list_of_event_titles = df['Event Title'].to_list()
 

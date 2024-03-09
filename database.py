@@ -22,7 +22,7 @@
 import pandas as pd # used for parsing the input csv
 import utils # imports filtering functions for determining what data will be put in the dictionary
 
-csv_file_path = 'Free_Food_Database.csv'
+csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 
 def run_map(input_csv, input_button):
     '''function to create a dictionary for a scatterplot map input from data from an input csv.

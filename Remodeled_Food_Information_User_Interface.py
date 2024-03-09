@@ -25,7 +25,7 @@ import pandas as pd
 import webbrowser
 from coordinate_finder import coordinate_validity
 
-csv_file_path = 'Free_Food_Database.csv'
+csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 
 #######################################################################
 # Overall Application Section:                                        #
@@ -353,12 +353,7 @@ class AdminModeButton(ctk.CTkButton):
         
     
     def on_refresh_data_click(self):
-        # this is what it should be
-        #'''refresh_data.refresh_data()'''
-        # rn I have it as populate_scrollable_frame(), because I don't want it 
-        # to actually change the entire system when we click the button
-        #populate_scrollable_frame()
-        pass
+        refresh_data.refresh_data()
 
     def populate_delete_buttons(self):
         # Clear existing data in the scrollable frame
@@ -367,7 +362,7 @@ class AdminModeButton(ctk.CTkButton):
 
         try:
             # Load the admin_info.csv file into a DataFrame
-            admin_df = pd.read_csv('admin_info.csv')
+            admin_df = pd.read_csv('./dollarless_database_files/admin_info.csv')
  
             for _, row in admin_df.iterrows():
                 print(row)
@@ -416,9 +411,9 @@ class AdminModeButton(ctk.CTkButton):
         confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete this event?")
         if confirmation:
             try:
-                admin_df = pd.read_csv('admin_info.csv')
+                admin_df = pd.read_csv('./dollarless_database_files/admin_info.csv')
                 admin_df.drop(index, inplace=True)
-                admin_df.to_csv('admin_info.csv', index=False)
+                admin_df.to_csv('./dollarless_database_files/admin_info.csv', index=False)
                 self.populate_delete_buttons()
             except FileNotFoundError:
                 print("CSV file not found.")

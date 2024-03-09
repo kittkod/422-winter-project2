@@ -63,7 +63,7 @@ def run_map_function(input_button):
     '''
     # event_dict : the dictionary created from run_map()
     # mapname : the string of the name of the map
-    event_dict, mapname = database.run_map("Free_Food_Database.csv", input_button)
+    event_dict, mapname = database.run_map("./dollarless_database_files/Free_Food_Database.csv", input_button)
     graph_scatterplot(event_dict, mapname)
     
 def main():
