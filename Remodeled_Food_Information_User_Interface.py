@@ -346,19 +346,19 @@ class TodayFrame(ctk.CTkFrame):
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
 
+        events, title_name = get_all_events(csv_file_path, 
+                        'today') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
+
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources', 
+                                                            label_text = 'UO Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey")) #maybe make fg transparent
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
 
         # Function to populate the scrollable frame with data
         def populate_scrollable_frame():
-            events = get_all_events(csv_file_path, 
-                                    'today') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
-
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
@@ -401,25 +401,24 @@ class TomorrowFrame(ctk.CTkFrame):
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
 
+        events, title_name = get_all_events(csv_file_path, 
+                                    'tomorrow')
+
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources', 
+                                                            label_text = 'UO Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
 
         # Function to populate the scrollable frame with data
         def populate_scrollable_frame():
-            events = get_all_events(csv_file_path, 
-                                    'tomorrow') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
-
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                
                 event_text = event['Event Title'] #+ '-' + event['Date']
 
                 # Create the Tkinter Text widget 
@@ -437,7 +436,6 @@ class TomorrowFrame(ctk.CTkFrame):
                                         fg_color="transparent") # a disabled, invisible button with a small font acts as a spacer between each event button!
                 spacing.pack()
                 event_button.pack(fill=tk.X)
-
         # Call the populate function to initially populate the frame
         populate_scrollable_frame()
 
@@ -456,19 +454,20 @@ class ThisWeekFrame(ctk.CTkFrame):
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
 
+        events, title_name = get_all_events(csv_file_path, 
+                        'this week') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
+
+
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color="transparent",
                                                             fg_color=("grey88", "grey28"),
-                                                            label_text = 'UO Free Food Resources', 
+                                                            label_text = 'UO Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
 
         # Function to populate the scrollable frame with data
         def populate_scrollable_frame():
-            events = get_all_events(csv_file_path, 
-                                    'this week') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
-
              # Clear existing data in the scrollable frame
         #     for widget in scrollable_frame_food_list.winfo_children():
         #         widget.destroy()
@@ -511,19 +510,20 @@ class NextWeekFrame(ctk.CTkFrame):
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
 
+        events, title_name = get_all_events(csv_file_path, 
+                        'next week') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
+
+
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color="transparent",
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources', 
+                                                            label_text = 'UO Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
 
         # Function to populate the scrollable frame with data
         def populate_scrollable_frame():
-            events = get_all_events(csv_file_path, 
-                                    'next week') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
-
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()

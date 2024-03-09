@@ -14,6 +14,7 @@ from utils import get_all_events
 from database import run_map
 import Resource_Graph
 import admin_intake_form
+import refresh_data
 
 import webbrowser
 import pandas as pd
@@ -108,7 +109,7 @@ scrollable_frame_food_list.pack(anchor="n", pady=5, expand=True)
 def populate_scrollable_frame():
     #TODO: the get_all_events second argument is the global variable that stores words like 'today' based on button input
     # Retrieve all events
-    events = get_all_events(csv_file_path, 'all') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
+    events, name = get_all_events(csv_file_path, 'all') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
 
     # Clear existing data in the scrollable frame
     for widget in scrollable_frame_food_list.winfo_children():
@@ -468,7 +469,11 @@ def on_add_new_event_click():
 
 # Function to handle the "Refresh Data" button click
 def on_refresh_data_click():
-    populate_scrollable_frame()
+    # this is what it should be
+    '''refresh_data.refresh_data()'''
+    # rn i have it as populate_scrollable_frame(), because i don't want it 
+    # to actually change the entire system when we click the button
+    populate_scrollable_frame() 
 
 def on_delete_data_click():
     # Load the admin_info.csv file into a DataFrame

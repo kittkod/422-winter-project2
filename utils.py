@@ -135,12 +135,12 @@ def get_all_events(csv_file_path, filtered_by):
     df = pd.read_csv(csv_file_path)
     df['sizes'] = 8
     new_dict = []
-
+    scrollable_name = ''
     is_all = False
     if filtered_by.lower() == "all":
         is_all = True
     else:
-        start_date, end_date, weekday_date, is_week, _ = find_ranges(filtered_by)
+        start_date, end_date, weekday_date, is_week, _, scrollable_name = find_ranges(filtered_by)
     
     for event in df.to_dict(orient='records'):
         # if there is a filter and the events is not in the filter range
@@ -149,7 +149,7 @@ def get_all_events(csv_file_path, filtered_by):
                 continue
         new_dict.append(event)
 
-    return new_dict
+    return new_dict, scrollable_name
 
 # function to find the ranges of days from an input button press
 def find_ranges(button_press):
@@ -162,12 +162,14 @@ def find_ranges(button_press):
     weekday_date = '' # a string of the weekday
     is_week = False
     map_name = 'Free Food Resources ' # name of map
+    scrollable_name = ''
     
     if button_press == "today":
         start_date = [int(todays_day), int(todays_month)] # to get rid of the leading '0'
         end_date = [int(todays_day), int(todays_month)]
         weekday_date = weekday_dict[date.today().weekday()]
         map_name += 'on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
+        scrollable_name += ' on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
         
     elif button_press == "tomorrow":
         month_days = days_in_month[int(todays_month)] # how many days in the current month
@@ -181,7 +183,8 @@ def find_ranges(button_press):
             end_date = [int(todays_day) + 1, int(todays_month)]
         weekday_date = weekday_dict[date.today().weekday() + 1]
         map_name += 'on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
-    
+        scrollable_name += ' on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
+
     elif button_press == "this week":
         days_till_weekend = 6 - date.today().weekday()
         month_days = days_in_month[int(todays_month)]
@@ -196,6 +199,7 @@ def find_ranges(button_press):
             end_date = [int(todays_day) + days_till_weekend, int(todays_month)]
         is_week = True
         map_name += 'for the week of Monday ' + str(start_date[1]) + '/' + str(int(start_date[0]) -int(date.today().weekday())) + '/' + curr_year + ' to Sunday ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+        scrollable_name += ' from ' + str(start_date[1]) + '/' + str(int(start_date[0]) -int(date.today().weekday())) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
 
     elif button_press == "next week":
         starting_day = int(todays_day) + (6 - date.today().weekday() + 1)
@@ -216,8 +220,9 @@ def find_ranges(button_press):
             end_date = [starting_day+6, int(todays_month)]
         is_week = True
         map_name += 'for the week of Monday ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to Sunday ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
-    
-    return start_date, end_date, weekday_date, is_week, map_name
+        scrollable_name += ' from ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+
+    return start_date, end_date, weekday_date, is_week, map_name, scrollable_name
 
 # for a single row, see if it satisfies the filter
 def in_filter(row, start_date, end_date, weekday_date, is_week):
