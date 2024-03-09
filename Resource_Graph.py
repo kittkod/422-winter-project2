@@ -41,9 +41,10 @@ def graph_scatterplot(input_data, title_name):
     fig.update_layout(mapbox_style='open-street-map')
     fig.update_layout(margin={"r":0,"t":70,"l":40,"b":0})
 
+    fig.show()
     # Convert to an HTML div string
-    graph_div = fig.to_html(full_html=False, include_plotlyjs='cdn')
-
+   # graph_div = fig.to_html(full_html=False, include_plotlyjs='cdn')
+    '''
     # Define custom HTML string with buttons
     custom_html = f"""
     <!DOCTYPE html>
@@ -70,6 +71,7 @@ def graph_scatterplot(input_data, title_name):
         url = 'file://' + f.name
         f.write(custom_html)
     webbrowser.open(url)
+    '''
 
 def run_map_function(input_button):
     event_dict, mapname = database.run_map("Free_Food_Database.csv", input_button)
