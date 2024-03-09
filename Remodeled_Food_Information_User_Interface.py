@@ -464,7 +464,7 @@ class ResourcesButton(ctk.CTkButton):
         resource_label2.pack()
 
         # Create a button to open a new popup with the list
-        open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: self.show_list_popup(description_text), fg_color="#7e57c2")
+        open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: self.show_list_popup(description_text))
         open_list_button.pack(pady=1)
 
         # Full list as buttons to be used with wifi
@@ -491,7 +491,7 @@ class ResourcesButton(ctk.CTkButton):
 
         # Create buttons in a grid
         for row, (button_text, url) in enumerate(wifi_buttons_data.items()):
-            button = ctk.CTkButton(wifi_frame, text=button_text, command=lambda u=url: webbrowser.open(u),  fg_color="#9c27b0")
+            button = ctk.CTkButton(wifi_frame, text=button_text, command=lambda u=url: webbrowser.open(u))
             button.grid(row=row // 2, column=row % 2, padx=5, pady=5)
 
         resource_list_window.mainloop()
