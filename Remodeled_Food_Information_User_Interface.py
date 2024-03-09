@@ -42,7 +42,7 @@ class App(ctk.CTk):
         self.title("Dollarless Dining")
         self.geometry("444x333")
         self.minsize(511, 477)
-        self.maxsize(777, 677)
+        self.maxsize(777, 667)
 
         ###############################################################
         # Create the Grid System for the entire App                   #   
@@ -407,12 +407,13 @@ class ResourcesButton(ctk.CTkButton):
     def show_resource_list(self):
         resource_list_window = ctk.CTkToplevel()
         resource_list_window.title('Online Resources')
-        resource_list_window.geometry('666x666')
+        resource_list_window.geometry('667x595')
         resource_list_window.resizable(False, False)  # width, height are constant
 
-        # Create a Label to display additional resources
-        resource_label = ctk.CTkLabel(resource_list_window, text="Online Resources", font=("bold", 30))
-        resource_label.pack(padx=10, pady=10)
+        # Removed to match other windows
+        # # Create a Label to display additional resources
+        # resource_label = ctk.CTkLabel(resource_list_window, text="Online Resources", font=("bold", 30))
+        # resource_label.pack(padx=10, pady=10)
 
         # Create a Text widget to display sample text with hyperlinks
         resource_text = tk.Text(resource_list_window, wrap=tk.WORD, height=20, width=80)
