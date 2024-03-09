@@ -1,6 +1,13 @@
-"""
-Web Scraper for University of Oregon Club Free Food
-"""
+#######################################################################
+# UO_scraper.py                                                       #
+# created: TODO                                                       # 
+# Authors: Kylie Griffiths                                            #
+#                                                                     #
+# Description: Web Scraper for University of Oregon Club Free Food    #                             
+#                                                                     #
+# Interactions:                                                       #
+# - TODO                                                              #
+####################################################################### 
 
 from bs4 import BeautifulSoup
 import requests

@@ -1,9 +1,12 @@
 #######################################################################
 # Remodeled Food Information User Interface                           # 
+# Created: TODO                                                       #
 # Authors: All team                                                   #
 #                                                                     #
+# Description/Interactions:                                           #
+# TODO                                                                #
 # Last Edited: 05/08/2024 by: sb                                      #   
-# Log: Added classes functionality                                    # 
+# Log: Added description functionality                                # 
 #######################################################################
 
 #######################################################################
@@ -14,17 +17,14 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events, filter_events
+from utils import get_all_events
 from database import run_map
+import admin_intake_form
 import Resource_Graph
+import pandas as pd
+import webbrowser
 
 csv_file_path = 'Free_Food_Database.csv'
-
-#######################################################################
-# Imports which may be helpful in the future                          #
-#######################################################################
-
-# from PIL import ImageTk, Image
 
 #######################################################################
 # Overall Application Section:                                        #
@@ -41,8 +41,8 @@ class App(ctk.CTk):
 
         self.title("Dollarless Dining")
         self.geometry("444x333")
-        self.minsize(555, 444)
-        self.maxsize(777, 555)
+        self.minsize(511, 477)
+        self.maxsize(777, 667)
 
         ###############################################################
         # Create the Grid System for the entire App                   #   
@@ -175,20 +175,389 @@ class AppearanceModeFrame(ctk.CTkFrame):
 class AdminModeButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
-                         text='Admin Mode')
+                         text='Admin Mode',
+                         command=self.show_admin_mode_popup)  # Set the command to open admin mode popup
+
+    def on_add_new_event_click(self):
+        # Set up New Event User Input Window
+        user_input_window = ctk.CTkToplevel(self.master)
+        user_input_window.title('')
+        user_input_window.geometry('555x555')
+
+        # title and description
+        text_var = ctk.StringVar(value="Add New Event")
+        label = ctk.CTkLabel(
+            user_input_window,
+            textvariable=text_var,
+            width=120,
+            height=25,
+            fg_color=("white", "gray75"),
+            corner_radius=8
+        )
+        label.configure(font=("TkDefaultFont", 25))
+        desc = ctk.CTkLabel(
+            user_input_window,
+            text="Input a new Free Food resource into our database. \nAll resources inputted by admins will be reviewed prior to being displayed."
+        )
+        label.pack(pady=20)
+        desc.pack()
+
+        # Make a frame to hold all input boxes
+        inputs_frame = ctk.CTkFrame(
+            user_input_window,
+            width=455,
+            height=455
+        )
+        inputs_frame.pack(padx=10, pady=10)
+
+        #######################################################################
+        # Input Boxes Configuration
+        #######################################################################
+
+        # Event Title
+        event_title_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Event Title",
+        )
+        event_title_input.pack(padx=10, pady=10)
+
+        # Date
+        date_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Date (i.e. March 26 2024)"
+        )
+        date_input.pack(padx=10, pady=10)
+
+        # Start Time
+        start_time_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Start Time (i.e. 1:00 PM)"
+        )
+        start_time_input.pack(padx=10, pady=10)
+
+        # End Time (Optional)
+        end_time_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="End Time (i.e. 4:00 PM)"
+        )
+        end_time_input.pack(padx=10, pady=10)
+
+        # Organizer(s)
+        organizers_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Organizer(s) (i.e. Women in Computer Science)"
+        )
+        organizers_input.pack(padx=10, pady=10)
+
+        # Location (Street, City, State)
+        location_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Location (i.e. Knight Library, 122 DREAM Lab 1501 Kincaid Street, Eugene, OR)"
+        )
+        location_input.pack(padx=10, pady=10)
+
+        # Description
+        desc_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Description"
+        )
+        desc_input.pack(padx=10, pady=10)
+
+        ############################################################
+        # Input Submission Button
+        ############################################################
+        new_event = {'title': '',
+                    'date': '',
+                    'start_time': '',
+                    'end_time': '',
+                    'location': '',
+                    'desc': '',
+                    'organizers': ''}
+
+        def my_function():
+            # getting the input box elements
+            event_title = event_title_input.get()
+            date = date_input.get()
+            start_time = start_time_input.get()
+            end_time = end_time_input.get()
+            organizers = organizers_input.get()
+            location = location_input.get()
+            desc = desc_input.get()
+            # adding them to the new dictionary
+            new_event['title'] = str(event_title)
+            new_event['date'] = str(date)
+            new_event['start_time'] = str(start_time)
+            new_event['end_time'] = str(end_time)
+            new_event['location'] = str(location)
+            new_event['desc'] = str(desc)
+            new_event['organizers'] = str(organizers)
+            # deleting the input values (so new values can be inputted)
+            event_title_input.delete(0, len(event_title))
+            date_input.delete(0, len(date))
+            start_time_input.delete(0, len(start_time))
+            end_time_input.delete(0, len(end_time))
+            location_input.delete(0, len(location))
+            desc_input.delete(0, len(desc))
+            organizers_input.delete(0, len(organizers))
+            # checking if all inputs have been placed
+            if event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != '':
+                succ = ctk.CTkToplevel()
+                succ.geometry("300x100")
+                succ.configure(bg="gray92")
+                succ.wm_title("Success")
+                l = ctk.CTkLabel(
+                    succ,
+                    text="'" + event_title + "' has been added and \nis waiting to be approved."
+                )
+                l.pack(padx=20, pady=10)
+                # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
+                # and it is available in the scope
+                admin_intake_form.add_to_admin_file(new_event)
+            else:
+                err = ctk.CTkToplevel()
+                err.geometry("300x100")
+                err.configure(bg="gray92")
+                err.wm_title("Error")
+                l = ctk.CTkLabel(
+                    err,
+                    text="please input all fields."
+                )
+                l.pack(padx=20, pady=10)
+
+        # submit buttom
+        submit_form = ctk.CTkButton(
+            inputs_frame,
+            text="Submit Event",
+            command=lambda: my_function()
+        )
+        submit_form.pack(padx=5, pady=5)
         
-        #FIXME add Nithi's frame
     
+    def on_refresh_data_click(self):
+        # this is what it should be
+        #'''refresh_data.refresh_data()'''
+        # rn I have it as populate_scrollable_frame(), because I don't want it 
+        # to actually change the entire system when we click the button
+        #populate_scrollable_frame()
+        pass
+
+    def on_delete_data_click(self):
+        # Load the admin_info.csv file into a DataFrame
+        admin_df = pd.read_csv('admin_info.csv')
+
+        # Create a new popup window to display the contents
+        delete_data_popup = ctk.CTkToplevel(self.master)
+        delete_data_popup.title('Admin Data Contents')
+        delete_data_popup.geometry('600x400')
+
+        # Create a Text widget to display the contents
+        contents_text = ctk.CTkTextbox(delete_data_popup)
+        contents_text.pack(padx=10, pady=10)
+
+        # Insert the contents into the Text widget
+        contents_text.insert(ctk.END, admin_df.to_string(index=False))
+
+        # Function to delete selected data
+        def delete_selected_data():
+            selected_indices = contents_text.tag_ranges('sel')
+            if selected_indices:
+                start_index, end_index = selected_indices
+                start_line, _ = map(int, start_index.split('.'))
+                end_line, _ = map(int, end_index.split('.'))
+                admin_df.drop(admin_df.index[start_line - 1:end_line], inplace=True)
+                admin_df.to_csv('admin_info.csv', index=False)
+                # Reload the updated content after deletion
+                contents_text.delete(1.0, ctk.END)
+                contents_text.insert(ctk.END, admin_df.to_string(index=False))
+
+        # Button to delete selected data
+        delete_selected_button = ctk.CTkButton(delete_data_popup, text='Delete Selected Data', command=delete_selected_data)
+        delete_selected_button.pack(pady=5)
+
+
+
+    def show_admin_mode_popup(self):
+        admin_mode_popup = ctk.CTkToplevel(self.master)
+        admin_mode_popup.title('Admin Mode')
+        admin_mode_popup.geometry('200x185')
+        admin_mode_popup.resizable(False, False)
+
+        # Add New Event button
+        add_new_event_button = ctk.CTkButton(admin_mode_popup, text='Add New Event', command=self.on_add_new_event_click)
+        add_new_event_button.pack(pady=(25, 10), anchor="center")
+
+        # Refresh Data button
+        refresh_data_button = ctk.CTkButton(admin_mode_popup, text='Refresh Data', command=self.on_refresh_data_click)
+        refresh_data_button.pack(padx=5, pady=10, anchor="center")
+
+        # Refresh Data button
+        delete_data_button = ctk.CTkButton(admin_mode_popup, text='Delete Data', command=self.on_delete_data_click)
+        delete_data_button.pack(padx=5, pady=(10, 5), anchor="center")
+
 #######################################################################
 # Resources Button                                                    #   
 #######################################################################
 class ResourcesButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
-                         text='Resources')
-        
-        #FIXME add Nithi's frame
-        
+                         text='Resources',
+                         command=self.show_resource_list)  # Set the command to open the resource list
+
+    # Function to show the resource list
+    def show_resource_list(self):
+        resource_list_window = ctk.CTkToplevel()
+        resource_list_window.title('Online Resources')
+        resource_list_window.geometry('667x595')
+        resource_list_window.resizable(False, False)  # width, height are constant
+
+        # Removed to match other windows
+        # # Create a Label to display additional resources
+        # resource_label = ctk.CTkLabel(resource_list_window, text="Online Resources", font=("bold", 30))
+        # resource_label.pack(padx=10, pady=10)
+
+        # Create a Text widget to display sample text with hyperlinks
+        resource_text = tk.Text(resource_list_window, wrap=tk.WORD, height=20, width=80)
+        resource_text.pack(padx=10, pady=10)
+
+        # Insert text into the Text widget
+        description_text = """
+        1. 211info: 
+            More than 1,000 food services in Oregon and Southwest Washington, such as food pantries, farmers markets, community gardens, fresh food distribution, and summer feeding programs for children, are listed and referred to by 211info.
+
+        2. UOregon Engage: 
+            Shows all the events that the University of Oregon organizes for thier students!
+
+        3. FOOD FOR LANE COUNTY:
+            FOOD For Lane County is committed to getting fruits and vegetables to community members who cannot typically afford such nutritious food. This is part of the solution to fighting both hunger and obesity and establishing positive lifelong eating habits.
+
+            - Meal Sites:
+                The meal sites are dedicated to providing hot and nutritious meals to individuals in need. 
+            
+            - Mobile Food Pantry:
+                Mobile Pantry will provide a three- to five-day supply of nutritionally balanced groceries. 
+
+            - Trillium Produce Plus
+                Trillium Produce Plus brings high-quality fresh fruits and vegetables to people in need at community and neighborhood locations free of charge.
+
+        4. UOregon Basic Needs Program:
+            Provides people, espeically students, a list of resources to get free food!
+
+        5. Burrito Brigade: Waste to Taste - Free Food Boxes
+            Waste to Taste is a food rescue and free food box program through Burrito Brigade. We work in collaboration with local grocery stores, bakeries, restaurants, and farms to rescue food and redistribute it to the community.
+
+        6. SNAP Food Benefits
+            SNAP is a federal program that provides individuals and families with financial support that can be used to purchase a variety of foods. 
+
+        7. UOregon Leftover Textover
+            The Leftover Textover program alerts current UO students via text message when leftover, free food is available on campus. These leftover portions come from campus events where food was ordered from UO Catering, but not all of it was consumed. 
+       
+        """
+
+        # Add sample text with hyperlinks
+        resource_text.insert(tk.END, description_text)
+
+        # Create an instance of CTkToplevel for focus management
+        toplevel_window = None
+
+        # to show the full list
+        resource_label2 = ctk.CTkLabel(resource_list_window, text="Can be used without wifi", font=("bold", 20))
+        resource_label2.pack()
+
+        # Create a button to open a new popup with the list
+        open_list_button = ctk.CTkButton(resource_list_window, text='Open List', command=lambda: self.show_list_popup(description_text), fg_color="#7e57c2")
+        open_list_button.pack(pady=1)
+
+        # Full list as buttons to be used with wifi
+        resource_label1 = ctk.CTkLabel(resource_list_window, text="Only can be used with wifi!", font=("bold", 20))
+        resource_label1.pack()
+
+        # Create a frame to contain the wifi buttons in a grid
+        wifi_frame = ctk.CTkFrame(resource_list_window)
+        wifi_frame.pack()
+
+        # Create a dictionary with button text and corresponding URLs
+        wifi_buttons_data = {
+            '211info': 'https://www.211info.org/get-help/food/',
+            'UOregon Engage': 'https://uoregon.campuslabs.com/engage/events?categories=16973',
+            'Food for Lane County: Meal Sites': 'https://www.foodforlanecounty.org/find-a-meal-site/',
+            'Food for Lane County: Mobile Food Pantry': 'https://www.foodforlanecounty.org/mobile-pantry/',
+            'Food for Lane County: Trillium Produce Plus': 'https://www.foodforlanecounty.org/get-help/trillium-produce-plus/',
+            'UOregon Basic Needs Program': 'https://basicneeds.uoregon.edu/food',
+            'UOregon Free Food Events': 'https://calendar.uoregon.edu/search/events?event_types[]=15630',
+            'Burrito Brigade: Waste to Taste - Free Food Boxes': 'https://burritobrigade.org/waste-to-taste/',
+            'SNAP Food Benefits': 'https://www.oregon.gov/odhs/food/pages/snap.aspx',
+            'UOregon Leftover Textover': 'https://emu.uoregon.edu/leftover-textover',
+        }
+
+        # Create buttons in a grid
+        for row, (button_text, url) in enumerate(wifi_buttons_data.items()):
+            button = ctk.CTkButton(wifi_frame, text=button_text, command=lambda u=url: webbrowser.open(u),  fg_color="#9c27b0")
+            button.grid(row=row // 2, column=row % 2, padx=5, pady=5)
+
+        resource_list_window.mainloop()
+
+    # Function to show a popup with a list
+    def show_list_popup(self, text):
+        list_popup = ctk.CTkToplevel()
+        list_popup.title('Resource List')
+        list_popup.geometry('500x500')
+
+        list_label = ctk.CTkLabel(list_popup, text="Resource List:")
+        list_label.pack(padx=10, pady=10)
+
+        # Create a Text widget to display sample text with hyperlinks
+        resource_text = tk.Text(list_popup, wrap=tk.WORD, height=20, width=80)
+        resource_text.pack(padx=10, pady=10)
+
+        # Insert text into the Text widget
+        sample_text = """
+        1. 211info
+        - Link: 
+            https://www.211info.org/get-help/food/
+
+        2. UOregon Engage
+        - Link: 
+            https://uoregon.campuslabs.com/engage/events?categories=16973
+
+        3. Food for Lane County
+        - Meal Sites: 
+            https://www.foodforlanecounty.org/find-a-meal-site/
+
+        - Mobile Food Pantry: 
+            https://www.foodforlanecounty.org/mobile-pantry/ 
+
+        - Trillium Produce Plus: 
+            https://www.foodforlanecounty.org/get-help/trillium-produce-plus/ 
+
+        4. UOregon Basic Needs Program
+        - Link: 
+            https://basicneeds.uoregon.edu/food
+
+        5. UOregon Free Food Events
+        - Link: 
+            https://calendar.uoregon.edu/search/events?event_types[]=15630
+
+        6. Burrito Brigade: Waste to Taste - Free Food Boxes
+        - Link: 
+            https://burritobrigade.org/waste-to-taste/ 
+
+        7. SNAP Food Benefits:
+        - Link: 
+            https://www.oregon.gov/odhs/food/pages/snap.aspx
+
+        8. UOregon Leftover Textover:
+        - Link: 
+            https://emu.uoregon.edu/leftover-textover 
+        """
+
+        # Add sample text with hyperlinks
+        resource_text.insert(tk.END, sample_text)
+
+        # Create an instance of CTkToplevel for focus management
+        toplevel_window = None
+
+        list_popup.mainloop()
+
 #######################################################################
 # About Pop-up Button
 #######################################################################
@@ -254,7 +623,9 @@ class MainArea(ctk.CTkFrame):
         self.event_description = EventDescription(self)
         self.event_description.grid(row=2,
                                     column=0,
-                                    padx=33,
+                                    ipadx=10,
+                                    padx=20,
+                                    ipady=10,
                                     pady=5,
                                     sticky="news",
                                     rowspan=1)
@@ -285,29 +656,29 @@ class FoodEventTabs(ctk.CTkTabview):
         # #############################################################
         # Today
         self.view_map_button = ctk.CTkButton(self.tab("Today"), 
-                                             text="View Today's Food Map",
-                                             command=lambda: Resource_Graph.main())
+                                             text="View Today's Food Map", 
+                                             command=lambda: Resource_Graph.run_map_function("today")) 
         self.view_map_button.pack(padx=50, 
                                   expand=True) 
         
         # Tomorrow
         self.view_map_button = ctk.CTkButton(self.tab("Tomorrow"), 
                                              text="View Tomorrow's Food Map", 
-                                             command=lambda: Resource_Graph.main())
+                                             command=lambda: Resource_Graph.run_map_function("tomorrow"))
         self.view_map_button.pack(padx=50, 
                                   expand=True)
         
         # This Week
         self.view_map_button = ctk.CTkButton(self.tab("This Week"), bg_color="transparent",
                                              text="View This Week's Food Map", 
-                                             command=lambda: Resource_Graph.main())
+                                             command=lambda: Resource_Graph.run_map_function("this week"))
         self.view_map_button.pack(padx=50, 
                                   expand=True)
 
         # Next Week
         self.view_map_button = ctk.CTkButton(self.tab("Next Week"), 
                                              text="View Next Week's Food Map", 
-                                             command=lambda: Resource_Graph.main())
+                                             command=lambda: Resource_Graph.run_map_function("next week"))
         self.view_map_button.pack(padx=50,
                                   expand=True)
         
@@ -346,44 +717,63 @@ class TodayFrame(ctk.CTkFrame):
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
 
+        events, title_name = get_all_events(csv_file_path, 
+                        'today') 
+
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
-                                                            bg_color="transparent",
+                                                            bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources', 
-                                                            label_text_color=("grey", "lightgrey")) #maybe make fg transparent
+                                                            label_text = 'Free Food Resources' + title_name, 
+                                                            label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
+        
+        ###############################################################
+        # Update the Description Frame Text for Today Buttons pressed #   
+        ############################################################### 
+        def update_description(event_desc):
+            app.main_area.event_description.configure(text=event_desc)
 
-        # Function to populate the scrollable frame with data
+        ###############################################################
+        # Function to populate the scrollable frame with data         #   
+        ############################################################### 
         def populate_scrollable_frame():
-            events = get_all_events(csv_file_path, 
-                                    'today') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
-
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                
                 event_text = event['Event Title'] #+ '-' + event['Date']
+                event_desc = event['Description']
 
-                # Create the Tkinter Text widget 
+                #######################################################
+                # Create the Tkinter Text widgets for Today Frame     #   
+                #######################################################  
+                # Choosing colors since the CTkScrollableFrame header 
+                # text becomes black on light mode which is 
+                # inconcsistent with the light theme for most widgets.
                 event_button = ctk.CTkButton(scrollable_frame_food_list,
                                              anchor="nw", 
                                              text= event_text, 
-                                             fg_color=("darkgrey", "gray33"),  
-                                             hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
-                event_button._text_label.configure(wraplength=222)
+                                             text_color=("darkgrey", "white"),
+                                             command = lambda desc=event_desc: update_description(desc),
+                                             fg_color=("grey88", "gray33"),  
+                                             hover_color=("lightgrey", "grey")) 
+                
+                event_button._text_label.configure(wraplength=267)
+
+                # A disabled, invisible button with a small font acts 
+                # as a spacer between each event button!
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
                                         font=("Helvetica", 1), 
                                         state="disabled", 
-                                        fg_color="transparent") # a disabled, invisible button with a small font acts as a spacer between each event button!
+                                        fg_color="transparent") 
                 spacing.pack()
                 event_button.pack(fill=tk.X)
 
-        # Call the populate function to initially populate the frame
+        # Call the populate function to populate the frame
         populate_scrollable_frame()
 
 #######################################################################
@@ -400,35 +790,47 @@ class TomorrowFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
+        events, title_name = get_all_events(csv_file_path, 
+                                    'tomorrow')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
-                                                            bg_color="transparent",
+                                                            bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources', 
+                                                            label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
+        
+        ###############################################################
+        # Update the Description Frame Text for Today Buttons pressed #   
+        ############################################################### 
+        def update_description(event_desc):
+            app.main_area.event_description.configure(text=event_desc)
 
-        # Function to populate the scrollable frame with data
+        ###############################################################
+        # Function to populate the scrollable frame with data         #   
+        ###############################################################
         def populate_scrollable_frame():
-            events = get_all_events(csv_file_path, 
-                                    'tomorrow') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
-
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                
                 event_text = event['Event Title'] #+ '-' + event['Date']
+                event_desc = event['Description']
 
-                # Create the Tkinter Text widget 
-                event_button = ctk.CTkButton(scrollable_frame_food_list, 
-                                             anchor="nw",
+                #######################################################
+                # Create the Tkinter Text widgets for Frame           #   
+                ####################################################### 
+                event_button = ctk.CTkButton(scrollable_frame_food_list,
+                                             anchor="nw", 
                                              text= event_text, 
-                                             fg_color=("darkgrey", "gray33"),  
-                                             hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
-                event_button._text_label.configure(wraplength=222)
+                                             text_color=("darkgrey", "white"),
+                                             command = lambda desc=event_desc: update_description(desc),
+                                             fg_color=("grey88", "gray33"),  
+                                             hover_color=("lightgrey", "grey")) 
+                
+                event_button._text_label.configure(wraplength=267)
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -453,43 +855,55 @@ class ThisWeekFrame(ctk.CTkFrame):
         super().__init__(master)
 
         ###############################################################
-        # Place Events as Buttons onto the Today Scrollable Frame     #   
+        # Place Events as Buttons onto the This Week Scrollable Frame #  
         ###############################################################
+        events, title_name = get_all_events(csv_file_path, 
+                        'this week') 
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
-                                                            bg_color="transparent",
-                                                            fg_color=("grey88", "grey28"),
-                                                            label_text = 'UO Free Food Resources', 
+                                                            bg_color=("#cfcfce","#333333"),
+                                                            fg_color=("grey88", "grey33"),
+                                                            label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
 
-        # Function to populate the scrollable frame with data
-        def populate_scrollable_frame():
-            events = get_all_events(csv_file_path, 
-                                    'this week') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
+        ###############################################################
+        # Update the Description Frame Text for Today Buttons pressed #   
+        ############################################################### 
+        def update_description(event_desc):
+            app.main_area.event_description.configure(text=event_desc)
 
-             # Clear existing data in the scrollable frame
-        #     for widget in scrollable_frame_food_list.winfo_children():
-        #         widget.destroy()
+        ###############################################################
+        # Function to populate the scrollable frame with data         #   
+        ###############################################################    
+        def populate_scrollable_frame():
+            # Clear existing data in the scrollable frame
+            for widget in scrollable_frame_food_list.winfo_children():
+                widget.destroy()
 
             for event in events:
-                
                 event_text = event['Event Title'] #+ '-' + event['Date']
+                event_desc = event['Description']
 
-                # Create the Tkinter Text widget 
-                event_button = ctk.CTkButton(scrollable_frame_food_list, 
-                                             anchor="nw",
+                #######################################################
+                # Create the Tkinter Text widgets for This Week Frame #   
+                #######################################################  
+                event_button = ctk.CTkButton(scrollable_frame_food_list,
+                                             anchor="nw", 
                                              text= event_text, 
-                                             fg_color=("darkgrey", "gray22"),  
-                                             hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
-                event_button._text_label.configure(wraplength=222)
+                                             text_color=("darkgrey", "white"),
+                                             command = lambda desc=event_desc: update_description(desc),
+                                             fg_color=("grey88", "gray33"),  
+                                             hover_color=("lightgrey", "grey")) 
+                
+                event_button._text_label.configure(wraplength=267)
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
                                         font=("Helvetica", 1), 
                                         state="disabled", 
-                                        fg_color="transparent") # a disabled, invisible button with a small font acts as a spacer between each event button!
+                                        fg_color="transparent") 
                 spacing.pack()
                 event_button.pack(fill=tk.X)
 
@@ -508,41 +922,50 @@ class NextWeekFrame(ctk.CTkFrame):
         super().__init__(master)
 
         ###############################################################
-        # Place Events as Buttons onto the Today Scrollable Frame     #   
+        # Place Events as Buttons onto the Next Week Scrollable Frame #   
         ###############################################################
+        events, title_name = get_all_events(csv_file_path, 
+                        'next week')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
-                                                            bg_color="transparent",
+                                                            bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
-                                                            label_text = 'UO Free Food Resources', 
+                                                            label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
 
-        # Function to populate the scrollable frame with data
-        def populate_scrollable_frame():
-            events = get_all_events(csv_file_path, 
-                                    'next week') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
+        ###############################################################
+        # Update Description Frame Text for Next Week Buttons pressed #   
+        ############################################################### 
+        def update_description(event_desc):
+            app.main_area.event_description.configure(text=event_desc)
 
+        ###############################################################
+        # Function to populate the scrollable frame with data         #   
+        ############################################################### 
+        def populate_scrollable_frame():
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                
                 event_text = event['Event Title'] #+ '-' + event['Date']
-
-                # Create the Tkinter Text widget 
-                event_button = ctk.CTkButton(scrollable_frame_food_list, 
-                                             anchor="nw",
-                                             text= event_text, 
-                                             fg_color=("darkgrey", "gray33"),  
-                                             hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
-                event_button._text_label.configure(wraplength=222)
+                event_desc = event['Description']
                 
-                # 'spacing' is a disabled, invisible button with a 
-                # small font acts as a spacer between each event 
-                # button! (see below). 
+                #######################################################
+                # Create the Tkinter Text widgets for Today Frame     #   
+                ####################################################### 
+                event_button = ctk.CTkButton(scrollable_frame_food_list,
+                                             anchor="nw", 
+                                             text= event_text, 
+                                             text_color=("darkgrey", "white"),
+                                             command = lambda desc=event_desc: update_description(desc),
+                                             fg_color=("grey88", "gray33"),  
+                                             hover_color=("lightgrey", "grey")) 
+                
+                event_button._text_label.configure(wraplength=267)
+                
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -552,7 +975,7 @@ class NextWeekFrame(ctk.CTkFrame):
                 spacing.pack()
                 event_button.pack(fill=tk.X)
 
-        # Call the populate function to initially populate the frame
+        # Call the populate function to initially populate the frame.
         populate_scrollable_frame()
 
 #######################################################################
@@ -564,11 +987,14 @@ class NextWeekFrame(ctk.CTkFrame):
 #      most recently clicked.                                         # 
 #                                                                     # 
 #######################################################################
-class EventDescription(ctk.CTkLabel):
+class EventDescription(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master, 
-                         justify="left",
-                         text= "Description here. <3")
+                         state = "disabled",
+                         fg_color=("grey88", "grey33"),
+                         text_color=("red", "red"),
+                         text= "Click an event for its description.")
+        self._text_label.configure(wraplength=300)
   
 #######################################################################
 # Run application                                                     #   

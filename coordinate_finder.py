@@ -1,8 +1,17 @@
-"""
-Code body to take in an address and return the latitude and longitude -- requires internet connection.
-"""
+#######################################################################
+# UO_scraper.py                                                       #
+# created: TODO                                                       # 
+# Authors: Kylie Griffiths                                            #
+#                                                                     #
+# Description: Code body to take in an address and return the         #
+# latitude and longitude -- requires internet connection.             #                             
+#                                                                     #
+# Interactions:                                                       #
+# - TODO                                                              #
+####################################################################### 
+
 from bs4 import BeautifulSoup
-import requests
+import requests 
 import urllib.parse
 import json
 import re
