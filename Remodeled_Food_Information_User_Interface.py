@@ -17,6 +17,7 @@ import tkinter as tk
 from utils import get_all_events, filter_events
 from database import run_map
 import Resource_Graph
+import pandas as pd
 
 csv_file_path = 'Free_Food_Database.csv'
 
@@ -175,10 +176,206 @@ class AppearanceModeFrame(ctk.CTkFrame):
 class AdminModeButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
-                         text='Admin Mode')
+                         text='Admin Mode',
+                         command=self.show_admin_mode_popup)  # Set the command to open admin mode popup
+
+    def on_add_new_event_click(self):
+        # Set up New Event User Input Window
+        user_input_window = ctk.CTkToplevel(self.master)
+        user_input_window.title('')
+        user_input_window.geometry('555x555')
+
+        # title and description
+        text_var = ctk.StringVar(value="Add New Event")
+        label = ctk.CTkLabel(
+            user_input_window,
+            textvariable=text_var,
+            width=120,
+            height=25,
+            fg_color=("white", "gray75"),
+            corner_radius=8
+        )
+        label.configure(font=("TkDefaultFont", 25))
+        desc = ctk.CTkLabel(
+            user_input_window,
+            text="Input a new Free Food resource into our database. \nAll resources inputted by admins will be reviewed prior to being displayed."
+        )
+        label.pack(pady=20)
+        desc.pack()
+
+        # Make a frame to hold all input boxes
+        inputs_frame = ctk.CTkFrame(
+            user_input_window,
+            width=455,
+            height=455
+        )
+        inputs_frame.pack(padx=10, pady=10)
+
+        #######################################################################
+        # Input Boxes Configuration
+        #######################################################################
+
+        # Event Title
+        event_title_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Event Title",
+        )
+        event_title_input.pack(padx=10, pady=10)
+
+        # Date
+        date_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Date (i.e. March 26 2024)"
+        )
+        date_input.pack(padx=10, pady=10)
+
+        # Start Time
+        start_time_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Start Time (i.e. 1:00 PM)"
+        )
+        start_time_input.pack(padx=10, pady=10)
+
+        # End Time (Optional)
+        end_time_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="End Time (i.e. 4:00 PM)"
+        )
+        end_time_input.pack(padx=10, pady=10)
+
+        # Organizer(s)
+        organizers_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Organizer(s) (i.e. Women in Computer Science)"
+        )
+        organizers_input.pack(padx=10, pady=10)
+
+        # Location (Street, City, State)
+        location_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Location (i.e. Knight Library, 122 DREAM Lab 1501 Kincaid Street, Eugene, OR)"
+        )
+        location_input.pack(padx=10, pady=10)
+
+        # Description
+        desc_input = ctk.CTkEntry(
+            inputs_frame,
+            placeholder_text="Description"
+        )
+        desc_input.pack(padx=10, pady=10)
+
+        ############################################################
+        # Input Submission Button
+        ############################################################
+        new_event = {'title': '',
+                    'date': '',
+                    'start_time': '',
+                    'end_time': '',
+                    'location': '',
+                    'desc': '',
+                    'organizers': ''}
+
+        # TODO: make comments on lines -- make it legible
+        def my_function():
+            event_title = event_title_input.get()
+            date = date_input.get()
+            start_time = start_time_input.get()
+            end_time = end_time_input.get()
+            organizers = organizers_input.get()
+            location = location_input.get()
+            desc = desc_input.get()
+            new_event['title'] = str(event_title)
+            new_event['date'] = str(date)
+            new_event['start_time'] = str(start_time)
+            new_event['end_time'] = str(end_time)
+            new_event['location'] = str(location)
+            new_event['desc'] = str(desc)
+            new_event['organizers'] = str(organizers)
+            event_title_input.delete(0, len(event_title))
+            date_input.delete(0, len(date))
+            start_time_input.delete(0, len(start_time))
+            end_time_input.delete(0, len(end_time))
+            location_input.delete(0, len(location))
+            desc_input.delete(0, len(desc))
+            organizers_input.delete(0, len(organizers))
+            if event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != '':
+                succ = ctk.CTkToplevel()
+                succ.geometry("300x100")
+                succ.configure(bg="gray92")
+                succ.wm_title("Success")
+                l = ctk.CTkLabel(
+                    succ,
+                    text="'" + event_title + "' has been added and \nis waiting to be approved."
+                )
+                l.pack(padx=20, pady=10)
+                # Assuming admin_intake_form is an instance of a class with the method add_to_admin_file
+                # and it is available in the scope
+                admin_intake_form.add_to_admin_file(new_event)
+            else:
+                err = ctk.CTkToplevel()
+                err.geometry("300x100")
+                err.configure(bg="gray92")
+                err.wm_title("Error")
+                l = ctk.CTkLabel(
+                    err,
+                    text="please input all fields."
+                )
+                l.pack(padx=20, pady=10)
+
+        submit_form = ctk.CTkButton(
+            inputs_frame,
+            text="Submit Event",
+            command=lambda: my_function()
+        )
+        submit_form.pack(padx=5, pady=5)
         
-        #FIXME add Nithi's frame
     
+    def on_refresh_data_click(self):
+        # this is what it should be
+        #'''refresh_data.refresh_data()'''
+        # rn I have it as populate_scrollable_frame(), because I don't want it 
+        # to actually change the entire system when we click the button
+        #populate_scrollable_frame()
+        pass
+
+    def on_delete_data_click(self):
+        # Load the admin_info.csv file into a DataFrame
+        admin_df = pd.read_csv('admin_info.csv')
+
+        # Create a new popup window to display the contents
+        delete_data_popup = ctk.CTkToplevel(self.master)
+        delete_data_popup.title('Admin Data Contents')
+        delete_data_popup.geometry('600x400')
+
+        # Create a Text widget to display the contents
+        contents_text = tk.Text(delete_data_popup, wrap=tk.WORD, height=20, width=50)
+        contents_text.pack(padx=10, pady=10)
+
+        # Insert the contents into the Text widget
+        contents_text.insert(tk.END, admin_df.to_string(index=False))
+
+
+    def show_admin_mode_popup(self):
+        admin_mode_popup = ctk.CTkToplevel(self.master)
+        admin_mode_popup.title('Admin Mode')
+        admin_mode_popup.geometry('300x200')
+
+        # Add New Event button
+        add_new_event_button = ctk.CTkButton(admin_mode_popup, text='Add New Event', command=self.on_add_new_event_click)
+        add_new_event_button.pack(pady=5)
+
+        # Refresh Data button
+        refresh_data_button = ctk.CTkButton(admin_mode_popup, text='Refresh Data', command=self.on_refresh_data_click)
+        refresh_data_button.pack(pady=5)
+
+        # Refresh Data button
+        delete_data_button = ctk.CTkButton(admin_mode_popup, text='Delete Data', command=self.on_delete_data_click)
+        delete_data_button.pack(pady=5)
+
+        # Create a button to close the popup window
+        # close_button = ctk.CTkButton(admin_mode_popup, text='Close', command=admin_mode_popup.destroy())
+        # close_button.pack(pady=5)
+
 #######################################################################
 # Resources Button                                                    #   
 #######################################################################
