@@ -285,29 +285,29 @@ class FoodEventTabs(ctk.CTkTabview):
         # #############################################################
         # Today
         self.view_map_button = ctk.CTkButton(self.tab("Today"), 
-                                             text="View Today's Food Map",
-                                             command=lambda: Resource_Graph.main())
+                                             text="View Today's Food Map", 
+                                             command=lambda: Resource_Graph.run_map_function("today")) 
         self.view_map_button.pack(padx=50, 
                                   expand=True) 
         
         # Tomorrow
         self.view_map_button = ctk.CTkButton(self.tab("Tomorrow"), 
                                              text="View Tomorrow's Food Map", 
-                                             command=lambda: Resource_Graph.main())
+                                             command=lambda: Resource_Graph.run_map_function("tomorrow"))
         self.view_map_button.pack(padx=50, 
                                   expand=True)
         
         # This Week
         self.view_map_button = ctk.CTkButton(self.tab("This Week"), bg_color="transparent",
                                              text="View This Week's Food Map", 
-                                             command=lambda: Resource_Graph.main())
+                                             command=lambda: Resource_Graph.run_map_function("this week"))
         self.view_map_button.pack(padx=50, 
                                   expand=True)
 
         # Next Week
         self.view_map_button = ctk.CTkButton(self.tab("Next Week"), 
                                              text="View Next Week's Food Map", 
-                                             command=lambda: Resource_Graph.main())
+                                             command=lambda: Resource_Graph.run_map_function("next week"))
         self.view_map_button.pack(padx=50,
                                   expand=True)
         
