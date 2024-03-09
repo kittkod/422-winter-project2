@@ -197,7 +197,7 @@ class AdminModeButton(ctk.CTkButton):
         label.configure(font=("TkDefaultFont", 25))
         desc = ctk.CTkLabel(
             user_input_window,
-            text="Input a new Free Food resource into our database. \nAll resources inputted by admins will be reviewed prior to being displayed."
+            text="Input a new Free Food resource into our database."
         )
         label.pack(pady=20)
         desc.pack()
