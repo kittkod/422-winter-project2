@@ -1,19 +1,30 @@
-"""
-Grapher to display free food resources around UO (as well as eugene, if development goes there)
-"""
-import plotly.express as px 
-import pandas as pd
-import database
-import webbrowser
-import tempfile
+#######################################################################
+# Resource_Graph.py                                                   #
+# created: 2/22/24                                                    # 
+# Authors: Jasmine Wallin and Max Hermens                             #
+#                                                                     #
+# Description: This file creates a map with the use of plotly.express #
+# with data points from a dictionary created with the                 #
+# Free_Food_Database.csv file.                                        #                             
+#                                                                     #
+# Interactions:                                                       #
+# - database.py: This file needs the run_map() function from          #
+#   database.py to create the dictionary of scatterplot points that   #
+#   graph_scatterplot needs.                                          #
+####################################################################### 
 
+import plotly.express as px # used for creating the plot/map
+import pandas as pd # creates a dataframe object from dictionary
+import database # needed for run_map function to create dictionary
+
+
+# function to create the map with plotly.express.scatter_mapbox()
 def graph_scatterplot(input_data, title_name):
     ''' This function graphs a plotly.express.scatter_mapbox() type with a dictionary
     of inputted plot points.
     inputs:
         input_data:dict - a dictionary with types 'lat', 'lon', 'sizes', 'text', 'comment', 'Food Resources'
         title_name:str - a string that pertains to the title of the given graph 
-
     '''
     # Convert input_data to a DataFrame first
     df = pd.DataFrame(input_data)
@@ -31,6 +42,7 @@ def graph_scatterplot(input_data, title_name):
                                 "lon": False},
                             size='sizes', color="Food Resources", color_continuous_scale="red", labels={'text':''})
 
+    # formatting the text boxes for each mark
     fig.update_traces(hovertemplate='<b>%{customdata[0]}</b><br>' +  # Event Title
                   '%{customdata[1]}<br>' +                           # Description
                   'Time: %{customdata[2]}<br>' +                     # Time
@@ -38,42 +50,19 @@ def graph_scatterplot(input_data, title_name):
                   'Organizer: %{customdata[4]}<br>' +                # Organizer
                   'Date: %{customdata[5]}<extra></extra>')           # Date
 
+    # formatting the map screen
     fig.update_layout(mapbox_style='open-street-map')
     fig.update_layout(margin={"r":0,"t":70,"l":40,"b":0})
 
     fig.show()
-    # Convert to an HTML div string
-   # graph_div = fig.to_html(full_html=False, include_plotlyjs='cdn')
-    '''
-    # Define custom HTML string with buttons
-    custom_html = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>{title_name}</title>
-    </head>
-    <body>
-        <div style="margin: 20px;">
-            <button onclick="alert('Filtering for today\'s events')">Today</button>
-            <button onclick="alert('Filtering for tomorrow\'s events')">Tomorrow</button>
-            <button onclick="alert('Filtering for this week\'s events')">This Week</button>
-        </div>
-        {graph_div}
-        <script>
-            // Add any JavaScript needed to handle button clicks
-        </script>
-    </body>
-    </html>
-    """
-
-    # Write the HTML content to a temporary file and open it in the default web browser
-    with tempfile.NamedTemporaryFile('w', delete=False, suffix='.html') as f:
-        url = 'file://' + f.name
-        f.write(custom_html)
-    webbrowser.open(url)
-    '''
 
 def run_map_function(input_button):
+    ''' connect the creation of the dictionary to creating the map.
+    inputs: input_button:str - a string of 'today', 'tomorrow', 'this week' or 'next week'
+                         for database.run_map()
+    '''
+    # event_dict : the dictionary created from run_map()
+    # mapname : the string of the name of the map
     event_dict, mapname = database.run_map("Free_Food_Database.csv", input_button)
     graph_scatterplot(event_dict, mapname)
     

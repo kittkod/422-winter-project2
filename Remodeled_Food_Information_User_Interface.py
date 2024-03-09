@@ -1,7 +1,10 @@
 #######################################################################
 # Remodeled Food Information User Interface                           # 
+# Created: TODO                                                       #
 # Authors: All team                                                   #
 #                                                                     #
+# Description/Interactions:                                           #
+# TODO                                                                #
 # Last Edited: 05/08/2024 by: sb                                      #   
 # Log: Added classes functionality                                    # 
 #######################################################################
@@ -14,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events, filter_events
+from utils import get_all_events
 from database import run_map
 import admin_intake_form
 import Resource_Graph

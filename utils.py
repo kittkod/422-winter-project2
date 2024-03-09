@@ -1,19 +1,46 @@
-import json
-import re
-import pandas as pd
-from datetime import date, datetime
+#######################################################################
+# utils.py                                                            #
+# created: 2/22/24                                                    # 
+# Authors: Max Hermens and Jasmine Wallin                             #
+#                                                                     #
+# Description: This file holds helper functions for two files in the  #
+# Dollarless Dining program.                                          #                             
+# Functions: break_str(), flexible_match_location(), get_lat_lon(),   #
+# address_converter(), filter_events(), clean_description(),          #
+# format_time(), clean_coordinate(), get_all_events(), find_ranges(), #
+# in_filter().                                                        #                
+#                                                                     #
+# Interactions:                                                       #
+# - Remodeled_Food_Information_User_Interface.py: This file uses      #
+#   get_all_events() for the scrollable frame.                        #
+# - database.py: This file uses find_ranges(), in_filter(),           #
+#   clean_coordinate(), break_str() and format_time(). for creating   #
+#   the dictionary for the map.                                       #
+####################################################################### 
 
-### DICTIONARIES
+import json # loading campus_buildings.txt as a json object
+import re # used for finding patterns in dates
+import pandas as pd # parsing through csv's 
+from datetime import date, datetime # finding dates based on today's date 
+
+################################################################################## 
+# DICTIONARIES                                                                   #
+# dictionaries for find_ranges() and in_filter() functions.                      # 
+################################################################################## 
+
 weekday_dict = {0:"monday", 1:"tuesday", 2:"wednesday", 3:"thursday", 
                 4:"friday", 5:"saturday", 6:"sunday"}
 days_in_month = {1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
 month_dict = {"january":1, "february":2, "march":3, "april":4, "may":5,
                 "june":6, "july":7, "august":8, "september":9, "october":10,
                     "november":11, "december":12}
-# this is kind of a bad dictionary, theres probably better ways of doing this
 abbr_mon = {'jan':'january', 'feb':'february', 'mar':'march', 'apr':'april', 'jun':'june', 'jul':'july',
             'aug':'august', 'sep':'september', 'sept':'september', 'oct':'october'}
 
+
+################################################################################## 
+# FUNCTIONS                                                                      #
+##################################################################################  
 
 # Load campus buildings data
 with open('campus_buildings.txt') as f:
@@ -21,6 +48,12 @@ with open('campus_buildings.txt') as f:
 
 # Function to break up long strings
 def break_str(input_string, size):
+    ''' Function to break up long strings with <br> every 'size'
+    characters.
+    inputs:
+        input_str:str - the string wishing to be broken up
+        size:int - the index in the string that will be split
+    '''
     words = input_string.split(' ')
     new_str = ''
     line = ''
@@ -35,8 +68,15 @@ def break_str(input_string, size):
     new_str += line.rstrip()  # Add the last line
     return new_str
 
+
+################################################################
 # Finds location within building dict. with partial string matching
 def flexible_match_location(event_location, buildings_dict):
+    '''' Finds location within building dict
+    inputs:
+        event_location:str - name of the location of event
+        buildings_dict:dict - dictionary of buildings and coordinates
+    '''
     # Convert the event location to lowercase for case-insensitive comparison
     event_location_lower = event_location.lower()
 
@@ -50,6 +90,9 @@ def flexible_match_location(event_location, buildings_dict):
 
 # Function to convert address to lat and lon using flexible match
 def get_lat_lon(address):
+    ''' Convert address to latitude and longitude
+    inputs: address:str - a string
+    '''
     transformed_address = address_converter(address)  # Use existing address transformation
 
     # Attempt to find the transformed address in the campus buildings data
@@ -92,14 +135,27 @@ def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
     ]
 
     return filtered_df
+###############################################################
 
+# function to format the description in a mark in the graph
 def clean_description(description):
+    ''' format the text to remove patterns
+    inputs: description:str - text string to be improved
+    '''
     patterns_to_remove = ['==> Eligibility:', '=', '=Eligibility:', 'Eligibility:']
     for pattern in patterns_to_remove:
         description = description.replace(pattern, '')
     return ' '.join(description.split())  # This removes extra spaces between words
 
+# format the time string in the graph
 def format_time(row):
+    ''' format the start time - end time string for the marks in the graph
+    inputs:
+        row:pandas row type - row with 'Start Time' and 'End Time' to be used 
+                              for formatting.
+    outputs:
+        time_str:str - the created string of either start-end, start or 'Time not available'
+    '''
     # Get the start and end time from the row; use None as a default if they don't exist
     start_time = row.get('Start Time', None)
     end_time = row.get('End Time', None)
@@ -119,7 +175,16 @@ def format_time(row):
 
     return time_str
 
+# function to improve coordinates
 def clean_coordinate(value):
+    ''' clean non numeric characters from coordinates
+    input:
+        value:str or float - the current coordinate
+    output:
+        clean_value: cleaned float form of 'value'
+        None: if 'value' is invalid
+        value: if already a float or non string
+    '''
     if isinstance(value, str):
         # Remove semicolon and any other non-numeric characters (except for the decimal point)
         clean_value = ''.join(c for c in value if c.isdigit() or c == '.')
@@ -128,15 +193,22 @@ def clean_coordinate(value):
         # If value is already a float (or other non-string), return it directly
         return value
 
+# get all events from a csv into a dictionary
 def get_all_events(csv_file_path, filtered_by):
-    ''' *description*
-    filtered_by:str - either 'all', 'today', 'tomorrow', or 'next 7 days'. controlls what events are shown.
+    ''' put all events from a csv into a dictionary by a filter
+    inputs:
+        csv_file_path:str file path - the csv with event info
+        filtered_by:str - either 'all', 'today', 'tomorrow', or 'next 7 days'. 
+                            controlls what events are shown
+    outputs:
+        new_dict, scrollable_name - the created dictionary and the string of the 
+                                     created scrollable frame name
     '''
     df = pd.read_csv(csv_file_path)
     df['sizes'] = 8
-    new_dict = []
-    scrollable_name = ''
-    is_all = False
+    new_dict = [] # dictionary to be created
+    scrollable_name = '' # name to be created
+    is_all = False # if 'all' was the 'filtered_by' value 
     if filtered_by.lower() == "all":
         is_all = True
     else:
@@ -153,14 +225,22 @@ def get_all_events(csv_file_path, filtered_by):
 
 # function to find the ranges of days from an input button press
 def find_ranges(button_press):
-    curr_year = date.today().strftime('%y')
-    todays_month = date.today().strftime('%m')
-    todays_day = date.today().strftime('%d')
+    ''' Find ranges of days depending on the button press value
+    inputs:
+        button_press:str - either 'today', 'tomorrow', 'this week' or 'next week'
+    outputs:
+        start_date, end_date, weekday_date, is_week, map_name, scrollable_name:
+            int list, int list, str, bool, str, str
+            [month, day], [month, day], 'WeekdayName', True/False, 'MapName', 'ScrollableFrameName'
+    '''
+    curr_year = date.today().strftime('%y') # str this year
+    todays_month = date.today().strftime('%m') # str this month
+    todays_day = date.today().strftime('%d') # str this day
     # inclusive start and end date
     start_date = None # a list of ints: [date, month]
     end_date = None # a list of ints: [date, month]
     weekday_date = '' # a string of the weekday
-    is_week = False
+    is_week = False # if 'this week' or 'next week' was chosen
     map_name = 'Free Food Resources ' # name of map
     scrollable_name = ''
     
@@ -226,7 +306,17 @@ def find_ranges(button_press):
 
 # for a single row, see if it satisfies the filter
 def in_filter(row, start_date, end_date, weekday_date, is_week):
-    ''' returns True or False'''
+    ''' See if a single row satisfies the filter
+    inputs:
+        row:pandas row type - row to be used for checking
+        start_date:list - list of ints [month, day] 
+        end_date:list -  list of ints [month, day]
+        weekday_date:str - day of the week i.e. Monday
+        is_week:bool - True/False if 'this week' or 'next week'
+    outputs: 
+        True: if it is in the filter range
+        False: if it is not in the filter range
+    '''
     # if its not reoccurring event
     if str(row["Reoccurring"]).strip().lower() == "false":
         row_day = 0 # int of the row's day

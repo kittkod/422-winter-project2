@@ -1,4 +1,14 @@
-"""Form to take in administrative input and add to database"""
+#######################################################################
+# UO_scraper.py                                                       #
+# created: TODO                                                       # 
+# Authors: TODO                                                       #
+#                                                                     #
+# Description: Form to take in administrative input and add to        #
+# database.                                                           #                             
+#                                                                     #
+# Interactions:                                                       #
+# - TODO                                                              #
+####################################################################### 
 
 from datetime import datetime 
 import pandas as pd

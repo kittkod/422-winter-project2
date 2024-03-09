@@ -1,13 +1,28 @@
-#################################################################
-#                               
-#Database for graph function helpers and UI-database connectors
-#needs to: sort through data in .csv to look for if user wants specific hours/days 
-#
-import pandas as pd
-import utils
+#######################################################################
+# database.py                                                         #
+# created: 2/22/24                                                    # 
+# Authors: Max Hermens and Jasmine Wallin                             #
+#                                                                     #
+# Description: This file creates a dictionary according to data from  # 
+# an input csv and the date field constraints from the input_button   #
+# string.                                                             #
+#                                                                     #
+# Interactions:                                                       #
+# - Resource_Graph.py: This file creates the dictionary that the      #
+#   function graph_scatterplot in Resource_Graph.py needs.            #
+# - utils.py: This file uses the helper functions find_ranges,        #
+#   in_filter, clean_coordinate, break_str and format_time from       #   
+#   utils.py. These are all used to sort through and format the       #
+#   elements in the output dictionary.                                #
+# - Free_Food_Database.csv: This is the database csv of all of the    #
+#   information that is displayed in the graph. The information in    #
+#   csv is what is turned into a dictionary by run_map().             #
+#######################################################################                             
+
+import pandas as pd # used for parsing the input csv
+import utils # imports filtering functions for determining what data will be put in the dictionary
 
 csv_file_path = 'Free_Food_Database.csv'
-
 
 def run_map(input_csv, input_button):
     '''function to create a dictionary for a scatterplot map input from data from an input csv.
@@ -21,6 +36,7 @@ def run_map(input_csv, input_button):
     '''
     df = pd.read_csv(input_csv)
 
+    # base dictionary 
     event_dict = {
         'lat': [],
         'lon': [],
@@ -34,9 +50,13 @@ def run_map(input_csv, input_button):
         'Date': [],
         'Reoccurring': []
     }
-    
+
+    # start_date = a list of ints: [month, day]
+    # end_date = a list of ints: [month, day]
+    # weekday_date = an integer of the weekday (0-6)
+    # is_week = True if input_button is 'this week' or 'next week'
+    # map_name = a string of the name that the map will have
     start_date, end_date, weekday_date, is_week, map_name, _ = utils.find_ranges(input_button.lower())
-    
     
     # looping through each row in the input csv
     for _, row in df.iterrows():
@@ -45,19 +65,20 @@ def run_map(input_csv, input_button):
         if utils.in_filter(row, start_date, end_date, weekday_date, is_week) == False:
             continue
       
-        # title with dates if is_week is true
+        # title for 'Food Resources' with dates appended only if is_week is true
         new_event_title = ''
         if is_week == True and str(row["Reoccurring"]).strip().lower() == "false":
-            new_event_title = utils.break_str((row.get('Event Title', '')+' - '+row['Date']), 28)#'+str(row_month)+'/'+str(row_day)+'/'+datetime.date.today().strftime('%y')), 28)
+            new_event_title = utils.break_str((row.get('Event Title', '')+' - '+row['Date']), 28)
         if is_week == True and str(row["Reoccurring"]).strip().lower() == "true":
             new_event_title = utils.break_str((row.get('Event Title', '')+' - '+ row['Date']), 28)
         if is_week == False:
             new_event_title = utils.break_str(row.get('Event Title', ''), 28)
 
         # Assuming clean_coordinate handles non-string inputs correctly.
-        latitude_tmp = utils.clean_coordinate(row['Latitude'])
-        longitude_tmp = utils.clean_coordinate(row['Longitude'])
+        latitude_tmp = utils.clean_coordinate(row['Latitude']) # float of latitude like 432.3343
+        longitude_tmp = utils.clean_coordinate(row['Longitude']) # float of longitude like -342.3433
 
+        # break if lat or long is invalid
         if latitude_tmp is None or longitude_tmp is None:
             continue
         
@@ -105,6 +126,7 @@ def run_map(input_csv, input_button):
     return event_dict, map_name
 
 if __name__ == "__main__":
+    # testing utils.get_all_events()
     print("Running database.py script...")
     events = utils.get_all_events(csv_file_path)
     print(f"CSV file read successfully. Number of events found: {len(events)}")
