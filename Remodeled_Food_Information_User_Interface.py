@@ -47,8 +47,8 @@ class App(ctk.CTk):
 
         self.title("Dollarless Dining")
         self.geometry("444x333")
-        self.minsize(555, 444)
-        self.maxsize(777, 555)
+        self.minsize(511, 477)
+        self.maxsize(777, 677)
 
         ###############################################################
         # Create the Grid System for the entire App                   #   
@@ -385,23 +385,20 @@ class AdminModeButton(ctk.CTkButton):
     def show_admin_mode_popup(self):
         admin_mode_popup = ctk.CTkToplevel(self.master)
         admin_mode_popup.title('Admin Mode')
-        admin_mode_popup.geometry('300x200')
+        admin_mode_popup.geometry('200x185')
+        admin_mode_popup.resizable(False, False)
 
         # Add New Event button
         add_new_event_button = ctk.CTkButton(admin_mode_popup, text='Add New Event', command=self.on_add_new_event_click)
-        add_new_event_button.pack(pady=5)
+        add_new_event_button.pack(pady=(25, 10), anchor="center")
 
         # Refresh Data button
         refresh_data_button = ctk.CTkButton(admin_mode_popup, text='Refresh Data', command=self.on_refresh_data_click)
-        refresh_data_button.pack(pady=5)
+        refresh_data_button.pack(padx=5, pady=10, anchor="center")
 
         # Refresh Data button
         delete_data_button = ctk.CTkButton(admin_mode_popup, text='Delete Data', command=self.on_delete_data_click)
-        delete_data_button.pack(pady=5)
-
-        # Create a button to close the popup window
-        # close_button = ctk.CTkButton(admin_mode_popup, text='Close', command=admin_mode_popup.destroy())
-        # close_button.pack(pady=5)
+        delete_data_button.pack(padx=5, pady=(10, 5), anchor="center")
 
 #######################################################################
 # Resources Button                                                    #   
@@ -565,6 +562,7 @@ class ResourcesButton(ctk.CTkButton):
         toplevel_window = None
 
         list_popup.mainloop()
+
 #######################################################################
 # About Pop-up Button
 #######################################################################
@@ -630,7 +628,9 @@ class MainArea(ctk.CTkFrame):
         self.event_description = EventDescription(self)
         self.event_description.grid(row=2,
                                     column=0,
-                                    padx=33,
+                                    ipadx=10,
+                                    padx=20,
+                                    ipady=10,
                                     pady=5,
                                     sticky="news",
                                     rowspan=1)
@@ -723,43 +723,62 @@ class TodayFrame(ctk.CTkFrame):
         ###############################################################
 
         events, title_name = get_all_events(csv_file_path, 
-                        'today') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
+                        'today') 
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
-                                                            bg_color="transparent",
+                                                            bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
                                                             label_text = 'Free Food Resources' + title_name, 
-                                                            label_text_color=("grey", "lightgrey")) #maybe make fg transparent
+                                                            label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
+        
+        ###############################################################
+        # Update the Description Frame Text for Today Buttons pressed #   
+        ############################################################### 
+        def update_description(event_desc):
+            app.main_area.event_description.configure(text=event_desc)
 
-        # Function to populate the scrollable frame with data
+        ###############################################################
+        # Function to populate the scrollable frame with data         #   
+        ############################################################### 
         def populate_scrollable_frame():
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                
                 event_text = event['Event Title'] #+ '-' + event['Date']
+                event_desc = event['Description']
 
-                # Create the Tkinter Text widget 
+                #######################################################
+                # Create the Tkinter Text widgets for Today Frame     #   
+                #######################################################  
+                # Choosing colors since the CTkScrollableFrame header 
+                # text becomes black on light mode which is 
+                # inconcsistent with the light theme for most widgets.
                 event_button = ctk.CTkButton(scrollable_frame_food_list,
                                              anchor="nw", 
                                              text= event_text, 
-                                             fg_color=("darkgrey", "gray33"),  
-                                             hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
-                event_button._text_label.configure(wraplength=222)
+                                             text_color=("darkgrey", "white"),
+                                             command = lambda desc=event_desc: update_description(desc),
+                                             fg_color=("grey88", "gray33"),  
+                                             hover_color=("lightgrey", "grey")) 
+                
+                event_button._text_label.configure(wraplength=270)
+
+                # A disabled, invisible button with a small font acts 
+                # as a spacer between each event button!
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
                                         font=("Helvetica", 1), 
                                         state="disabled", 
-                                        fg_color="transparent") # a disabled, invisible button with a small font acts as a spacer between each event button!
+                                        fg_color="transparent") 
                 spacing.pack()
                 event_button.pack(fill=tk.X)
 
-        # Call the populate function to initially populate the frame
+        # Call the populate function to populate the frame
         populate_scrollable_frame()
 
 #######################################################################
@@ -776,19 +795,26 @@ class TomorrowFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
-
         events, title_name = get_all_events(csv_file_path, 
                                     'tomorrow')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
-                                                            bg_color="transparent",
+                                                            bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
                                                             label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
+        
+        ###############################################################
+        # Update the Description Frame Text for Today Buttons pressed #   
+        ############################################################### 
+        def update_description(event_desc):
+            app.main_area.event_description.configure(text=event_desc)
 
-        # Function to populate the scrollable frame with data
+        ###############################################################
+        # Function to populate the scrollable frame with data         #   
+        ###############################################################
         def populate_scrollable_frame():
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
@@ -796,14 +822,20 @@ class TomorrowFrame(ctk.CTkFrame):
 
             for event in events:
                 event_text = event['Event Title'] #+ '-' + event['Date']
+                event_desc = event['Description']
 
-                # Create the Tkinter Text widget 
-                event_button = ctk.CTkButton(scrollable_frame_food_list, 
-                                             anchor="nw",
+                #######################################################
+                # Create the Tkinter Text widgets for Frame           #   
+                ####################################################### 
+                event_button = ctk.CTkButton(scrollable_frame_food_list,
+                                             anchor="nw", 
                                              text= event_text, 
-                                             fg_color=("darkgrey", "gray33"),  
-                                             hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
-                event_button._text_label.configure(wraplength=222)
+                                             text_color=("darkgrey", "white"),
+                                             command = lambda desc=event_desc: update_description(desc),
+                                             fg_color=("grey88", "gray33"),  
+                                             hover_color=("lightgrey", "grey")) 
+                
+                event_button._text_label.configure(wraplength=270)
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -812,6 +844,7 @@ class TomorrowFrame(ctk.CTkFrame):
                                         fg_color="transparent") # a disabled, invisible button with a small font acts as a spacer between each event button!
                 spacing.pack()
                 event_button.pack(fill=tk.X)
+
         # Call the populate function to initially populate the frame
         populate_scrollable_frame()
 
@@ -827,44 +860,55 @@ class ThisWeekFrame(ctk.CTkFrame):
         super().__init__(master)
 
         ###############################################################
-        # Place Events as Buttons onto the Today Scrollable Frame     #   
+        # Place Events as Buttons onto the This Week Scrollable Frame #  
         ###############################################################
-
         events, title_name = get_all_events(csv_file_path, 
-                        'this week') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
-
+                        'this week') 
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
-                                                            bg_color="transparent",
-                                                            fg_color=("grey88", "grey28"),
+                                                            bg_color=("#cfcfce","#333333"),
+                                                            fg_color=("grey88", "grey33"),
                                                             label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
 
-        # Function to populate the scrollable frame with data
+        ###############################################################
+        # Update the Description Frame Text for Today Buttons pressed #   
+        ############################################################### 
+        def update_description(event_desc):
+            app.main_area.event_description.configure(text=event_desc)
+
+        ###############################################################
+        # Function to populate the scrollable frame with data         #   
+        ###############################################################    
         def populate_scrollable_frame():
-             # Clear existing data in the scrollable frame
-        #     for widget in scrollable_frame_food_list.winfo_children():
-        #         widget.destroy()
+            # Clear existing data in the scrollable frame
+            for widget in scrollable_frame_food_list.winfo_children():
+                widget.destroy()
 
             for event in events:
-                
                 event_text = event['Event Title'] #+ '-' + event['Date']
+                event_desc = event['Description']
 
-                # Create the Tkinter Text widget 
-                event_button = ctk.CTkButton(scrollable_frame_food_list, 
-                                             anchor="nw",
+                #######################################################
+                # Create the Tkinter Text widgets for This Week Frame #   
+                #######################################################  
+                event_button = ctk.CTkButton(scrollable_frame_food_list,
+                                             anchor="nw", 
                                              text= event_text, 
-                                             fg_color=("darkgrey", "gray22"),  
-                                             hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
-                event_button._text_label.configure(wraplength=222)
+                                             text_color=("darkgrey", "white"),
+                                             command = lambda desc=event_desc: update_description(desc),
+                                             fg_color=("grey88", "gray33"),  
+                                             hover_color=("lightgrey", "grey")) 
+                
+                event_button._text_label.configure(wraplength=270)
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
                                         font=("Helvetica", 1), 
                                         state="disabled", 
-                                        fg_color="transparent") # a disabled, invisible button with a small font acts as a spacer between each event button!
+                                        fg_color="transparent") 
                 spacing.pack()
                 event_button.pack(fill=tk.X)
 
@@ -883,42 +927,50 @@ class NextWeekFrame(ctk.CTkFrame):
         super().__init__(master)
 
         ###############################################################
-        # Place Events as Buttons onto the Today Scrollable Frame     #   
+        # Place Events as Buttons onto the Next Week Scrollable Frame #   
         ###############################################################
-
         events, title_name = get_all_events(csv_file_path, 
-                        'next week') # second argument can be 'all', 'today', 'tomorrow','this week' or 'next week'
-
+                        'next week')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
-                                                            bg_color="transparent",
+                                                            bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
                                                             label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
                                         expand=True) 
 
-        # Function to populate the scrollable frame with data
+        ###############################################################
+        # Update Description Frame Text for Next Week Buttons pressed #   
+        ############################################################### 
+        def update_description(event_desc):
+            app.main_area.event_description.configure(text=event_desc)
+
+        ###############################################################
+        # Function to populate the scrollable frame with data         #   
+        ############################################################### 
         def populate_scrollable_frame():
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                
                 event_text = event['Event Title'] #+ '-' + event['Date']
-
-                # Create the Tkinter Text widget 
-                event_button = ctk.CTkButton(scrollable_frame_food_list, 
-                                             anchor="nw",
-                                             text= event_text, 
-                                             fg_color=("darkgrey", "gray33"),  
-                                             hover_color=("lightgrey", "grey")) # choosing colors since the CTkScrollableFrame header text becomes black on light mode which is inconcsistent with the light theme for most widgets
-                event_button._text_label.configure(wraplength=222)
+                event_desc = event['Description']
                 
-                # 'spacing' is a disabled, invisible button with a 
-                # small font acts as a spacer between each event 
-                # button! (see below). 
+                #######################################################
+                # Create the Tkinter Text widgets for Today Frame     #   
+                ####################################################### 
+                event_button = ctk.CTkButton(scrollable_frame_food_list,
+                                             anchor="nw", 
+                                             text= event_text, 
+                                             text_color=("darkgrey", "white"),
+                                             command = lambda desc=event_desc: update_description(desc),
+                                             fg_color=("grey88", "gray33"),  
+                                             hover_color=("lightgrey", "grey")) 
+                
+                event_button._text_label.configure(wraplength=270)
+                
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -928,7 +980,7 @@ class NextWeekFrame(ctk.CTkFrame):
                 spacing.pack()
                 event_button.pack(fill=tk.X)
 
-        # Call the populate function to initially populate the frame
+        # Call the populate function to initially populate the frame.
         populate_scrollable_frame()
 
 #######################################################################
@@ -940,11 +992,14 @@ class NextWeekFrame(ctk.CTkFrame):
 #      most recently clicked.                                         # 
 #                                                                     # 
 #######################################################################
-class EventDescription(ctk.CTkLabel):
+class EventDescription(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master, 
-                         justify="left",
-                         text= "Description here. <3")
+                         state = "disabled",
+                         fg_color=("grey88", "grey33"),
+                         text_color=("red", "red"),
+                         text= "Click an event for its description.")
+        self._text_label.configure(wraplength=300)
   
 #######################################################################
 # Run application                                                     #   
