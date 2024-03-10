@@ -404,16 +404,35 @@ class AdminModeButton(ctk.CTkButton):
         confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete this event?")
         if confirmation:
             try:
+                # Read admin_info.csv
                 admin_df = pd.read_csv('./dollarless_database_files/admin_info.csv')
+                
+                # Read Free_Food_Database.csv
+                free_food_df = pd.read_csv('./dollarless_database_files/Free_Food_Database.csv')
+
+                # Get the event details from admin_info.csv
+                event_details = admin_df.iloc[index].to_dict()
+
+                # Remove the event from admin_info.csv
                 admin_df.drop(index, inplace=True)
                 admin_df.to_csv('./dollarless_database_files/admin_info.csv', index=False)
+
+                # Remove the corresponding event from Free_Food_Database.csv
+                for col, value in event_details.items():
+                    free_food_df = free_food_df[free_food_df[col] != value]
+
+                free_food_df.to_csv('./dollarless_database_files/Free_Food_Database.csv', index=False)
+
+                # Refresh the delete buttons in the GUI
                 self.populate_delete_buttons()
+
             except FileNotFoundError:
                 print("CSV file not found.")
             except pd.errors.EmptyDataError:
                 print("CSV file is empty.")
             except pd.errors.ParserError:
                 print("Error parsing CSV file.")
+
 
     def show_admin_mode_popup(self):
         admin_mode_popup = ctk.CTkToplevel(self.master)
