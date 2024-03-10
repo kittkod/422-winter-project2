@@ -95,16 +95,11 @@ def lat_and_long(address: str):
                 
             return [response[0]["lat"], response[0]["lon"]]
 
-# creating the class dictionary
-'''
-class_dict = class_dict_maker()
-with open('campus_buildings.txt', 'w') as convert_file: 
-    convert_file.write(json.dumps(class_dict))
-'''
 
 def coordinate_validity(address: str):
     """Ensure the validity of an address - check if coordinates exist"""
     matched_location = None
+    # creating the class dictionary
     class_dict = class_dict_maker()
     with open('dollarless_database_files/campus_buildings.txt', 'w') as convert_file: 
         convert_file.write(json.dumps(class_dict))

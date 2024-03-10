@@ -1,2 +1,4 @@
 Event Title,Date,Start Time,End Time,Location,Description,Organizer(s),Latitude,Longitude,Reoccurring
 f,f,f,f,Knight Library,f,f,44.043639;,-123.077625,False
+f,f,f,f,Knight Library,f,f,44.043639;,-123.077625,False
+test 1,March 9 2024,1:00 pm,3:00 pm,Knight Library,hello there,jasmine,44.043639;,-123.077625,False
