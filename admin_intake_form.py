@@ -19,6 +19,7 @@ import json
 from coordinate_finder import lat_and_long, address_converter
 from UO_scraper import CSV_file_creator, CSV_data_inputter, food_CSV_file
 
+unprocessed_admin_CSV_file = "dollarless_database_files/unprocessed_admin_info.csv"
 admin_CSV_file = "dollarless_database_files/admin_info.csv"
 
 def add_to_admin_file(dictionary):
@@ -57,6 +58,12 @@ def add_to_admin_file(dictionary):
     admin_CSV_entry.append(long)
     admin_CSV_entry.append(False)
 
+    if os.path.isfile("./dollarless_database_files/unprocessed_admin_info.csv") is False:
+        CSV_file_creator(unprocessed_admin_CSV_file)
+        CSV_data_inputter(admin_CSV_entry, unprocessed_admin_CSV_file)
+    else:
+        CSV_data_inputter(admin_CSV_entry, unprocessed_admin_CSV_file)
+    '''
     if os.path.isfile("./dollarless_database_files/admin_info.csv") is False:
         CSV_file_creator(admin_CSV_file)
         CSV_data_inputter(admin_CSV_entry, admin_CSV_file)
@@ -64,6 +71,7 @@ def add_to_admin_file(dictionary):
         CSV_data_inputter(admin_CSV_entry, admin_CSV_file)
 
     CSV_data_inputter(admin_CSV_entry, food_CSV_file)
+    '''
     
     return
 

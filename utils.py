@@ -22,6 +22,9 @@ import json # loading campus_buildings.txt as a json object
 import re # used for finding patterns in dates
 import pandas as pd # parsing through csv's 
 from datetime import date, datetime # finding dates based on today's date 
+import os.path # checks if food data file is present
+import csv # for reading through unprocessed admin events
+from UO_scraper import CSV_data_inputter, CSV_file_creator
 
 ################################################################################## 
 # DICTIONARIES                                                                   #
@@ -366,70 +369,23 @@ def in_filter(row, start_date, end_date, weekday_date, is_week):
     
     return True
 
-def get_title_name(input_button):
-    ''' Get the dates or date ranges from an input button string
-    inputs:
-        input_button:str - 
-    outputs:
-        scrollable_name:str - 
-    '''
-    curr_year = date.today().strftime('%y') # str this year
-    todays_month = date.today().strftime('%m') # str this month
-    todays_day = date.today().strftime('%d') # str this day
-    # inclusive start and end date
-    start_date = None # a list of ints: [date, month]
-    end_date = None # a list of ints: [date, month]
-    scrollable_name = ''
-    
-    if input_button == "today":
-        start_date = [int(todays_day), int(todays_month)] # to get rid of the leading '0'
-        end_date = [int(todays_day), int(todays_month)]
-        scrollable_name += ' on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
-        
-    elif input_button == "tomorrow":
-        month_days = days_in_month[int(todays_month)] # how many days in the current month
-        # if tomorrow goes into the next month
-        if int(todays_day) + 1 > month_days:
-            start_date = [1, int(todays_month)+1]
-            end_date = [1, int(todays_month) + 1]
-        # if tomorrow is in the same month
-        else:
-            start_date = [int(todays_day) + 1, int(todays_month)]
-            end_date = [int(todays_day) + 1, int(todays_month)]
-        scrollable_name += ' on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
+def delete_input():
+    if os.path.isfile("./dollarless_database_files/unprocessed_admin_info.csv") is True:
+        os.remove("./dollarless_database_files/unprocessed_admin_info.csv")
 
-    elif input_button == "this week":
-        days_till_weekend = 6 - date.today().weekday()
-        month_days = days_in_month[int(todays_month)]
-        # if the next 6 days go into the next month
-        if int(todays_day) + days_till_weekend > month_days:
-            days_forward = (int(todays_day) + days_till_weekend) - month_days
-            start_date = [int(todays_day), int(todays_month)]
-            end_date = [int(days_forward), int(todays_month) + 1]
-        # if the next 6 days stay in the current month
-        else:
-            start_date = [int(todays_day), int(todays_month)]
-            end_date = [int(todays_day) + days_till_weekend, int(todays_month)]
-        scrollable_name += ' from ' + str(start_date[1]) + '/' + str(int(start_date[0]) -int(date.today().weekday())) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+def update_csvs():
+    # checking if there has been any new additions 
+    if os.path.isfile("./dollarless_database_files/unprocessed_admin_info.csv") is True:
+         # checking if admin_info exists
+        if os.path.isfile("./dollarless_database_files/admin_info.csv") is False:
+            CSV_file_creator("./dollarless_database_files/admin_info.csv")
 
-    elif input_button == "next week":
-        starting_day = int(todays_day) + (6 - date.today().weekday() + 1)
-        month_days = days_in_month[int(todays_month)]
-        # if the starting day is past this month
-        if starting_day > month_days:
-            days_forward = starting_day-month_days 
-            start_date = [days_forward, int(todays_month)+1]
-            end_date = [days_forward+6, int(todays_month)+1]
-        # if the ending day is past this month
-        elif starting_day + 6 > month_days:
-            days_forward = (starting_day + 6) - month_days
-            start_date = [starting_day, int(todays_month)]
-            end_date = [int(days_forward), int(todays_month) + 1]
-        # if next week stays within this current month
-        else:
-            start_date = [starting_day, int(todays_month)]
-            end_date = [starting_day+6, int(todays_month)]
-        scrollable_name += ' from ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
-
-    return scrollable_name
-  
+        # going through the inputted events
+        with open('./dollarless_database_files/unprocessed_admin_info.csv') as file_obj: 
+            # skipping the heading
+            heading = next(file_obj) 
+            reader_obj = csv.reader(file_obj) 
+            # adding each inputted event to the main admin intake form
+            for row in reader_obj: 
+                CSV_data_inputter(row, "./dollarless_database_files/admin_info.csv")
+                CSV_data_inputter(row, "./dollarless_database_files/Free_Food_Database.csv")

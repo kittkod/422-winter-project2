@@ -17,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events, get_title_name
+from utils import get_all_events, update_csvs, delete_input
 from database import run_map
 import admin_intake_form
 import Resource_Graph
@@ -78,6 +78,9 @@ class App(ctk.CTk):
                             sticky="news",
                             rowspan=3,
                             columnspan=3)
+
+    
+    
 
 #######################################################################
 # Left Sidebar (containing various buttons & modes of operation)      #
@@ -751,7 +754,8 @@ class TodayFrame(ctk.CTkFrame):
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
 
-        title_name = get_title_name('today')
+        events, title_name = get_all_events(csv_file_path, 
+                        'today') 
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -771,15 +775,14 @@ class TodayFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ############################################################### 
         def populate_scrollable_frame():
-            events, _ = get_all_events(csv_file_path, 
-                        'today') 
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                event_text = event['Event Title'] #+ '-' + event['Date']
-                event_desc = event['Description']
+                event_text = event['Event Title']
+                # pop up description
+                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
@@ -825,7 +828,9 @@ class TomorrowFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
-        title_name = get_title_name('tomorrow')
+
+        events, title_name = get_all_events(csv_file_path, 
+                                    'tomorrow')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -845,15 +850,14 @@ class TomorrowFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ###############################################################
         def populate_scrollable_frame():
-            events, _ = get_all_events(csv_file_path, 
-                                    'tomorrow')
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                event_text = event['Event Title'] #+ '-' + event['Date']
-                event_desc = event['Description']
+                event_text = event['Event Title'] 
+                # pop up description
+                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for Frame           #   
@@ -893,7 +897,9 @@ class ThisWeekFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the This Week Scrollable Frame #  
         ###############################################################
-        title_name = get_title_name('this week')
+
+        events, title_name = get_all_events(csv_file_path, 
+                        'this week') 
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -913,15 +919,14 @@ class ThisWeekFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ###############################################################    
         def populate_scrollable_frame():
-            events, _ = get_all_events(csv_file_path, 
-                        'this week') 
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                event_text = event['Event Title'] #+ '-' + event['Date']
-                event_desc = event['Description']
+                event_text = event['Event Title'] 
+                # pop up description
+                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for This Week Frame #   
@@ -961,7 +966,9 @@ class NextWeekFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Next Week Scrollable Frame #   
         ###############################################################
-        title_name = get_title_name('next week')
+
+        events, title_name = get_all_events(csv_file_path, 
+                        'next week')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -981,15 +988,14 @@ class NextWeekFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ############################################################### 
         def populate_scrollable_frame():
-            events, _ = get_all_events(csv_file_path, 
-                        'next week')
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
 
             for event in events:
-                event_text = event['Event Title'] #+ '-' + event['Date']
-                event_desc = event['Description']
+                event_text = event['Event Title']
+                # pop up description
+                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
                 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
@@ -1037,5 +1043,9 @@ class EventDescription(ctk.CTkButton):
 # Run application                                                     #   
 #######################################################################
 
+delete_input()
 app = App()
 app.mainloop()
+# update the csv's so that manually added items get 
+# put into the database
+update_csvs()
