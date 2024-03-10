@@ -83,18 +83,16 @@ def admin_file_updater():
     index = 0
     values = []
     time = datetime.now()
-    time_hour = datetime.now().hour
+    time_hour = int(datetime.now().time().strftime('%H%M'))
     for date in admin_df['Date']:
 
         if contains_year(date) == False:
             """if year is not in the time string"""
             fixed_date = datetime.strptime(date, '%B %d')
-            if fixed_date < time.replace(year=fixed_date.year):
+            if fixed_date.date() < time.replace(year=fixed_date.year).date:
                 original_admin_df = original_admin_df.drop(index)
             else:
-                target_time = datetime.strptime(admin_df["Start Time"], '%I:%M %p').time()
-                print(time_hour)
-                print(target_time)
+                target_time = int(datetime.strptime(admin_df.at[index, "Start Time"], '%I:%M %p').time().strftime('%H%M'))
                 if time_hour > target_time:
                     original_admin_df = original_admin_df.drop(index)
                 else:
@@ -104,12 +102,14 @@ def admin_file_updater():
             """if year is in the time string"""
             given_datetime = datetime.strptime(date, "%B %d %Y")
             # Compare the parsed datetime with the current datetime
-            if given_datetime < time:
+            if given_datetime.date() < time.date():
                 original_admin_df = original_admin_df.drop(index)
             else:
-                target_time = datetime.strptime(admin_df["Start Time"], '%I:%M %p').time()
+                target_time = int(datetime.strptime(admin_df.at[index, "Start Time"], '%I:%M %p').time().strftime('%H%M'))
                 if time_hour > target_time:
                     original_admin_df = original_admin_df.drop(index)
+                else:
+                    values.append(index)
 
         index += 1
     
