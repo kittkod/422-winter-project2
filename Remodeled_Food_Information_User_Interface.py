@@ -25,6 +25,8 @@ import pandas as pd
 import webbrowser
 import refresh_data
 from coordinate_finder import coordinate_validity
+from tkinter import messagebox
+
 
 csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 
