@@ -184,9 +184,9 @@ class AdminModeButton(ctk.CTkButton):
         # Set up New Event User Input Window
         user_input_window = ctk.CTkToplevel(self.master)
         user_input_window.title('Add Event')
-        user_input_window.geometry('370x400')
-        user_input_window.minsize(370, 400)
-        user_input_window.maxsize(777, 400)
+        user_input_window.geometry('370x373')
+        user_input_window.minsize(370, 373)
+        user_input_window.maxsize(777, 373)
 
         # Make a frame to hold all input boxes
         inputs_frame = ctk.CTkFrame(
@@ -242,7 +242,7 @@ class AdminModeButton(ctk.CTkButton):
         # Location (Street, City, State)
         location_input = ctk.CTkEntry(
             inputs_frame,
-            placeholder_text="Location (i.e. 944 W 5th Avenue)"
+            placeholder_text="Location (i.e. Erb Memorial Union (full building name) or 944 W 5th Avenue, Eugene OR (address))"
         )
         location_input.pack(padx=5, pady=5, fill=tk.BOTH)
 
@@ -658,9 +658,7 @@ class MainArea(ctk.CTkFrame):
         self.event_description = EventDescription(self)
         self.event_description.grid(row=2,
                                     column=0,
-                                    ipadx=10,
-                                    padx=20,
-                                    ipady=10,
+                                    padx=5,
                                     pady=5,
                                     sticky="news",
                                     rowspan=1)
@@ -1020,14 +1018,13 @@ class NextWeekFrame(ctk.CTkFrame):
 # Contains:                                                           #
 #   1. An event of the event from the Scrollable Frame which was      #
 #      most recently clicked.                                         # 
-#                                                                     #  #FIXME y red diwn there
+#                                                                     #  
 #######################################################################
 class EventDescription(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master, 
                          state = "disabled",
-                         fg_color=("grey88", "grey33"),
-                         text_color=("red", "red"),
+                         fg_color=("#cfcfcf", "#333333"),
                          text= "Click an event for its description.")
         self._text_label.configure(wraplength=300)
   
