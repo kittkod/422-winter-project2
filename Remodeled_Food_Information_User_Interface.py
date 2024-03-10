@@ -17,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events
+from utils import get_all_events, get_title_name
 from database import run_map
 import admin_intake_form
 import Resource_Graph
@@ -179,95 +179,83 @@ class AdminModeButton(ctk.CTkButton):
         super().__init__(master,
                          text='Admin Mode',
                          command=self.show_admin_mode_popup)  # Set the command to open admin mode popup
-
+    
     def on_add_new_event_click(self):
         # Set up New Event User Input Window
         user_input_window = ctk.CTkToplevel(self.master)
-        user_input_window.title('')
-        user_input_window.geometry('555x555')
-
-        # title and description
-        text_var = ctk.StringVar(value="Add New Event")
-        label = ctk.CTkLabel(
-            user_input_window,
-            textvariable=text_var,
-            width=120,
-            height=25,
-            fg_color=("white", "gray75"),
-            corner_radius=8
-        )
-        label.configure(font=("TkDefaultFont", 25))
-        desc = ctk.CTkLabel(
-            user_input_window,
-            text="Input a new Free Food resource into our database."
-        )
-        label.pack(pady=20)
-        desc.pack()
+        user_input_window.title('Add Event')
+        user_input_window.geometry('370x400')
+        user_input_window.minsize(370, 400)
+        user_input_window.maxsize(777, 400)
 
         # Make a frame to hold all input boxes
         inputs_frame = ctk.CTkFrame(
-            user_input_window,
-            width=455,
-            height=455
+            user_input_window
         )
-        inputs_frame.pack(padx=10, pady=10)
+        inputs_frame.pack(padx=15, pady=15, fill=tk.BOTH)
 
         #######################################################################
         # Input Boxes Configuration
         #######################################################################
+        # Brief Formatting instructions for administrator inputting new event
+        input_new_event_instr = ctk.CTkLabel(
+            inputs_frame,
+            text = "Input must match form as seen below",
+        )
+        input_new_event_instr.pack(padx=5, pady=5, fill=tk.X)
 
         # Event Title
         event_title_input = ctk.CTkEntry(
             inputs_frame,
             placeholder_text="Event Title",
         )
-        event_title_input.pack(padx=10, pady=10)
+        event_title_input.pack(padx=5, pady=5, fill=tk.BOTH)
 
         # Date
         date_input = ctk.CTkEntry(
             inputs_frame,
             placeholder_text="Date (i.e. March 26 2024)"
         )
-        date_input.pack(padx=10, pady=10)
+        date_input.pack(padx=5, pady=5, fill=tk.BOTH)
 
         # Start Time
         start_time_input = ctk.CTkEntry(
             inputs_frame,
             placeholder_text="Start Time (i.e. 1:00 PM)"
         )
-        start_time_input.pack(padx=10, pady=10)
+        start_time_input.pack(padx=5, pady=5, fill=tk.BOTH)
 
         # End Time (Optional)
         end_time_input = ctk.CTkEntry(
             inputs_frame,
             placeholder_text="End Time (i.e. 4:00 PM)"
         )
-        end_time_input.pack(padx=10, pady=10)
+        end_time_input.pack(padx=5, pady=5, fill=tk.BOTH)
 
         # Organizer(s)
         organizers_input = ctk.CTkEntry(
             inputs_frame,
             placeholder_text="Organizer(s) (i.e. Women in Computer Science)"
         )
-        organizers_input.pack(padx=10, pady=10)
+        organizers_input.pack(padx=5, pady=5, fill=tk.BOTH)
 
         # Location (Street, City, State)
         location_input = ctk.CTkEntry(
             inputs_frame,
-            placeholder_text="Location (i.e. Knight Library, 122 DREAM Lab 1501 Kincaid Street, Eugene, OR)"
+            placeholder_text="Location (i.e. 944 W 5th Avenue)"
         )
-        location_input.pack(padx=10, pady=10)
+        location_input.pack(padx=5, pady=5, fill=tk.BOTH)
 
         # Description
         desc_input = ctk.CTkEntry(
             inputs_frame,
             placeholder_text="Description"
         )
-        desc_input.pack(padx=10, pady=10)
+        desc_input.pack(padx=5, pady=5, fill=tk.BOTH)
 
-        ############################################################
-        # Input Submission Button
-        ############################################################
+        ###############################################################
+        # Input Submission Button                                     #
+        ###############################################################
         new_event = {'title': '',
                     'date': '',
                     'start_time': '',
@@ -277,7 +265,7 @@ class AdminModeButton(ctk.CTkButton):
                     'organizers': ''}
 
         def my_function():
-            # getting the input box elements
+            # Getting the input box elements
             event_title = event_title_input.get()
             date = date_input.get()
             start_time = start_time_input.get()
@@ -285,7 +273,7 @@ class AdminModeButton(ctk.CTkButton):
             organizers = organizers_input.get()
             location = location_input.get()
             desc = desc_input.get()
-            # adding them to the new dictionary
+            # Adding them to the new dictionary
             new_event['title'] = str(event_title)
             new_event['date'] = str(date)
             new_event['start_time'] = str(start_time)
@@ -313,7 +301,7 @@ class AdminModeButton(ctk.CTkButton):
                     err1.wm_title("Error")
                     l = ctk.CTkLabel(
                         err1,
-                        text="location is invalid."
+                        text="location '" + location + "'is invalid."
                     )
                     l.pack(padx=20, pady=10)
                     checked_loc = True
@@ -330,8 +318,7 @@ class AdminModeButton(ctk.CTkButton):
                         text="'" + event_title + "' has been added."
                     )
                     l.pack(padx=20, pady=10)
-                    # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
-                    # and it is available in the scope
+                    # adding new valid event to the database csv
                     admin_intake_form.add_to_admin_file(new_event)
                 else:
                     err = ctk.CTkToplevel()
@@ -423,8 +410,6 @@ class AdminModeButton(ctk.CTkButton):
             except pd.errors.ParserError:
                 print("Error parsing CSV file.")
 
-
-
     def show_admin_mode_popup(self):
         admin_mode_popup = ctk.CTkToplevel(self.master)
         admin_mode_popup.title('Admin Mode')
@@ -432,7 +417,7 @@ class AdminModeButton(ctk.CTkButton):
         admin_mode_popup.resizable(False, False)
 
         # Add New Event button
-        add_new_event_button = ctk.CTkButton(admin_mode_popup, text='Add New Event', command=self.on_add_new_event_click)
+        add_new_event_button = ctk.CTkButton(admin_mode_popup, text='Add Event', command=self.on_add_new_event_click)
         add_new_event_button.pack(pady=(25, 10), anchor="center")
 
         # Refresh Data button
@@ -766,8 +751,7 @@ class TodayFrame(ctk.CTkFrame):
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
 
-        events, title_name = get_all_events(csv_file_path, 
-                        'today') 
+        title_name = get_title_name('today')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -787,6 +771,8 @@ class TodayFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ############################################################### 
         def populate_scrollable_frame():
+            events, _ = get_all_events(csv_file_path, 
+                        'today') 
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
@@ -839,8 +825,7 @@ class TomorrowFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
-        events, title_name = get_all_events(csv_file_path, 
-                                    'tomorrow')
+        title_name = get_title_name('tomorrow')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -860,6 +845,8 @@ class TomorrowFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ###############################################################
         def populate_scrollable_frame():
+            events, _ = get_all_events(csv_file_path, 
+                                    'tomorrow')
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
@@ -906,8 +893,7 @@ class ThisWeekFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the This Week Scrollable Frame #  
         ###############################################################
-        events, title_name = get_all_events(csv_file_path, 
-                        'this week') 
+        title_name = get_title_name('this week')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -927,6 +913,8 @@ class ThisWeekFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ###############################################################    
         def populate_scrollable_frame():
+            events, _ = get_all_events(csv_file_path, 
+                        'this week') 
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
@@ -973,8 +961,7 @@ class NextWeekFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Next Week Scrollable Frame #   
         ###############################################################
-        events, title_name = get_all_events(csv_file_path, 
-                        'next week')
+        title_name = get_title_name('next week')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -994,6 +981,8 @@ class NextWeekFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ############################################################### 
         def populate_scrollable_frame():
+            events, _ = get_all_events(csv_file_path, 
+                        'next week')
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
@@ -1034,7 +1023,7 @@ class NextWeekFrame(ctk.CTkFrame):
 # Contains:                                                           #
 #   1. An event of the event from the Scrollable Frame which was      #
 #      most recently clicked.                                         # 
-#                                                                     # 
+#                                                                     #  #FIXME y red diwn there
 #######################################################################
 class EventDescription(ctk.CTkButton):
     def __init__(self, master):

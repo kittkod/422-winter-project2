@@ -535,34 +535,10 @@ new_event_button.pack(side='bottom', anchor='w', padx=10, pady=10)
 view_map_popup_button = ctk.CTkButton(
     left_frame,
     text = 'View Map',
-    #TODO: instead of 'next week' the argument should be the global variable that stores things like 'today' made when the button is pressed
-    command = lambda:Resource_Graph.run_map_function('next week') # arguments can be 'today', 'tomorrow', 'this week', or 'next week'
+    command = lambda:Resource_Graph.run_map_function('next week') 
 )
 
 view_map_popup_button.pack(pady=5)
-
-#######################################################################
-# View Map Function
-#######################################################################
-# TODO: we don't need this function!
-# Function to handle View Map button click
-def on_view_map_click():
-    # placeholder values:
-    date = "February 20 2024"
-    start_time = "5:00 PM"
-    end_time = "7:00 PM"
-    
-    # Path to CSV file
-    csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
-    
-    # Filter events and convert to dictionary
-    filtered_df = filter_events(csv_file_path, date, start_time, end_time)
-    event_dict = run_map(filtered_df, None, None)
-    
-    # Here, pass event_dict to plotting function
-    # plot_events(event_dict)  # This function should handle the plotting
-    
-    print(event_dict)  # Placeholder to show the dictionary in the console
 
 
 #######################################################################

@@ -365,3 +365,71 @@ def in_filter(row, start_date, end_date, weekday_date, is_week):
             return False
     
     return True
+
+def get_title_name(input_button):
+    ''' Get the dates or date ranges from an input button string
+    inputs:
+        input_button:str - 
+    outputs:
+        scrollable_name:str - 
+    '''
+    curr_year = date.today().strftime('%y') # str this year
+    todays_month = date.today().strftime('%m') # str this month
+    todays_day = date.today().strftime('%d') # str this day
+    # inclusive start and end date
+    start_date = None # a list of ints: [date, month]
+    end_date = None # a list of ints: [date, month]
+    scrollable_name = ''
+    
+    if input_button == "today":
+        start_date = [int(todays_day), int(todays_month)] # to get rid of the leading '0'
+        end_date = [int(todays_day), int(todays_month)]
+        scrollable_name += ' on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
+        
+    elif input_button == "tomorrow":
+        month_days = days_in_month[int(todays_month)] # how many days in the current month
+        # if tomorrow goes into the next month
+        if int(todays_day) + 1 > month_days:
+            start_date = [1, int(todays_month)+1]
+            end_date = [1, int(todays_month) + 1]
+        # if tomorrow is in the same month
+        else:
+            start_date = [int(todays_day) + 1, int(todays_month)]
+            end_date = [int(todays_day) + 1, int(todays_month)]
+        scrollable_name += ' on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
+
+    elif input_button == "this week":
+        days_till_weekend = 6 - date.today().weekday()
+        month_days = days_in_month[int(todays_month)]
+        # if the next 6 days go into the next month
+        if int(todays_day) + days_till_weekend > month_days:
+            days_forward = (int(todays_day) + days_till_weekend) - month_days
+            start_date = [int(todays_day), int(todays_month)]
+            end_date = [int(days_forward), int(todays_month) + 1]
+        # if the next 6 days stay in the current month
+        else:
+            start_date = [int(todays_day), int(todays_month)]
+            end_date = [int(todays_day) + days_till_weekend, int(todays_month)]
+        scrollable_name += ' from ' + str(start_date[1]) + '/' + str(int(start_date[0]) -int(date.today().weekday())) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+
+    elif input_button == "next week":
+        starting_day = int(todays_day) + (6 - date.today().weekday() + 1)
+        month_days = days_in_month[int(todays_month)]
+        # if the starting day is past this month
+        if starting_day > month_days:
+            days_forward = starting_day-month_days 
+            start_date = [days_forward, int(todays_month)+1]
+            end_date = [days_forward+6, int(todays_month)+1]
+        # if the ending day is past this month
+        elif starting_day + 6 > month_days:
+            days_forward = (starting_day + 6) - month_days
+            start_date = [starting_day, int(todays_month)]
+            end_date = [int(days_forward), int(todays_month) + 1]
+        # if next week stays within this current month
+        else:
+            start_date = [starting_day, int(todays_month)]
+            end_date = [starting_day+6, int(todays_month)]
+        scrollable_name += ' from ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year + ' to ' + str(end_date[1]) + '/' + str(end_date[0]) + '/' + curr_year
+
+    return scrollable_name
+  
