@@ -17,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events
+from utils import get_all_events, get_title_name
 from database import run_map
 import admin_intake_form
 import Resource_Graph
@@ -179,7 +179,7 @@ class AdminModeButton(ctk.CTkButton):
         super().__init__(master,
                          text='Admin Mode',
                          command=self.show_admin_mode_popup)  # Set the command to open admin mode popup
-
+    
     def on_add_new_event_click(self):
         # Set up New Event User Input Window
         user_input_window = ctk.CTkToplevel(self.master)
@@ -301,7 +301,7 @@ class AdminModeButton(ctk.CTkButton):
                     err1.wm_title("Error")
                     l = ctk.CTkLabel(
                         err1,
-                        text="location is invalid."
+                        text="location '" + location + "'is invalid."
                     )
                     l.pack(padx=20, pady=10)
                     checked_loc = True
@@ -318,8 +318,7 @@ class AdminModeButton(ctk.CTkButton):
                         text="'" + event_title + "' has been added."
                     )
                     l.pack(padx=20, pady=10)
-                    # Adding to the .csv -- assuming admin_intake_form is an instance of a class with the method add_to_admin_file
-                    # and it is available in the scope
+                    # adding new valid event to the database csv
                     admin_intake_form.add_to_admin_file(new_event)
                 else:
                     err = ctk.CTkToplevel()
@@ -750,8 +749,7 @@ class TodayFrame(ctk.CTkFrame):
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
 
-        events, title_name = get_all_events(csv_file_path, 
-                        'today') 
+        title_name = get_title_name('today')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -771,6 +769,8 @@ class TodayFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ############################################################### 
         def populate_scrollable_frame():
+            events, _ = get_all_events(csv_file_path, 
+                        'today') 
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
@@ -823,8 +823,7 @@ class TomorrowFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
-        events, title_name = get_all_events(csv_file_path, 
-                                    'tomorrow')
+        title_name = get_title_name('tomorrow')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -844,6 +843,8 @@ class TomorrowFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ###############################################################
         def populate_scrollable_frame():
+            events, _ = get_all_events(csv_file_path, 
+                                    'tomorrow')
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
@@ -890,8 +891,7 @@ class ThisWeekFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the This Week Scrollable Frame #  
         ###############################################################
-        events, title_name = get_all_events(csv_file_path, 
-                        'this week') 
+        title_name = get_title_name('this week')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -911,6 +911,8 @@ class ThisWeekFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ###############################################################    
         def populate_scrollable_frame():
+            events, _ = get_all_events(csv_file_path, 
+                        'this week') 
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
@@ -957,8 +959,7 @@ class NextWeekFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Next Week Scrollable Frame #   
         ###############################################################
-        events, title_name = get_all_events(csv_file_path, 
-                        'next week')
+        title_name = get_title_name('next week')
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
@@ -978,6 +979,8 @@ class NextWeekFrame(ctk.CTkFrame):
         # Function to populate the scrollable frame with data         #   
         ############################################################### 
         def populate_scrollable_frame():
+            events, _ = get_all_events(csv_file_path, 
+                        'next week')
             # Clear existing data in the scrollable frame
             for widget in scrollable_frame_food_list.winfo_children():
                 widget.destroy()
