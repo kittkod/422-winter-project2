@@ -23,7 +23,7 @@ admin_CSV_file = "dollarless_database_files/admin_info.csv"
 
 def add_to_admin_file(dictionary):
 
-    with open('dollarless_database_files/campus_buildings.txt') as f: 
+    with open('campus_buildings.txt') as f: 
         data = f.read() 
     #pull data to be read from
       
@@ -79,11 +79,11 @@ def admin_file_updater():
     original_admin_df = pd.read_csv("./dollarless_database_files/admin_info.csv")
     admin_df = original_admin_df[["Date", "Start Time", "End Time"]]
     admin_df = pd.DataFrame(admin_df)
-    time = datetime.now()
 
     index = 0
     values = []
-
+    time = datetime.now()
+    time_hour = datetime.now().hour
     for date in admin_df['Date']:
 
         if contains_year(date) == False:
@@ -92,7 +92,13 @@ def admin_file_updater():
             if fixed_date < time.replace(year=fixed_date.year):
                 original_admin_df = original_admin_df.drop(index)
             else:
-                values.append(index)
+                target_time = datetime.strptime(admin_df["Start Time"], '%I:%M %p').time()
+                print(time_hour)
+                print(target_time)
+                if time_hour > target_time:
+                    original_admin_df = original_admin_df.drop(index)
+                else:
+                    values.append(index)
 
         else:
             """if year is in the time string"""
@@ -101,7 +107,9 @@ def admin_file_updater():
             if given_datetime < time:
                 original_admin_df = original_admin_df.drop(index)
             else:
-                values.append(index)
+                target_time = datetime.strptime(admin_df["Start Time"], '%I:%M %p').time()
+                if time_hour > target_time:
+                    original_admin_df = original_admin_df.drop(index)
 
         index += 1
     
@@ -132,21 +140,21 @@ def delete_from_admin(event_title: str):
     df_food.to_csv('./dollarless_database_files/Free_Food_Database.csv', index=False)
     return  
 
+def delete_only_from_admin(event_title: str):
+    """Function to remove admin entered data (but only on admin list)
+    -for debugging purposes
+    """
+    ##should be no errors in event_title because event_title is a button press grab
+    
+    df_admin_1 = pd.read_csv(admin_CSV_file)
+    df_admin = pd.DataFrame(df_admin_1)
+    admin_index = df_admin.index.get_loc(df_admin[df_admin['Event Title'] == event_title].index[0])
+    df_admin = df_admin.drop([admin_index])
+
+    CSV_file_creator(admin_CSV_file)
+    df_admin.to_csv('./dollarless_database_files/admin_info.csv', index=False)
+    return  
+
 if __name__ == "__main__":
     "Test cases - don't run unless you are prepared to refresh the data afterwards"
-    '''
-    CSV_file_creator(admin_CSV_file)
-
-    dictionary_1 = {"title": "Kylie Test", "date": "March 4", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie!", "organizers": "Kylie"}
-    dictionary_2 = {"title": "Kylie Test number 2", "date": "March 5", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "348 Lincoln St Eugene OR", "desc": "Climb with Kylie a second time!", "organizers": "Simone :>"}
-    
-    add_to_admin_file(dictionary_1) 
-    add_to_admin_file(dictionary_2) 
-
-    admin_file_updater()
-
-    delete_from_admin("Kylie Test")
-    '''
-    add_to_admin_file({"title": "Kylie Test", "date": "March 4", "start_time": "3:00 PM", "end_time": "4:00 PM", "location": "Knight Library", "desc": "Climb with Kylie!", "organizers": "Kylie"})
-
     

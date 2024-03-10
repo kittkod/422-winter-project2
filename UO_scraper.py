@@ -1,12 +1,13 @@
 #######################################################################
 # UO_scraper.py                                                       #
-# created: TODO                                                       # 
+# created: 2/15/2024                                                  # 
 # Authors: Kylie Griffiths                                            #
 #                                                                     #
-# Description: Web Scraper for University of Oregon Club Free Food    #                             
+# Description: Web Scraper for University of Oregon Free Food Events
+# and                            
 #                                                                     #
 # Interactions:                                                       #
-# -                                                              #
+# -                                                                   #
 ####################################################################### 
 
 from bs4 import BeautifulSoup
@@ -26,7 +27,7 @@ food_CSV_file = "./dollarless_database_files/Free_Food_Database.csv"
 days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 #to be used when parsing date strings
 
-with open('dollarless_database_files/campus_buildings.txt') as f: 
+with open('campus_buildings.txt') as f: 
     data = f.read() 
 #pull data to be read from
       

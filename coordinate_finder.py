@@ -17,11 +17,10 @@ import json
 import re
 
 raw_link = "https://en.wikipedia.org/wiki/List_of_University_of_Oregon_buildings"
-class_dictionary = {}
 address_exceptions = {"Grace Evangelical Church": [44.0408363098272, -123.08166553148503]}
 
-
 def class_dict_maker():
+    class_dictionary = {}
 
     link = requests.get(raw_link)
     soup = BeautifulSoup(link.text, 'html.parser')
@@ -95,21 +94,13 @@ def lat_and_long(address: str):
                 
             return [response[0]["lat"], response[0]["lon"]]
 
-# creating the class dictionary
-'''
-class_dict = class_dict_maker()
-with open('campus_buildings.txt', 'w') as convert_file: 
-    convert_file.write(json.dumps(class_dict))
-'''
-
 def coordinate_validity(address: str):
     """Ensure the validity of an address - check if coordinates exist"""
     matched_location = None
-    class_dict = class_dict_maker()
-    with open('dollarless_database_files/campus_buildings.txt', 'w') as convert_file: 
-        convert_file.write(json.dumps(class_dict))
+    with open('campus_buildings.txt') as f:
+        campus_buildings = json.load(f)
     if address != '':
-        for location in class_dict.keys():
+        for location in campus_buildings.keys():
             if location in address:
                 matched_location = location
                 break
@@ -117,7 +108,7 @@ def coordinate_validity(address: str):
             new_location = address_converter(address)
             lat, long = lat_and_long(new_location)
         else:
-            latlong = class_dict.get(matched_location).split(" ")
+            latlong = campus_buildings.get(matched_location).split(" ")
             lat = latlong[0]
             long = latlong[1]
     if lat != "N/A" and long != "N/A": 
@@ -126,11 +117,9 @@ def coordinate_validity(address: str):
         return False
 
 def main():
-    class_dict_maker()
-    #class_dict = class_dict_maker()
-    #with open('campus_buildings.txt', 'w') as convert_file: 
-    #    convert_file.write(json.dumps(class_dict))
-    print(coordinate_validity("Knight Library"))
+    class_dict = class_dict_maker()
+    with open('campus_buildings.txt', 'w') as convert_file: 
+        convert_file.write(json.dumps(class_dict))
 
 if __name__ == '__main__':
     main()

@@ -15,7 +15,7 @@ from admin_intake_form import admin_file_updater
 
 def refresh_data():
     """refreshes data using scraper and admin data list"""
-    
+    print("Starting to refresh data.")
     CSV_file_creator(food_CSV_file)
     coordinate_finder.main()
     URL_list = engage_URL_web_scraper()
