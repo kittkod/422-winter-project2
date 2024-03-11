@@ -74,7 +74,7 @@ def lat_and_long(address: str):
     """Take an address and return the latitude and longitude"""
     match = None
     for location in address_exceptions:
-            if location in address:
+            if location.lower() in address.lower():
                 match = location
                 lat_long = address_exceptions[match]
                 return [lat_long[0], lat_long[1]]
