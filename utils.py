@@ -293,13 +293,13 @@ def in_filter(row, start_date, end_date, weekday_date, is_week):
     return True
 
 def is_valid_date(input_str):
-    ''' checks if date matches 'March 10 2024' like format. Returns boolean
+    ''' checks if date matches 'March 10 2024' or 'March 10' like format. Returns boolean
     Input: input_str:str - the input date 
     Output: False - if the date is in the invalid format
             True - if the date is in valid format
     '''
     pass
-    
+
 # function that adds unprocessed new admin events to the database 
 def update_database():
     ''' if there are new admin inputs, new admin inputs get added to the database
