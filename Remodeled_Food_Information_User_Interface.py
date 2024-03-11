@@ -44,8 +44,8 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("Dollarless Dining")
-        self.geometry("444x333")
-        self.minsize(511, 477)
+        self.geometry("580x512")
+        self.minsize(580, 512)
         self.maxsize(777, 667)
 
         ###############################################################
