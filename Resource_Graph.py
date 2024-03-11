@@ -23,9 +23,14 @@ def graph_scatterplot(input_data, title_name):
     ''' This function graphs a plotly.express.scatter_mapbox() type with a dictionary
     of inputted plot points.
     inputs:
-        input_data:dict - a dictionary with types 'lat', 'lon', 'sizes', 'text', 'comment', 'Food Resources'
+        input_data:dict - a dictionary which needs the keys: 'lat', 'lon', 'sizes', 'text', 
+                            'comment', 'Food Resources', 'sizes', 'Time', 'Location', 
+                            'Organizer', and 'Date'
         title_name:str - a string that pertains to the title of the given graph 
     '''
+    # if input dictionary is empty
+    if len(input_data['lat']) == 0 and len(input_data['lon']) == 0 and len(input_data['sizes']) == 0 and len(input_data['text']) == 0 and len(input_data['comment']) == 0 and len(input_data['Food Resources']) == 0 and len(input_data['sizes']) == 0 and len(input_data['Time']) == 0 and len(input_data['Location']) == 0 and len(input_data['Organizer']) == 0 and len(input_data['Date']) == 0:
+        title_name += ' -- No events to display!'
     # Convert input_data to a DataFrame first
     df = pd.DataFrame(input_data)
     fig = px.scatter_mapbox(df, lat="lat", lon="lon", title=title_name, height=650, width=1200, zoom=10.5, text="comment",
@@ -40,7 +45,7 @@ def graph_scatterplot(input_data, title_name):
                                 "sizes": False,
                                 "lat": False,
                                 "lon": False},
-                            size='sizes', color="Food Resources", color_continuous_scale="red", labels={'text':''})
+                            size='sizes', color="Food Resources", color_continuous_scale="purp", labels={'text':''})
 
     # formatting the text boxes for each mark
     fig.update_traces(hovertemplate='<b>%{customdata[0]}</b><br>' +  # Event Title

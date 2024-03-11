@@ -269,7 +269,7 @@ def find_ranges(button_press):
         else:
             start_date = [int(todays_day) + 1, int(todays_month)]
             end_date = [int(todays_day) + 1, int(todays_month)]
-        weekday_date = weekday_dict[date.today().weekday() + 1]
+        weekday_date = weekday_dict[(date.today().weekday() + 1)%6]
         map_name += 'on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
         scrollable_name += ' on ' + str(start_date[1]) + '/' + str(start_date[0]) + '/' + curr_year
 
@@ -369,23 +369,33 @@ def in_filter(row, start_date, end_date, weekday_date, is_week):
     
     return True
 
-def delete_input():
+# function that adds unprocessed new admin events to the database 
+def update_database():
+    ''' if there are new admin inputs, new admin inputs get added to the database
+    upon the next run. 
+    ''' 
+    # if not the first run
     if os.path.isfile("./dollarless_database_files/unprocessed_admin_info.csv") is True:
-        os.remove("./dollarless_database_files/unprocessed_admin_info.csv")
+        new_inputs = pd.read_csv('./dollarless_database_files/unprocessed_admin_info.csv')
 
-def update_csvs():
-    # checking if there has been any new additions 
-    if os.path.isfile("./dollarless_database_files/unprocessed_admin_info.csv") is True:
-         # checking if admin_info exists
-        if os.path.isfile("./dollarless_database_files/admin_info.csv") is False:
-            CSV_file_creator("./dollarless_database_files/admin_info.csv")
+        # checking if there has been any new additions
+        if not new_inputs.empty:
+            # checking if admin_info exists
+            if os.path.isfile("./dollarless_database_files/admin_info.csv") is False:
+                CSV_file_creator("./dollarless_database_files/admin_info.csv")
 
-        # going through the inputted events
-        with open('./dollarless_database_files/unprocessed_admin_info.csv') as file_obj: 
-            # skipping the heading
-            heading = next(file_obj) 
-            reader_obj = csv.reader(file_obj) 
-            # adding each inputted event to the main admin intake form
-            for row in reader_obj: 
-                CSV_data_inputter(row, "./dollarless_database_files/admin_info.csv")
-                CSV_data_inputter(row, "./dollarless_database_files/Free_Food_Database.csv")
+            # going through the inputted events
+            with open('./dollarless_database_files/unprocessed_admin_info.csv') as file_obj: 
+                # skipping the heading
+                heading = next(file_obj) 
+                reader_obj = csv.reader(file_obj) 
+                # adding each inputted event to the main admin intake form
+                for row in reader_obj: 
+                    CSV_data_inputter(row, "./dollarless_database_files/admin_info.csv")
+                    CSV_data_inputter(row, "./dollarless_database_files/Free_Food_Database.csv")
+            
+            # deleting contents of the file - but not the heading
+            with open("./dollarless_database_files/unprocessed_admin_info.csv", 'r+') as f:
+                f.readline() # read header line
+                f.truncate(f.tell()) # terminate rest of the file
+            #os.remove("./dollarless_database_files/unprocessed_admin_info.csv")

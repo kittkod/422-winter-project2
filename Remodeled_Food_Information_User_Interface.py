@@ -17,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events, update_csvs, delete_input
+from utils import get_all_events, update_database
 from database import run_map
 import admin_intake_form
 import Resource_Graph
@@ -357,6 +357,7 @@ class AdminModeButton(ctk.CTkButton):
             # Load the admin_info.csv file into a DataFrame
             admin_df = pd.read_csv('./dollarless_database_files/admin_info.csv')
  
+            # TODO clean up this code so no print statements
             for _, row in admin_df.iterrows():
                 print(row)
 
@@ -375,7 +376,27 @@ class AdminModeButton(ctk.CTkButton):
                                                  fg_color=("grey88", "gray33"),
                                                  hover_color=("lightgrey", "grey"))
                     event_button.pack(fill=tk.X)
-            else:
+                
+            # checking if there are any new events inputted from this run 
+            unprocessed_admin_df = pd.read_csv('./dollarless_database_files/unprocessed_admin_info.csv')
+            if not unprocessed_admin_df.empty:
+
+                # Use the first column as the event_text (change this if needed)
+                un_event_text_column = unprocessed_admin_df.columns[0]
+
+                # Create the Tkinter Text widgets for the scrollable frame
+                for index, event in unprocessed_admin_df.iterrows():
+                    un_event_text = str(event[un_event_text_column]) + ' - unprocessed'
+                    un_event_button = ctk.CTkButton(self.scrollable_frame_delete_list,
+                                                text=un_event_text,
+                                                text_color=("black", "white"),
+                                                command=lambda i=index: self.delete_unprocessed_data(i),
+                                                fg_color=("grey88", "gray33"),
+                                                hover_color=("lightgrey", "grey"))
+                    un_event_button.pack(fill=tk.X)
+
+            # if there are no new events or past events added
+            if admin_df.empty and unprocessed_admin_df.empty:
                 print("DataFrame is empty.")
                 # Display a message in the scrollable frame
                 empty_label = ctk.CTkLabel(self.scrollable_frame_delete_list,
@@ -399,6 +420,30 @@ class AdminModeButton(ctk.CTkButton):
         self.scrollable_frame_delete_list.pack(fill=tk.BOTH, expand=True)
 
         self.populate_delete_buttons()
+
+    def delete_unprocessed_data(self, index):
+        confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete this event?")
+        if confirmation:
+            try:
+                # Read admin_info.csv
+                un_admin_df = pd.read_csv('./dollarless_database_files/unprocessed_admin_info.csv')
+
+                # Get the event details from admin_info.csv
+                event_details = un_admin_df.iloc[index].to_dict()
+
+                # Remove the event from admin_info.csv
+                un_admin_df.drop(index, inplace=True)
+                un_admin_df.to_csv('./dollarless_database_files/unprocessed_admin_info.csv', index=False)
+
+                # Refresh the delete buttons in the GUI
+                self.populate_delete_buttons()
+
+            except FileNotFoundError:
+                print("CSV file not found.")
+            except pd.errors.EmptyDataError:
+                print("CSV file is empty.")
+            except pd.errors.ParserError:
+                print("Error parsing CSV file.")
 
     def delete_selected_data(self, index):
         confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete this event?")
@@ -1061,10 +1106,7 @@ class EventDescription(ctk.CTkButton):
 #######################################################################
 # Run application                                                     #   
 #######################################################################
-
-delete_input()
+# updating the database with any possible new event additions
+update_database()
 app = App()
 app.mainloop()
-# update the csv's so that manually added items get 
-# put into the database
-update_csvs()
