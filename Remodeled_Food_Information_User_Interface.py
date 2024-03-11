@@ -53,8 +53,8 @@ class App(ctk.CTk):
         ###############################################################
         # Left Sidebar 
         self.l_sidebar = LeftSideBar(self)
-        self.l_sidebar.pack(padx=(5, 0), # padx=(5,0) so that the center isn't spaced by 10 
-                            pady=(5, 5),
+        self.l_sidebar.pack(padx=(10, 0), # padx=(5,0) so that the center isn't spaced by 10 
+                            pady=(10, 10),
                             side=tk.LEFT,
                             fill=tk.Y,
                             expand=False) 
@@ -62,8 +62,8 @@ class App(ctk.CTk):
         # Main Area
         self.main_area = MainArea(self)
         self.main_area.pack(
-                            padx=(5, 5), 
-                            pady=(5, 5), 
+                            padx=(10, 10), 
+                            pady=(10, 10), 
                             fill=tk.BOTH,
                             expand=True)
 
@@ -419,6 +419,12 @@ class AdminModeButton(ctk.CTkButton):
             print("Error parsing CSV file.")
 
     def on_delete_data_click(self):
+        ###############################################################
+        # Open loading screen                                         #
+        ###############################################################
+        data_deleting_loading_screen = ctk.CTkToplevel(self.master)
+        data_deleting_loading_screen.geometry('333x333')
+
         delete_data_popup = ctk.CTkToplevel(self.master)
         delete_data_popup.title('Admin Delete Events')
         delete_data_popup.geometry('400x300')
@@ -428,6 +434,12 @@ class AdminModeButton(ctk.CTkButton):
         self.scrollable_frame_delete_list.pack(fill=tk.BOTH, expand=True)
 
         self.populate_delete_buttons()
+
+        data_deleting_loading_screen.destroy()
+
+        ###############################################################
+        # Close Loading Screen                                        #
+        ###############################################################
 
     def delete_unprocessed_data(self, index):
         confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete this event?")
@@ -490,20 +502,39 @@ class AdminModeButton(ctk.CTkButton):
     def show_admin_mode_popup(self):
         admin_mode_popup = ctk.CTkToplevel(self.master)
         admin_mode_popup.title('Admin Mode')
-        admin_mode_popup.geometry('200x185')
+        admin_mode_popup.geometry('170x160')
         admin_mode_popup.resizable(False, False)
 
         # Add New Event button
-        add_new_event_button = ctk.CTkButton(admin_mode_popup, text='Add Event', command=self.on_add_new_event_click)
-        add_new_event_button.pack(pady=(25, 10), anchor="center")
+        add_new_event_button = ctk.CTkButton(admin_mode_popup, 
+                                             width=111,
+                                             text='Add Event', 
+                                             command=self.on_add_new_event_click
+                                             )
+        add_new_event_button.pack(padx=10, 
+                                  pady=(30, 5), 
+                                  anchor="center"
+                                  )
 
         # Refresh Data button
-        refresh_data_button = ctk.CTkButton(admin_mode_popup, text='Refresh Data', command=self.on_refresh_data_click)
-        refresh_data_button.pack(padx=5, pady=10, anchor="center")
+        refresh_data_button = ctk.CTkButton(admin_mode_popup, 
+                                            width=111,
+                                            text='Refresh Data', 
+                                            command=self.on_refresh_data_click
+                                            )
+        refresh_data_button.pack(padx=10, 
+                                 pady=(5, 5), 
+                                 anchor="center"
+                                 )
 
         # Refresh Data button
-        delete_data_button = ctk.CTkButton(admin_mode_popup, text='Delete Data', command=self.on_delete_data_click)
-        delete_data_button.pack(padx=5, pady=(10, 5), anchor="center")
+        delete_data_button = ctk.CTkButton(admin_mode_popup, 
+                                           width=111,
+                                           text='Delete Data', 
+                                           command=self.on_delete_data_click)
+        delete_data_button.pack(padx=10, 
+                                pady=(5, 5), 
+                                anchor="center")
 
 #######################################################################
 # Resources Button                                                    #   
@@ -900,7 +931,7 @@ class TodayFrame(ctk.CTkFrame):
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
                 
-                event_button._text_label.configure(wraplength=267)
+                event_button._text_label.configure(wraplength=400)
 
                 # A disabled, invisible button with a small font acts 
                 # as a spacer between each event button!
@@ -972,7 +1003,7 @@ class TomorrowFrame(ctk.CTkFrame):
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
                 
-                event_button._text_label.configure(wraplength=267)
+                event_button._text_label.configure(wraplength=400)
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -1041,7 +1072,7 @@ class ThisWeekFrame(ctk.CTkFrame):
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
                 
-                event_button._text_label.configure(wraplength=267)
+                event_button._text_label.configure(wraplength=400)
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -1110,7 +1141,7 @@ class NextWeekFrame(ctk.CTkFrame):
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
                 
-                event_button._text_label.configure(wraplength=267)
+                event_button._text_label.configure(wraplength=400)
                 
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
