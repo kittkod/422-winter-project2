@@ -80,9 +80,16 @@ def contains_year(input_string):
     match = re.search(pattern, input_string)
     return match is not None
 
-def insert_space_before_pm(time_str):
-    # Use regular expression to insert a space before 'pm' if it exists
-    return re.sub(r'(\d)(pm)', r'\1 \2', time_str)
+def convert_time_format(time_str):
+    try:
+        # Parse the input time string
+        time_obj = datetime.strptime(time_str, '%I:%M%p')
+        # Format the time object with AM/PM
+        formatted_time = time_obj.strftime('%I:%M %p')
+    except ValueError:
+        # If parsing fails, return the original string
+        formatted_time = time_str
+    return formatted_time
 
 def admin_file_updater():
     """Checks if admin file contains out-of-date data
@@ -103,12 +110,14 @@ def admin_file_updater():
             fixed_date = datetime.strptime(date, '%B %d')
             if fixed_date.date() < time.replace(year=fixed_date.year).date:
                 original_admin_df = original_admin_df.drop(index)
-            else:
+            if fixed_date.date() == time.replace(year=fixed_date.year).date:
                 target_time = int(datetime.strptime(admin_df.at[index, "Start Time"], '%I:%M %p').time().strftime('%H%M'))
                 if time_hour > target_time:
                     original_admin_df = original_admin_df.drop(index)
                 else:
                     values.append(index)
+            else:
+                values.append(index)
 
         else:
             """if year is in the time string"""
@@ -116,13 +125,15 @@ def admin_file_updater():
             # Compare the parsed datetime with the current datetime
             if given_datetime.date() < time.date():
                 original_admin_df = original_admin_df.drop(index)
-            else:
-                editted_time = insert_space_before_pm(admin_df.at[index, "Start Time"])
+            if given_datetime.date() == time.date():
+                editted_time = convert_time_format(admin_df.at[index, "Start Time"])
                 target_time = int(datetime.strptime(editted_time, '%I:%M %p').time().strftime('%H%M'))
                 if time_hour > target_time:
                     original_admin_df = original_admin_df.drop(index)
                 else:
                     values.append(index)
+            else:
+                values.append(index)
 
         index += 1
     
