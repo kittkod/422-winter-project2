@@ -510,7 +510,7 @@ class ResourcesButton(ctk.CTkButton):
     def show_resource_list(self):
         resource_list_window = ctk.CTkToplevel()
         resource_list_window.title('Online Resources')
-        resource_list_window.geometry('667x595')
+        resource_list_window.geometry('725x635')
         resource_list_window.resizable(False, False)  # width, height are constant
 
         # Removed to match other windows
