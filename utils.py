@@ -298,7 +298,32 @@ def is_valid_date(input_str):
     Output: False - if the date is in the invalid format
             True - if the date is in valid format
     '''
-    pass
+    # Define the patterns for the expected date formats
+    pattern_with_year = r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2}\s\d{4}$"
+    pattern_without_year = r"^(January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2}$"
+    
+    # Check if the date matches the pattern with year
+    if re.match(pattern_with_year, input_str):
+        try:
+            # If the pattern matches, validate the date using strptime
+            datetime.strptime(input_str, '%B %d %Y')
+            return True
+        except ValueError:
+            # If strptime raises a ValueError, the date is invalid
+            return False
+    
+    # Check if the date matches the pattern without year
+    if re.match(pattern_without_year, input_str):
+        try:
+            # If the pattern matches, validate the date using strptime by adding a dummy year
+            datetime.strptime(input_str + " 2024", '%B %d %Y')
+            return True
+        except ValueError:
+            # If strptime raises a ValueError, the date is invalid
+            return False
+    
+    # If neither pattern matches, the date is invalid
+    return False
 
 # function that adds unprocessed new admin events to the database 
 def update_database():

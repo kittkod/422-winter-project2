@@ -328,8 +328,8 @@ class AdminModeButton(ctk.CTkButton):
                         invalid.wm_title("Error")
                         l = ctk.CTkLabel(
                             invalid,
-                            text="\nDate '" + date "' is invalid.\nPlease input date in correct format."
-                        )
+                            text="\nDate '" + date + "' is invalid.\nPlease input date in correct format."
+                        ),
                         l.pack(padx=20, pady=10)
                     else:
                         succ = ctk.CTkToplevel()
