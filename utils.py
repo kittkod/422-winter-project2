@@ -18,7 +18,6 @@
 #   the dictionary for the map.                                       #
 ####################################################################### 
 
-import json # loading campus_buildings.txt as a json object
 import re # used for finding patterns in dates
 import pandas as pd # parsing through csv's 
 from datetime import date, datetime # finding dates based on today's date 
@@ -45,12 +44,6 @@ abbr_mon = {'jan':'january', 'feb':'february', 'mar':'march', 'apr':'april', 'ju
 # FUNCTIONS                                                                      #
 ##################################################################################  
 
-'''
-# Load campus buildings data
-with open('campus_buildings.txt') as f:
-    campus_buildings = json.load(f)
-'''
-
 # Function to break up long strings
 def break_str(input_string, size):
     ''' Function to break up long strings with <br> every 'size'
@@ -73,83 +66,13 @@ def break_str(input_string, size):
     new_str += line.rstrip()  # Add the last line
     return new_str
 
-
-################################################################
-# Finds location within building dict. with partial string matching
-def flexible_match_location(event_location, buildings_dict):
-    '''' Finds location within building dict
-    inputs:
-        event_location:str - name of the location of event
-        buildings_dict:dict - dictionary of buildings and coordinates
-    '''
-    # Convert the event location to lowercase for case-insensitive comparison
-    event_location_lower = event_location.lower()
-
-    for building_key, coords in buildings_dict.items():
-        # Check if the building name (in lowercase) is contained within the event location string
-        if building_key.lower() in event_location_lower:
-            lat_lon_str = coords.split("; ")
-            return float(lat_lon_str[0]), float(lat_lon_str[1])
-        
-    return None, None
-
-# Function to convert address to lat and lon using flexible match
-def get_lat_lon(address):
-    ''' Convert address to latitude and longitude
-    inputs: address:str - a string
-    '''
-    # Load campus buildings data
-    with open('campus_buildings.txt') as f:
-        campus_buildings = json.load(f)
-    transformed_address = address_converter(address)  # Use existing address transformation
-
-    # Attempt to find the transformed address in the campus buildings data
-    lat, lon = flexible_match_location(transformed_address, campus_buildings)
-    if lat is not None and lon is not None:
-        return lat, lon
-    else:
-        print(f"Location: {address} not found in campus buildings.")
-        return None, None
-    
-def address_converter(initial_address: str):
-    if not isinstance(initial_address, str):
-        initial_address = str(initial_address)
-        
-    pattern = r'^\D+\d+'
-
-    # Use re.search() to find the matched pattern in the string
-    match = re.search(pattern, initial_address)
-
-    # If a match is found, return the matched substring, else return the original string
-    if match:
-        return (match.group()+" Eugene OR")
-    else:
-        return initial_address
-    
-# Function to filter events based on date and time range
-def filter_events(csv_file_path, date_str, start_time_str, end_time_str):
-    df = pd.read_csv(csv_file_path)
-
-    # Convert date and time strings to objects
-    date = datetime.strptime(date_str, '%B %d %Y')
-    start_time = datetime.strptime(start_time_str, '%I:&M &p').time()
-    end_time = datetime.strptime(end_time_str, '%I:%M %p').time()
-
-    # Filter dataframe
-    filtered_df = df[
-        (pd.to_datetime(df['Date']) == date) &
-        (pd.to_datetime(df['Start Time']).dt.time >= start_time) &
-        (pd.to_datetime(df['End Time']).dt.time <= end_time)
-    ]
-
-    return filtered_df
-###############################################################
-
 # function to format the description in a mark in the graph
 def clean_description(description):
-    ''' format the text to remove patterns
+    '''format the text to remove patterns
     inputs: description:str - text string to be improved
+    outputs: a string of the cleaned up description
     '''
+    
     patterns_to_remove = ['==> Eligibility:', '=', '=Eligibility:', 'Eligibility:']
     for pattern in patterns_to_remove:
         description = description.replace(pattern, '')
@@ -157,7 +80,7 @@ def clean_description(description):
 
 # format the time string in the graph
 def format_time(row):
-    ''' format the start time - end time string for the marks in the graph
+    '''format the start time - end time string for the marks in the graph
     inputs:
         row:pandas row type - row with 'Start Time' and 'End Time' to be used 
                               for formatting.
@@ -185,7 +108,7 @@ def format_time(row):
 
 # function to improve coordinates
 def clean_coordinate(value):
-    ''' clean non numeric characters from coordinates
+    '''clean non numeric characters from coordinates
     input:
         value:str or float - the current coordinate
     output:
@@ -203,7 +126,7 @@ def clean_coordinate(value):
 
 # get all events from a csv into a dictionary
 def get_all_events(csv_file_path, filtered_by):
-    ''' put all events from a csv into a dictionary by a filter
+    '''put all events from a csv into a dictionary by a filter
     inputs:
         csv_file_path:str file path - the csv with event info
         filtered_by:str - either 'all', 'today', 'tomorrow', or 'next 7 days'. 
@@ -233,7 +156,7 @@ def get_all_events(csv_file_path, filtered_by):
 
 # function to find the ranges of days from an input button press
 def find_ranges(button_press):
-    ''' Find ranges of days depending on the button press value
+    '''Find ranges of days depending on the button press value
     inputs:
         button_press:str - either 'today', 'tomorrow', 'this week' or 'next week'
     outputs:

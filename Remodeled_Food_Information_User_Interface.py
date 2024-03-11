@@ -296,17 +296,23 @@ class AdminModeButton(ctk.CTkButton):
             organizers_input.delete(0, len(organizers))
 
             checked_loc = False # boolean to quit if invalid lat and long
+
             # checking if location can become valid coordinate
             if location != '':
                 yes_no = coordinate_validity(str(location))
+                # if its not a valid location
                 if yes_no == False:
                     err1 = ctk.CTkToplevel()
                     err1.geometry("300x100")
                     err1.configure(bg="gray92")
                     err1.wm_title("Error")
+                    # breaking up a long text
+                    new_title = "\nlocation '" + location + "' is invalid."
+                    if len(new_title) > 45:
+                        new_title = new_title[:45] + '\n' + new_title[45:]
                     l = ctk.CTkLabel(
                         err1,
-                        text="location '" + location + "'is invalid."
+                        text=new_title
                     )
                     l.pack(padx=20, pady=10)
                     checked_loc = True
@@ -318,9 +324,13 @@ class AdminModeButton(ctk.CTkButton):
                     succ.geometry("300x100")
                     succ.configure(bg="gray92")
                     succ.wm_title("Success")
+                    # breaking up long titles
+                    title_text = "\n'" + event_title + "' has been added and is being reviewed."
+                    if len(title_text) > 45:
+                        title_text = title_text[:45] + '\n' + title_text[45:]
                     l = ctk.CTkLabel(
                         succ,
-                        text="'" + event_title + "' has been added."
+                        text=title_text
                     )
                     l.pack(padx=20, pady=10)
                     # adding new valid event to the database csv
@@ -332,7 +342,7 @@ class AdminModeButton(ctk.CTkButton):
                     err.wm_title("Error")
                     l = ctk.CTkLabel(
                         err,
-                        text="please input all fields."
+                        text="\nplease input all fields."
                     )
                     l.pack(padx=20, pady=10)
 
