@@ -80,6 +80,10 @@ def contains_year(input_string):
     match = re.search(pattern, input_string)
     return match is not None
 
+def insert_space_before_pm(time_str):
+    # Use regular expression to insert a space before 'pm' if it exists
+    return re.sub(r'(\d)(pm)', r'\1 \2', time_str)
+
 def admin_file_updater():
     """Checks if admin file contains out-of-date data
     - should only be called in conjunction with updating data"""
@@ -113,7 +117,8 @@ def admin_file_updater():
             if given_datetime.date() < time.date():
                 original_admin_df = original_admin_df.drop(index)
             else:
-                target_time = int(datetime.strptime(admin_df.at[index, "Start Time"], '%I:%M %p').time().strftime('%H%M'))
+                editted_time = insert_space_before_pm(admin_df.at[index, "Start Time"])
+                target_time = int(datetime.strptime(editted_time, '%I:%M %p').time().strftime('%H%M'))
                 if time_hour > target_time:
                     original_admin_df = original_admin_df.drop(index)
                 else:
