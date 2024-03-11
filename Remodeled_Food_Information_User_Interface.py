@@ -49,38 +49,23 @@ class App(ctk.CTk):
         self.maxsize(777, 667)
 
         ###############################################################
-        # Create the Grid System for the entire App                   #   
-        ###############################################################
-        self.grid_columnconfigure((0, 3), 
-                                  weight=1)
-        self.grid_rowconfigure((0, 1), 
-                               weight=1)
-
-        ###############################################################
-        # Place Internal Frames onto the Main App Grid System         #   
+        # Place Internal Frames onto the Main App                     #   
         ###############################################################
         # Left Sidebar 
         self.l_sidebar = LeftSideBar(self)
-        self.l_sidebar.grid(row=0, 
-                            column=0, 
-                            padx=(5, 0), # padx=(5,0) so that the center isn't spaced by 10 
+        self.l_sidebar.pack(padx=(5, 0), # padx=(5,0) so that the center isn't spaced by 10 
                             pady=(5, 5),
-                            sticky="news",
-                            rowspan=2,
-                            columnspan=1) 
-
+                            side=tk.LEFT,
+                            fill=tk.Y,
+                            expand=False) 
+        
         # Main Area
         self.main_area = MainArea(self)
-        self.main_area.grid(row=0, 
-                            column=1, 
+        self.main_area.pack(
                             padx=(5, 5), 
                             pady=(5, 5), 
-                            sticky="news",
-                            rowspan=3,
-                            columnspan=3)
-
-    
-    
+                            fill=tk.BOTH,
+                            expand=True)
 
 #######################################################################
 # Left Sidebar (containing various buttons & modes of operation)      #
@@ -99,7 +84,7 @@ class LeftSideBar(ctk.CTkFrame):
         # Create the Grid System for Left Sidebar                     #   
         ###############################################################
         self.grid_columnconfigure(0,
-                                  weight=1)
+                                  weight=0)
         self.grid_rowconfigure((0, 1), 
                                weight=1)
 
@@ -118,25 +103,25 @@ class LeftSideBar(ctk.CTkFrame):
         self.admin_mode_frame = AdminModeButton(self)
         self.admin_mode_frame.grid(row=4, 
                                     column=0, 
-                                    padx=(5, 5), 
+                                    padx=(10), 
                                     pady=(5, 5), 
-                                    sticky="news")
+                                    sticky="s")
 
         # Additional Resources Button Frame
         self.resources_button = ResourcesButton(self)
         self.resources_button.grid(row=5, 
                                column=0, 
-                               padx=(5, 5), 
+                               padx=(10), 
                                pady=(5, 5), 
-                               sticky="news")
+                               sticky="ns")
 
         # About Button Frame
         self.about_button = AboutButton(self)
         self.about_button.grid(row=6, 
                                column=0, 
-                               padx=(5, 5), 
-                               pady=(5, 5), 
-                               sticky="news")
+                               padx=(10), 
+                               pady=(5, 10), 
+                               sticky="ns")
 
 #######################################################################
 # Light and Dark Appearance Mode Buttons                              #   
@@ -182,6 +167,7 @@ class AppearanceModeFrame(ctk.CTkFrame):
 class AdminModeButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
+                         width = 111,
                          text='Admin Mode',
                          command=self.show_admin_mode_popup)  # Set the command to open admin mode popup
     
@@ -525,6 +511,7 @@ class AdminModeButton(ctk.CTkButton):
 class ResourcesButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master,
+                         width = 111,
                          text='Resources',
                          command=self.show_resource_list)  # Set the command to open the resource list
 
@@ -689,6 +676,7 @@ class ResourcesButton(ctk.CTkButton):
 class AboutButton(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master, 
+                         width = 111,
                          text='About', 
                          command=lambda: show_about_popup())
 
@@ -740,7 +728,7 @@ class MainArea(ctk.CTkFrame):
         self.food_event_tabs = FoodEventTabs(self)
         self.food_event_tabs.grid(row=0, 
                                   column=0, 
-                                  padx=5, 
+                                  padx=10, 
                                   pady=5, 
                                   sticky="news",
                                   rowspan=2)
@@ -748,8 +736,8 @@ class MainArea(ctk.CTkFrame):
         self.event_description = EventDescription(self)
         self.event_description.grid(row=2,
                                     column=0,
-                                    padx=5,
-                                    pady=5,
+                                    padx=10,
+                                    pady=(5, 10),
                                     sticky="news",
                                     rowspan=1)
 
@@ -781,29 +769,41 @@ class FoodEventTabs(ctk.CTkTabview):
         self.view_map_button = ctk.CTkButton(self.tab("Today"), 
                                              text="View Today's Food Map", 
                                              command=lambda: Resource_Graph.run_map_function("today")) 
-        self.view_map_button.pack(padx=50, 
-                                  expand=True) 
+        self.view_map_button.pack(padx=50,
+                                  pady=(10, 10),
+                                  side=tk.TOP,
+                                  fill=None, 
+                                  expand=False) 
         
         # Tomorrow
         self.view_map_button = ctk.CTkButton(self.tab("Tomorrow"), 
                                              text="View Tomorrow's Food Map", 
                                              command=lambda: Resource_Graph.run_map_function("tomorrow"))
-        self.view_map_button.pack(padx=50, 
-                                  expand=True)
+        self.view_map_button.pack(padx=50,
+                                  pady=(10, 10),
+                                  side=tk.TOP,
+                                  fill=None, 
+                                  expand=False) 
         
         # This Week
         self.view_map_button = ctk.CTkButton(self.tab("This Week"), bg_color="transparent",
                                              text="View This Week's Food Map", 
                                              command=lambda: Resource_Graph.run_map_function("this week"))
-        self.view_map_button.pack(padx=50, 
-                                  expand=True)
+        self.view_map_button.pack(padx=50,
+                                  pady=(10, 10),
+                                  side=tk.TOP,
+                                  fill=None, 
+                                  expand=False) 
 
         # Next Week
         self.view_map_button = ctk.CTkButton(self.tab("Next Week"), 
                                              text="View Next Week's Food Map", 
                                              command=lambda: Resource_Graph.run_map_function("next week"))
         self.view_map_button.pack(padx=50,
-                                  expand=True)
+                                  pady=(10, 10),
+                                  side=tk.TOP,
+                                  fill=None, 
+                                  expand=False) 
         
         ###############################################################
         # Add a scrollable frame to each tab                          #   
@@ -811,19 +811,35 @@ class FoodEventTabs(ctk.CTkTabview):
         
         # Today Tab
         self.today_scrollable_frame = TodayFrame(self.tab("Today"))
-        self.today_scrollable_frame.pack(padx=5, fill=tk.BOTH)
+        self.today_scrollable_frame.pack(padx=5, 
+                                         pady=(5, 10),
+                                         side=tk.BOTTOM,
+                                         fill=tk.BOTH, 
+                                         expand=True)
 
         # Tomorrow Tab
         self.tomorrow_scrollable_frame = TomorrowFrame(self.tab("Tomorrow"))
-        self.tomorrow_scrollable_frame.pack(padx=5, fill=tk.BOTH)
+        self.tomorrow_scrollable_frame.pack(padx=5, 
+                                            pady=(5, 10),
+                                            side=tk.BOTTOM,
+                                            fill=tk.BOTH, 
+                                            expand=True)
 
         # This Week Tab
         self.thisweek_scrollable_frame = ThisWeekFrame(self.tab("This Week"))
-        self.thisweek_scrollable_frame.pack(padx=5, fill=tk.BOTH)
+        self.thisweek_scrollable_frame.pack(padx=5, 
+                                            pady=(5, 10),
+                                            side=tk.BOTTOM,
+                                            fill=tk.BOTH, 
+                                            expand=True)
 
         # Next Week Tab
         self.nextweek_scrollable_frame = NextWeekFrame(self.tab("Next Week"))
-        self.nextweek_scrollable_frame.pack(padx=5, fill=tk.BOTH)
+        self.nextweek_scrollable_frame.pack(padx=5, 
+                                            pady=(5, 10),
+                                            side=tk.BOTTOM,
+                                            fill=tk.BOTH, 
+                                            expand=True)
 
 #######################################################################
 # Today Tab                                                           #
@@ -1120,7 +1136,8 @@ class NextWeekFrame(ctk.CTkFrame):
 class EventDescription(ctk.CTkButton):
     def __init__(self, master):
         super().__init__(master, 
-                         state = "disabled",
+                         text_color=("grey", "lightgrey"),
+                         hover_color=("#cfcfcf", "#333333"),
                          fg_color=("#cfcfcf", "#333333"),
                          text= "Click an event for its description.")
         self._text_label.configure(wraplength=300)
