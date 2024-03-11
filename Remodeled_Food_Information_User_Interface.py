@@ -17,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events, update_database
+from utils import get_all_events, update_database, is_valid_date
 from database import run_map
 import admin_intake_form
 import Resource_Graph
@@ -320,21 +320,33 @@ class AdminModeButton(ctk.CTkButton):
             if checked_loc != True:
                 # checking if all inputs have been placed
                 if (event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != ''):
-                    succ = ctk.CTkToplevel()
-                    succ.geometry("300x100")
-                    succ.configure(bg="gray92")
-                    succ.wm_title("Success")
-                    # breaking up long titles
-                    title_text = "\n'" + event_title + "' has been added and is being reviewed."
-                    if len(title_text) > 45:
-                        title_text = title_text[:45] + '\n' + title_text[45:]
-                    l = ctk.CTkLabel(
-                        succ,
-                        text=title_text
-                    )
-                    l.pack(padx=20, pady=10)
-                    # adding new valid event to the database csv
-                    admin_intake_form.add_to_admin_file(new_event)
+                    # checking if the date is valid format
+                    if not is_valid_date(date):
+                        invalid = ctk.CTkToplevel()
+                        invalid.geometry("300x100")
+                        invalid.configure(bg="gray92")
+                        invalid.wm_title("Error")
+                        l = ctk.CTkLabel(
+                            invalid,
+                            text="\nDate '" + date "' is invalid.\nPlease input date in correct format."
+                        )
+                        l.pack(padx=20, pady=10)
+                    else:
+                        succ = ctk.CTkToplevel()
+                        succ.geometry("300x100")
+                        succ.configure(bg="gray92")
+                        succ.wm_title("Success")
+                        # breaking up long titles
+                        title_text = "\n'" + event_title + "' has been added and is being reviewed."
+                        if len(title_text) > 45:
+                            title_text = title_text[:45] + '\n' + title_text[45:]
+                        l = ctk.CTkLabel(
+                            succ,
+                            text=title_text
+                        )
+                        l.pack(padx=20, pady=10)
+                        # adding new valid event to the database csv
+                        admin_intake_form.add_to_admin_file(new_event)
                 else:
                     err = ctk.CTkToplevel()
                     err.geometry("300x100")
