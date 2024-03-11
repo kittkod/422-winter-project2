@@ -420,7 +420,7 @@ class AdminModeButton(ctk.CTkButton):
 
     def on_delete_data_click(self):
         ###############################################################
-        # Open loading screen                                         #
+        # Open loading screen            FIXME                             #
         ###############################################################
         data_deleting_loading_screen = ctk.CTkToplevel(self.master)
         data_deleting_loading_screen.geometry('333x333')
@@ -435,11 +435,10 @@ class AdminModeButton(ctk.CTkButton):
 
         self.populate_delete_buttons()
 
+        ###############################################################
+        # Close Loading Screen            FIXME                            #
+        ###############################################################
         data_deleting_loading_screen.destroy()
-
-        ###############################################################
-        # Close Loading Screen                                        #
-        ###############################################################
 
     def delete_unprocessed_data(self, index):
         confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete this event?")
@@ -890,7 +889,7 @@ class TodayFrame(ctk.CTkFrame):
         events, title_name = get_all_events(csv_file_path, 
                         'today') 
 
-        scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
+        scrollable_frame_food_list = ctk.CTkScrollableFrame(self,
                                                             bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
                                                             label_text = 'Free Food Resources' + title_name, 
@@ -1099,7 +1098,6 @@ class NextWeekFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Next Week Scrollable Frame #   
         ###############################################################
-
         events, title_name = get_all_events(csv_file_path, 
                         'next week')
 
