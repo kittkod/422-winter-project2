@@ -17,13 +17,14 @@ import json
 import re
 
 raw_link = "https://en.wikipedia.org/wiki/List_of_University_of_Oregon_buildings"
+acronym_link = "https://registrar.uoregon.edu/faculty-staff/academic-scheduling/classrooms-chart"
 address_exceptions = {"Grace Evangelical Church": [44.0408363098272, -123.08166553148503]}
 
 def class_dict_maker():
     class_dictionary = {}
 
-    link = requests.get(raw_link)
-    soup = BeautifulSoup(link.text, 'html.parser')
+    link_1 = requests.get(raw_link)
+    soup = BeautifulSoup(link_1.text, 'html.parser')
     list_of_buildings = soup.find_all("tr")
     for row in list_of_buildings:
         row_of_buildings = row.find_all("td")
@@ -36,6 +37,24 @@ def class_dict_maker():
                     no_hall_building = building.text.replace("Hall", "")
                     class_dictionary[no_hall_building] = coordinates.text
                 class_dictionary[building.text] = coordinates.text
+
+    ###acronyms being added to list of buildings -- for scraping usage
+    acronym_info = requests.get(acronym_link)
+    soup_stuff = BeautifulSoup(acronym_info.text, 'html.parser')
+    specific_vals = soup_stuff.find("tbody")
+    specific_vals = specific_vals.find_all("tr")
+    items = list(class_dictionary.keys())
+    for val in specific_vals:
+        acryonym = val.find("td").text.replace("\xa0", "").split("(")
+        if type(acryonym) == list:
+            if len(acryonym) == 2:
+                data = val.find("td").text.split("(")[0]
+                acry = val.find("td").text.split("(")[1].replace(")", "")
+                if acry != "International Classroom":
+                    for item in items:
+                        if data.strip() in item:
+                            class_dictionary[acry.strip()] = class_dictionary.get(item)
+
     class_dictionary["EMU"] = class_dictionary.get("Erb Memorial Union")
     class_dictionary["PSC"] = class_dictionary.get("Allan Price Science Commons and Research Library")
     class_dictionary["SRC"] = class_dictionary.get("Student resource center")
@@ -55,6 +74,8 @@ def class_dict_maker():
     class_dictionary["Barn"] = '44.04102377844486, -123.07411695536857'
     class_dictionary["Lylle Reynolds-Parker"] = '44.04321043698473, -123.06539574909931'
     class_dictionary["Black Cultural Center"] = class_dictionary.get("Lylle Reynolds-Parker")
+    
+    
     return class_dictionary
 
 def address_converter(initial_address: str):

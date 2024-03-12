@@ -63,16 +63,6 @@ def add_to_admin_file(dictionary):
         CSV_data_inputter(admin_CSV_entry, unprocessed_admin_CSV_file)
     else:
         CSV_data_inputter(admin_CSV_entry, unprocessed_admin_CSV_file)
-    '''
-    if os.path.isfile("./dollarless_database_files/admin_info.csv") is False:
-        CSV_file_creator(admin_CSV_file)
-        CSV_data_inputter(admin_CSV_entry, admin_CSV_file)
-    else: 
-        CSV_data_inputter(admin_CSV_entry, admin_CSV_file)
-
-    CSV_data_inputter(admin_CSV_entry, food_CSV_file)
-    '''
-    
     return
 
 def contains_year(input_string):
@@ -97,6 +87,8 @@ def admin_file_updater():
 
     ###checks admin file inputs to see if they have passed###
     original_admin_df = pd.read_csv("./dollarless_database_files/admin_info.csv")
+    if original_admin_df.empty == True:
+        return
     admin_df = original_admin_df[["Date", "Start Time", "End Time"]]
     admin_df = pd.DataFrame(admin_df)
 
