@@ -98,6 +98,10 @@ class LeftSideBar(ctk.CTkFrame):
                                         padx=(10, 10), 
                                         pady=(10, 10),
                                         sticky="n")
+
+        # Title Label 
+        title_label = tk.Label(self, text="Dollarless\nDining", font=("default", 25, "bold"))
+        title_label.grid(row=0, column=0, pady=(10, 10))
         
         # Admin Mode Button Frame
         self.admin_mode_frame = AdminModeButton(self)
@@ -160,6 +164,7 @@ class AppearanceModeFrame(ctk.CTkFrame):
                                    padx=5, 
                                    pady=5, 
                                    sticky="ns")
+        
         
 #######################################################################
 # Admin Mode Button                                                   #   
@@ -961,7 +966,7 @@ class TodayFrame(ctk.CTkFrame):
                 event_button = ctk.CTkButton(scrollable_frame_food_list,
                                              anchor="nw", 
                                              text= event_text, 
-                                             text_color=("darkgrey", "white"),
+                                             text_color=("black", "white"),
                                              command = lambda desc=event_desc: update_description(desc),
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
@@ -1033,7 +1038,7 @@ class TomorrowFrame(ctk.CTkFrame):
                 event_button = ctk.CTkButton(scrollable_frame_food_list,
                                              anchor="nw", 
                                              text= event_text, 
-                                             text_color=("darkgrey", "white"),
+                                             text_color=("black", "white"),
                                              command = lambda desc=event_desc: update_description(desc),
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
@@ -1102,7 +1107,7 @@ class ThisWeekFrame(ctk.CTkFrame):
                 event_button = ctk.CTkButton(scrollable_frame_food_list,
                                              anchor="nw", 
                                              text= event_text, 
-                                             text_color=("darkgrey", "white"),
+                                             text_color=("black", "white"),
                                              command = lambda desc=event_desc: update_description(desc),
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
@@ -1170,7 +1175,7 @@ class NextWeekFrame(ctk.CTkFrame):
                 event_button = ctk.CTkButton(scrollable_frame_food_list,
                                              anchor="nw", 
                                              text= event_text, 
-                                             text_color=("darkgrey", "white"),
+                                             text_color=("black", "white"),
                                              command = lambda desc=event_desc: update_description(desc),
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
@@ -1214,3 +1219,4 @@ class EventDescription(ctk.CTkButton):
 update_database()
 app = App()
 app.mainloop()
+
