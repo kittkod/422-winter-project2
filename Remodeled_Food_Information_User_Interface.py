@@ -17,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events, update_database, is_valid_date, is_valid_time
+from utils import get_all_events, update_database, is_valid_date, is_valid_time, break_str
 from database import run_map
 import admin_intake_form
 import Resource_Graph
@@ -289,16 +289,13 @@ class AdminModeButton(ctk.CTkButton):
                 # if its not a valid location
                 if yes_no == False:
                     err1 = ctk.CTkToplevel()
-                    err1.geometry("300x100")
+                    err1.geometry("350x120")
                     err1.configure(bg="gray92")
                     err1.wm_title("Error")
                     # breaking up a long text
-                    new_title = "\nlocation '" + location + "' is invalid."
-                    if len(new_title) > 35:
-                        new_title = new_title[:35] + '\n' + new_title[35:]
                     l = ctk.CTkLabel(
                         err1,
-                        text=new_title
+                        text=break_str("\nlocation '" + location + "' is invalid.", 35).replace('<br>', '\n')
                     )
                     l.pack(padx=20, pady=10)
                     checked_loc = True
@@ -309,47 +306,40 @@ class AdminModeButton(ctk.CTkButton):
                     # checking if the date is valid format
                     if not is_valid_date(date):
                         invalid = ctk.CTkToplevel()
-                        invalid.geometry("300x100")
+                        invalid.geometry("350x120")
                         invalid.configure(bg="gray92")
                         invalid.wm_title("Error")
                         l = ctk.CTkLabel(
                             invalid,
-                            text="\nDate '" + date + "' is invalid.\nPlease input date in correct format."
+                            text=break_str("\nDate '" + date + "' is invalid.\nPlease input date in correct format.", 35).replace('<br>', '\n')
                         )
                         l.pack(padx=20, pady=10)
                     # checking if times are valid format
                     elif not is_valid_time(start_time) or not is_valid_time(end_time):
                         invalidtime = ctk.CTkToplevel()
-                        invalidtime.geometry("300x100")
+                        invalidtime.geometry("350x120")
                         invalidtime.configure(bg="gray92")
                         invalidtime.wm_title("Error")
-                        title_test = "\nStart Time " + start_time + " or End Time " + end_time + " is invalid. Please input times in correct format."
-                        if len(title_test) > 35:
-                            title_test = title_test[:35] + '\n' + title_test[35:]
                         l = ctk.CTkLabel(
                             invalidtime,
-                            text=title_test
+                            text=break_str("\nStart Time " + start_time + " or End Time " + end_time + " is invalid. Please input times in correct format.", 38).replace('<br>', '\n')
                         )
                         l.pack(padx=20, pady=10)
                     else:
                         succ = ctk.CTkToplevel()
-                        succ.geometry("300x100")
+                        succ.geometry("350x120")
                         succ.configure(bg="gray92")
                         succ.wm_title("Success")
-                        # breaking up long titles
-                        title_text = "\n'" + event_title + "' has been added and is being reviewed."
-                        if len(title_text) > 35:
-                            title_text = title_text[:35] + '\n' + title_text[35:]
                         l = ctk.CTkLabel(
                             succ,
-                            text=title_text
+                            text=break_str("\n'" + event_title + "' has been added and is being reviewed.", 35).replace('<br>', '\n')
                         )
                         l.pack(padx=20, pady=10)
                         # adding new valid event to the database csv
                         admin_intake_form.add_to_admin_file(new_event)
                 else:
                     err = ctk.CTkToplevel()
-                    err.geometry("300x100")
+                    err.geometry("350x100")
                     err.configure(bg="gray92")
                     err.wm_title("Error")
                     l = ctk.CTkLabel(

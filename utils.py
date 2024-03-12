@@ -336,14 +336,32 @@ def is_valid_time(time_str):
     
     # Check if the date matches the pattern with year
     if re.match(pattern_time, time_str):
-        print('hi')
-        try:
-            # If the pattern matches, validate the time using strptime
-            datetime.strptime(time_str, '%I %M')
-            return True
-        except ValueError:
-            # If strptime raises a ValueError, the date is invalid
-            return False
+        is_am = False 
+        is_pm = False
+        if 'am' in time_str:
+            is_am = True
+        if 'pm' in time_str:
+            is_pm = True
+        # checking if correct items for am
+        if is_am == True:
+            try:
+                # If the pattern matches, validate the time using strptime
+                datetime.strptime(time_str, '%I:%M am')
+                return True
+
+            except ValueError:
+                # If strptime raises a ValueError, the date is invalid
+                return False
+        # checking if correct items for pm
+        if is_pm == True:
+            try:
+                # If the pattern matches, validate the time using strptime
+                datetime.strptime(time_str, '%I:%M pm')
+                return True
+
+            except ValueError:
+                # If strptime raises a ValueError, the date is invalid
+                return False
     
     # If neither pattern matches, the time is invalid
     return False
@@ -378,5 +396,4 @@ def update_database():
                 f.readline() # read header line
                 f.truncate(f.tell()) # terminate rest of the file
 
-is_valid_time('1:00 pm')
             
