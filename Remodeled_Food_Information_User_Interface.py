@@ -27,7 +27,6 @@ import refresh_data
 from coordinate_finder import coordinate_validity
 from tkinter import messagebox
 
-
 csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 
 #######################################################################
@@ -38,22 +37,23 @@ csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 # Contains:                                                           #   
 #   #FIXME List upon completion.                                      #
 #######################################################################
-
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
         self.title("Dollarless Dining")
-        self.geometry("900x800")
-        self.minsize(900, 512)
-        self.maxsize(900, 667)
+        self.geometry("895x800")
+        self.minsize(500, 440)
+        self.maxsize(1000, 880)
 
         ###############################################################
         # Place Internal Frames onto the Main App                     #   
         ###############################################################
         # Left Sidebar 
         self.l_sidebar = LeftSideBar(self)
-        self.l_sidebar.pack(padx=(10, 0), # padx=(5,0) so that the center isn't spaced by 10 
+        # padx=(5,0) so that the center isn't spaced by 10, 
+        # continue such padding practicies in the future.
+        self.l_sidebar.pack(padx=(10, 0), 
                             pady=(10, 10),
                             side=tk.LEFT,
                             fill=tk.Y,
@@ -100,8 +100,15 @@ class LeftSideBar(ctk.CTkFrame):
                                         sticky="n")
 
         # Title Label 
-        title_label = tk.Label(self, text="Dollarless\nDining", font=("default", 25, "bold"))
-        title_label.grid(row=0, column=0, pady=(10, 10))
+        title_label = ctk.CTkLabel(self, 
+                                  text="Dollarless\nDining", 
+                                  font=("default", 25),
+                                  text_color=("grey", "lightgrey")
+                                  )
+        title_label.grid(row=0, 
+                        column=0, 
+                        pady=(10, 10)
+                        )
         
         # Admin Mode Button Frame
         self.admin_mode_frame = AdminModeButton(self)
@@ -800,7 +807,7 @@ class MainArea(ctk.CTkScrollableFrame):
         self.food_event_tabs.grid(row=0, 
                                   column=0, 
                                   padx=10, 
-                                  pady=5, 
+                                  pady=(5, 0), 
                                   sticky="news",
                                   rowspan=2)
         # Event Description Box
@@ -808,7 +815,7 @@ class MainArea(ctk.CTkScrollableFrame):
         self.event_description.grid(row=2,
                                     column=0,
                                     padx=10,
-                                    pady=(5, 10),
+                                    pady=(0, 10),
                                     sticky="news",
                                     rowspan=1)
 
