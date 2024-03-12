@@ -121,8 +121,6 @@ def engage_URL_web_scraper():
     for link in list_of_data:
         new_data.append(link.get('href'))
 
-    driver.quit()
-
     return new_data
 
 def engage_site_scraper(list):
@@ -406,7 +404,9 @@ def student_life_scraper():
 
     raw_link = "https://studentlife.uoregon.edu/events"
 
-    req = Request(raw_link, headers={'User-Agent': 'Mozilla/5.0'})
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
+    req = Request(raw_link, headers=headers)
     #avoid error 403
     webpage = urlopen(req).read()
     soup = BeautifulSoup(webpage, 'html.parser')
@@ -621,7 +621,9 @@ def food_for_lane_scraper():
 
     raw_link = 'https://www.foodforlanecounty.org/find-a-meal-site/'
 
-    req = Request(raw_link, headers={'User-Agent': 'Mozilla/5.0'})
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
+    req = Request(raw_link, headers=headers)
     #avoid error 403
     webpage = urlopen(req).read()
 
