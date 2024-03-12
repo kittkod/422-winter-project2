@@ -44,9 +44,9 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("Dollarless Dining")
-        self.geometry("580x512")
-        self.minsize(580, 512)
-        self.maxsize(777, 667)
+        self.geometry("900x800")
+        self.minsize(900, 512)
+        self.maxsize(900, 667)
 
         ###############################################################
         # Place Internal Frames onto the Main App                     #   
@@ -780,7 +780,7 @@ def show_about_popup():
 #   1. Free Food Events Lists with Tab View                           #
 #   2. View Map Button                                                #
 #######################################################################
-class MainArea(ctk.CTkFrame):
+class MainArea(ctk.CTkScrollableFrame):
     def __init__(self, master):
         super().__init__(master)
         
@@ -955,7 +955,7 @@ class TodayFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description'])
+                event_desc = '\n\n' + str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
@@ -1030,7 +1030,7 @@ class TomorrowFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up descriptionevent_desc
-                event_desc = str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description'])
+                event_desc = '\n\n' + str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
 
                 #######################################################
                 # Create the Tkinter Text widgets for Frame           #   
@@ -1099,7 +1099,7 @@ class ThisWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up description
-                event_desc = str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description'])
+                event_desc = '\n\n' + str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
 
                 #######################################################
                 # Create the Tkinter Text widgets for This Week Frame #   
@@ -1167,7 +1167,7 @@ class NextWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description'])
+                event_desc = '\n\n' + str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
                 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
@@ -1210,7 +1210,7 @@ class EventDescription(ctk.CTkButton):
                          hover_color=("#cfcfcf", "#333333"),
                          fg_color=("#cfcfcf", "#333333"),
                          text= "Click an event for its description.")
-        self._text_label.configure(wraplength=300)
+        self._text_label.configure(wraplength=600)
   
 #######################################################################
 # Run application                                                     #   
