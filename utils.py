@@ -325,6 +325,29 @@ def is_valid_date(input_str):
     # If neither pattern matches, the date is invalid
     return False
 
+# checkigng if times are in valid format
+def is_valid_time(time_str):
+    ''' checking if time is in format like 1:00 pm/am 
+    inputs: time_str:str - the input string that you would like to compare
+    outputs: is_true:bool - true if the string is correct format false if its not in the correct format
+    '''
+    # Expected time format
+    pattern_time = r"^\d{1,2}\:\d{2}\s(am|pm)$"
+    
+    # Check if the date matches the pattern with year
+    if re.match(pattern_time, time_str):
+        print('hi')
+        try:
+            # If the pattern matches, validate the time using strptime
+            datetime.strptime(time_str, '%I %M')
+            return True
+        except ValueError:
+            # If strptime raises a ValueError, the date is invalid
+            return False
+    
+    # If neither pattern matches, the time is invalid
+    return False
+
 # function that adds unprocessed new admin events to the database 
 def update_database():
     ''' if there are new admin inputs, new admin inputs get added to the database
@@ -354,4 +377,6 @@ def update_database():
             with open("./dollarless_database_files/unprocessed_admin_info.csv", 'r+') as f:
                 f.readline() # read header line
                 f.truncate(f.tell()) # terminate rest of the file
+
+is_valid_time('1:00 pm')
             
