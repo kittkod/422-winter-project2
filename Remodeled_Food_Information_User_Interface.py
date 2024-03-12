@@ -922,7 +922,7 @@ class TodayFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
+                event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
@@ -997,7 +997,7 @@ class TomorrowFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up description
-                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
+                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for Frame           #   
@@ -1066,7 +1066,7 @@ class ThisWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up description
-                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
+                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for This Week Frame #   
@@ -1134,7 +1134,7 @@ class NextWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
+                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
                 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
