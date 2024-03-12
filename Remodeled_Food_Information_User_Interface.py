@@ -303,7 +303,7 @@ class AdminModeButton(ctk.CTkButton):
                     l.pack(padx=20, pady=10)
                     checked_loc = True
 
-            if checked_loc != True:
+            if checked_loc != True: 
                 # checking if all inputs have been placed
                 if (event_title != '' and date != '' and start_time != '' and end_time != '' and organizers != '' and location != '' and desc != ''):
                     # checking if the date is valid format
