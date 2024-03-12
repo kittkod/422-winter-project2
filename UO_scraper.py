@@ -21,6 +21,10 @@ import coordinate_finder
 import pandas as pd
 from selenium import webdriver 
 
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
 food_CSV_file = "./dollarless_database_files/Free_Food_Database.csv"
 #CSV file to store Food data
 
@@ -404,8 +408,7 @@ def student_life_scraper():
 
     raw_link = "https://studentlife.uoregon.edu/events"
 
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'} 
     req = Request(raw_link, headers=headers)
     #avoid error 403
     webpage = urlopen(req).read()
@@ -783,7 +786,7 @@ def CSV_data_inputter(data, CSV_file):
     data: list - containing data formatted for CSV file
     CSV_file: str - name of CSV file to be added to
     """
-    with open(CSV_file, 'a', newline="") as file:
+    with open(CSV_file, 'a', newline="", encoding='utf-8', errors='replace') as file:
         csvwriter = csv.writer(file)
         csvwriter.writerow(data)
         return

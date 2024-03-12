@@ -8,20 +8,19 @@
 # Functions: break_str(), flexible_match_location(), get_lat_lon(),   #
 # address_converter(), filter_events(), clean_description(),          #
 # format_time(), clean_coordinate(), get_all_events(), find_ranges(), #
-# in_filter(), is_valid_date(), is_valid_time(), update_database().   #                
+# in_filter().                                                        #                
 #                                                                     #
 # Interactions:                                                       #
 # - Remodeled_Food_Information_User_Interface.py: This file uses      #
-#   get_all_events(), break_str(), is_valid_date(), is_valid_time(),  #
-#   and update_database().                                            #
+#   get_all_events() for the scrollable frame.                        #
 # - database.py: This file uses find_ranges(), in_filter(),           #
 #   clean_coordinate(), break_str() and format_time(). for creating   #
 #   the dictionary for the map.                                       #
 ####################################################################### 
 
 import re # used for finding patterns in dates
-import pandas as pd # parsing through csv's 
-from datetime import date, datetime # finding dates based on today's date 
+import pandas as pd # parsing through csv's
+from datetime import date, datetime # finding dates based on today's date
 import os.path # checks if food data file is present
 import csv # for reading through unprocessed admin events
 from UO_scraper import CSV_data_inputter, CSV_file_creator
@@ -136,8 +135,18 @@ def get_all_events(csv_file_path, filtered_by):
         new_dict, scrollable_name - the created dictionary and the string of the 
                                      created scrollable frame name
     '''
-    df = pd.read_csv(csv_file_path)
-    df['sizes'] = 8
+    try:
+        df = pd.read_csv(csv_file_path, encoding='utf-8')
+    except UnicodeDecodeError:
+        try:
+            df = pd.read_csv(csv_file_path, encoding='iso-8859-1')
+        except UnicodeDecodeError:
+            try:
+                df = pd.read_csv(csv_file_path, encoding='cp1252')
+            except Exception as e:
+                raise e
+            
+    df['sizes'] = 100
     new_dict = [] # dictionary to be created
     scrollable_name = '' # name to be created
     is_all = False # if 'all' was the 'filtered_by' value 
@@ -395,6 +404,4 @@ def update_database():
             # deleting contents of the file - but not the heading
             with open("./dollarless_database_files/unprocessed_admin_info.csv", 'r+') as f:
                 f.readline() # read header line
-                f.truncate(f.tell()) # terminate rest of the file
-
-            
+                f.truncate(f.tell()) # terminate rest of the file    
