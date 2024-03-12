@@ -8,11 +8,12 @@
 # Functions: break_str(), flexible_match_location(), get_lat_lon(),   #
 # address_converter(), filter_events(), clean_description(),          #
 # format_time(), clean_coordinate(), get_all_events(), find_ranges(), #
-# in_filter().                                                        #                
+# in_filter(), is_valid_date(), is_valid_time(), update_database().   #                
 #                                                                     #
 # Interactions:                                                       #
 # - Remodeled_Food_Information_User_Interface.py: This file uses      #
-#   get_all_events() for the scrollable frame.                        #
+#   get_all_events(), break_str(), is_valid_date(), is_valid_time(),  #
+#   and update_database().                                            #
 # - database.py: This file uses find_ranges(), in_filter(),           #
 #   clean_coordinate(), break_str() and format_time(). for creating   #
 #   the dictionary for the map.                                       #

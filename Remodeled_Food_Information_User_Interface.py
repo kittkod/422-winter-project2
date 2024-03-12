@@ -17,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events, update_database, is_valid_date, is_valid_time, break_str
+from utils import get_all_events, update_database, is_valid_date, is_valid_time, break_str, format_time
 from database import run_map
 import admin_intake_form
 import Resource_Graph
@@ -955,7 +955,7 @@ class TodayFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = '\n\n' + str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
+                event_desc = '\n\n' + str(event['Event Title']) + ' -- ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + ' -- ' + format_time(event) + '\n' + 'Where: ' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
@@ -1030,7 +1030,7 @@ class TomorrowFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up descriptionevent_desc
-                event_desc = '\n\n' + str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
+                event_desc = '\n\n' + str(event['Event Title']) + ' -- ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + ' -- ' + format_time(event) + '\n' + 'Where: ' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
 
                 #######################################################
                 # Create the Tkinter Text widgets for Frame           #   
@@ -1099,7 +1099,7 @@ class ThisWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up description
-                event_desc = '\n\n' + str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
+                event_desc = '\n\n' + str(event['Event Title']) + ' -- ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + ' -- ' + format_time(event) + '\n' + 'Where: ' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
 
                 #######################################################
                 # Create the Tkinter Text widgets for This Week Frame #   
@@ -1167,7 +1167,7 @@ class NextWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = '\n\n' + str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
+                event_desc = '\n\n' + str(event['Event Title']) + ' -- ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + ' -- ' + format_time(event) + '\n' + 'Where: ' + str(event['Location']) + '\n\n' + str(event['Description']) + '\n\n'
                 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
