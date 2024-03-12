@@ -354,22 +354,46 @@ class AdminModeButton(ctk.CTkButton):
         
     
     def on_refresh_data_click(self):
-        ###############################################################
-        # Open loading screen            FIXME                        #
-        ###############################################################
+        # Open loading screen
         data_refreshing_loading_screen = ctk.CTkToplevel(self.master)
         data_refreshing_loading_screen.geometry('333x333')
         data_refreshing_loading_screen.resizable(False, False)
 
-        ###############################################################
-        # Refresh Data Funcitonality                                  #
-        ###############################################################
-        refresh_data.refresh_data()
+        try:
+            # Refresh Data Functionality
+            refresh_data.refresh_data()
 
-        ###############################################################
-        # Close Loading Screen            FIXME                       #
-        ###############################################################
-        data_refreshing_loading_screen.destroy()
+            # Close Loading Screen
+            data_refreshing_loading_screen.destroy()
+
+            # Optionally, provide user feedback on successful data refresh
+            success_message = ctk.CTkToplevel(self.master)
+            success_message.geometry("300x100")
+            success_message.configure(bg="gray92")
+            success_message.wm_title("Success")
+            success_label = ctk.CTkLabel(
+                success_message,
+                text="\nData has been successfully refreshed."
+            )
+            success_label.pack(padx=20, pady=10)
+
+        except Exception as e:
+            # Handle exceptions appropriately
+            print(f"Error during data refresh: {e}")
+
+            # Optionally, provide user feedback on error
+            error_message = ctk.CTkToplevel(self.master)
+            error_message.geometry("300x100")
+            error_message.configure(bg="gray92")
+            error_message.wm_title("Error")
+            error_label = ctk.CTkLabel(
+                error_message,
+                text=f"\nError during data refresh: {e}"
+            )
+            error_label.pack(padx=20, pady=10)
+            # Close Loading Screen in case of an error
+            data_refreshing_loading_screen.destroy()
+
 
 
     def populate_delete_buttons(self):
