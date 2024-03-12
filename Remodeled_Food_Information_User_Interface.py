@@ -354,7 +354,23 @@ class AdminModeButton(ctk.CTkButton):
         
     
     def on_refresh_data_click(self):
+        ###############################################################
+        # Open loading screen            FIXME                        #
+        ###############################################################
+        data_refreshing_loading_screen = ctk.CTkToplevel(self.master)
+        data_refreshing_loading_screen.geometry('333x333')
+        data_refreshing_loading_screen.resizable(False, False)
+
+        ###############################################################
+        # Refresh Data Funcitonality                                  #
+        ###############################################################
         refresh_data.refresh_data()
+
+        ###############################################################
+        # Close Loading Screen            FIXME                       #
+        ###############################################################
+        data_refreshing_loading_screen.destroy()
+
 
     def populate_delete_buttons(self):
         # Clear existing data in the scrollable frame
@@ -420,25 +436,17 @@ class AdminModeButton(ctk.CTkButton):
 
     def on_delete_data_click(self):
         ###############################################################
-        # Open loading screen            FIXME                             #
+        # Delete Data Functionality                                   #
         ###############################################################
-        data_deleting_loading_screen = ctk.CTkToplevel(self.master)
-        data_deleting_loading_screen.geometry('333x333')
-
         delete_data_popup = ctk.CTkToplevel(self.master)
         delete_data_popup.title('Admin Delete Events')
         delete_data_popup.geometry('400x300')
 
         self.scrollable_frame_delete_list = ctk.CTkScrollableFrame(delete_data_popup,    
                                                                     label_text='Delete Events')
-        self.scrollable_frame_delete_list.pack(fill=tk.BOTH, expand=True)
-
+        self.scrollable_frame_delete_list.pack(fill=tk.BOTH, 
+                                               expand=True)
         self.populate_delete_buttons()
-
-        ###############################################################
-        # Close Loading Screen            FIXME                            #
-        ###############################################################
-        data_deleting_loading_screen.destroy()
 
     def delete_unprocessed_data(self, index):
         confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to delete this event?")
@@ -526,7 +534,7 @@ class AdminModeButton(ctk.CTkButton):
                                  anchor="center"
                                  )
 
-        # Refresh Data button
+        # Delete Data button
         delete_data_button = ctk.CTkButton(admin_mode_popup, 
                                            width=111,
                                            text='Delete Data', 
@@ -914,7 +922,7 @@ class TodayFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
+                event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
@@ -989,7 +997,7 @@ class TomorrowFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up description
-                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
+                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for Frame           #   
@@ -1058,7 +1066,7 @@ class ThisWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up description
-                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
+                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
 
                 #######################################################
                 # Create the Tkinter Text widgets for This Week Frame #   
@@ -1126,7 +1134,7 @@ class NextWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = event['Event Title'] + '\n' + event['Date'] + '\n\n' + event['Description']
+                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
                 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
