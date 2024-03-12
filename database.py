@@ -92,7 +92,10 @@ def run_map(input_csv, input_button):
             description = description.strip()  # Remove leading/trailing whitespace
             description = utils.clean_description(description)
             description+='<br>'
-            event_dict['text'].append(utils.break_str(description, 40))
+            break_num = 45
+            if len(description) > 750:
+                break_num = 90
+            event_dict['text'].append(utils.break_str(description, break_num))
         else:
             event_dict['text'].append('')
 
