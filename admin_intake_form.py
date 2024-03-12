@@ -95,6 +95,7 @@ def admin_file_updater():
     """Checks if admin file contains out-of-date data
     - should only be called in conjunction with updating data"""
 
+    ###checks admin file inputs to see if they have passed###
     original_admin_df = pd.read_csv("./dollarless_database_files/admin_info.csv")
     admin_df = original_admin_df[["Date", "Start Time", "End Time"]]
     admin_df = pd.DataFrame(admin_df)
@@ -145,6 +146,57 @@ def admin_file_updater():
         CSV_data_inputter(CSV_file_list, admin_CSV_file)
         CSV_data_inputter(CSV_file_list, food_CSV_file)
 
+    ###unprocessed admin file checker###
+    original_admin_df = pd.read_csv("./dollarless_database_files/unprocessed_admin_info.csv")
+    admin_df = original_admin_df[["Date", "Start Time", "End Time"]]
+    admin_df = pd.DataFrame(admin_df)
+
+    index = 0
+    values = []
+    time = datetime.now()
+    time_hour = int(datetime.now().time().strftime('%H%M'))
+    for date in admin_df['Date']:
+
+        if contains_year(date) == False:
+            """if year is not in the time string"""
+            fixed_date = datetime.strptime(date, '%B %d')
+            if fixed_date.date() < time.replace(year=fixed_date.year).date:
+                original_admin_df = original_admin_df.drop(index)
+            if fixed_date.date() == time.replace(year=fixed_date.year).date:
+                target_time = int(datetime.strptime(admin_df.at[index, "Start Time"], '%I:%M %p').time().strftime('%H%M'))
+                if time_hour > target_time:
+                    original_admin_df = original_admin_df.drop(index)
+                else:
+                    values.append(index)
+            else:
+                values.append(index)
+
+        else:
+            """if year is in the time string"""
+            given_datetime = datetime.strptime(date, "%B %d %Y")
+            # Compare the parsed datetime with the current datetime
+            if given_datetime.date() < time.date():
+                original_admin_df = original_admin_df.drop(index)
+            if given_datetime.date() == time.date():
+                editted_time = convert_time_format(admin_df.at[index, "Start Time"])
+                target_time = int(datetime.strptime(editted_time, '%I:%M %p').time().strftime('%H%M'))
+                if time_hour > target_time:
+                    original_admin_df = original_admin_df.drop(index)
+                else:
+                    values.append(index)
+            else:
+                values.append(index)
+
+        index += 1
+    
+    CSV_file_creator(unprocessed_admin_CSV_file)
+
+    for val in values:
+
+        CSV_file_list = original_admin_df.loc[val, :].values.flatten().tolist()
+        CSV_data_inputter(CSV_file_list, "unprocessed_admin_info.csv")
+
+
 def delete_from_admin(event_title: str):
     """Function to remove admin entered data - once admin has selected an event title to delete"""
     ##should be no errors in event_title because event_title is a button press grab
@@ -165,9 +217,7 @@ def delete_from_admin(event_title: str):
     return  
 
 def delete_only_from_admin(event_title: str):
-    """Function to remove admin entered data (but only on admin list)
-    -for debugging purposes
-    """
+    """Function to remove admin entered data (but only on admin list)"""
     ##should be no errors in event_title because event_title is a button press grab
     
     df_admin_1 = pd.read_csv(admin_CSV_file)
@@ -181,4 +231,4 @@ def delete_only_from_admin(event_title: str):
 
 if __name__ == "__main__":
     "Test cases - don't run unless you are prepared to refresh the data afterwards"
-    
+    admin_file_updater()
