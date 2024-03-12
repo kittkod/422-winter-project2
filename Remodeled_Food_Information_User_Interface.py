@@ -17,7 +17,7 @@
 
 import customtkinter as ctk 
 import tkinter as tk
-from utils import get_all_events, update_database, is_valid_date
+from utils import get_all_events, update_database, is_valid_date, is_valid_time
 from database import run_map
 import admin_intake_form
 import Resource_Graph
@@ -294,8 +294,8 @@ class AdminModeButton(ctk.CTkButton):
                     err1.wm_title("Error")
                     # breaking up a long text
                     new_title = "\nlocation '" + location + "' is invalid."
-                    if len(new_title) > 45:
-                        new_title = new_title[:45] + '\n' + new_title[45:]
+                    if len(new_title) > 35:
+                        new_title = new_title[:35] + '\n' + new_title[35:]
                     l = ctk.CTkLabel(
                         err1,
                         text=new_title
@@ -315,7 +315,21 @@ class AdminModeButton(ctk.CTkButton):
                         l = ctk.CTkLabel(
                             invalid,
                             text="\nDate '" + date + "' is invalid.\nPlease input date in correct format."
-                        ),
+                        )
+                        l.pack(padx=20, pady=10)
+                    # checking if times are valid format
+                    elif not is_valid_time(start_time) or not is_valid_time(end_time):
+                        invalidtime = ctk.CTkToplevel()
+                        invalidtime.geometry("300x100")
+                        invalidtime.configure(bg="gray92")
+                        invalidtime.wm_title("Error")
+                        title_test = "\nStart Time " + start_time + " or End Time " + end_time + " is invalid. Please input times in correct format."
+                        if len(title_test) > 35:
+                            title_test = title_test[:35] + '\n' + title_test[35:]
+                        l = ctk.CTkLabel(
+                            invalidtime,
+                            text=title_test
+                        )
                         l.pack(padx=20, pady=10)
                     else:
                         succ = ctk.CTkToplevel()
@@ -324,8 +338,8 @@ class AdminModeButton(ctk.CTkButton):
                         succ.wm_title("Success")
                         # breaking up long titles
                         title_text = "\n'" + event_title + "' has been added and is being reviewed."
-                        if len(title_text) > 45:
-                            title_text = title_text[:45] + '\n' + title_text[45:]
+                        if len(title_text) > 35:
+                            title_text = title_text[:35] + '\n' + title_text[35:]
                         l = ctk.CTkLabel(
                             succ,
                             text=title_text
@@ -946,7 +960,7 @@ class TodayFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
+                event_desc = str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description'])
 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
@@ -1020,8 +1034,8 @@ class TomorrowFrame(ctk.CTkFrame):
 
             for event in events:
                 event_text = event['Event Title'] 
-                # pop up description
-                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
+                # pop up descriptionevent_desc
+                event_desc = str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description'])
 
                 #######################################################
                 # Create the Tkinter Text widgets for Frame           #   
@@ -1090,7 +1104,7 @@ class ThisWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title'] 
                 # pop up description
-                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
+                event_desc = str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description'])
 
                 #######################################################
                 # Create the Tkinter Text widgets for This Week Frame #   
@@ -1158,7 +1172,7 @@ class NextWeekFrame(ctk.CTkFrame):
             for event in events:
                 event_text = event['Event Title']
                 # pop up description
-                event_desc = event_desc = event['Event Title'] + ' - ' + event['Organizer(s)'] + '\n\n' + event['Date'] + '\n' + event['Location'] + '\n\n' + event['Description']
+                event_desc = str(event['Event Title']) + ' - ' + str(event['Organizer(s)']) + '\n\n' + str(event['Date']) + '\n' + str(event['Location']) + '\n\n' + str(event['Description'])
                 
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
