@@ -1,23 +1,39 @@
 #######################################################################
 # Food Information User Interface                                     # 
+# Created:                                                            #
+#   February 15 2024                                                  #
+# Authors:                                                            #
+#   Simone Badaruddin (sb), Nithi Deivanayagam, Max Hermens,  Jasmine #
+#                                                         Wallin      #
 #                                                                     #
-# Created: February 15 2024                                           #
-# Authors: Simone Badaruddin, Nithi Deivanayagam, Max Hermens,        #
-#          Jasmine Wallin                                             #
 # Function: This file creates the user interface for the Dollarless   #
-# Dining System, including event selection and map view               #
+# Dining System, including event selection, map view, and 'Add Event' #
 # functionality.                                                      #
 #                                                                     #
 # Interactions:                                                       #
-# - utils.py                                                                #
-# - database.py
-# - admin_intake_form.py                                                                   #
-# - Resource_Graph.py                                                                  #
-# - refresh_data.py                                                                    #
-# - coordinate_finder.py                                                                    #
+#   - utils.py:                                                       #
+#       This file uses get_all_events, update_database,               #
+#       is_valid_date, is_valid_time, break_str, and format_time from #
+#       utils.py in order to input event information into the         #
+#       scrollable frame, map, and description boxes.                 #
+#   - database.py:                                                    #
+#       This file uses the database to get the events from the csv    #  
+#   - admin_intake_form.py:                                           #
+#       This file takes input in the user and passes it through the   #
+#       admin_intake_form.py to input the user's new event into the   #
+#       user interface.                                               #
+#   - Resource_Graph.py:                                              #
+#       This file uses Resource_Graph to get the map of free food     #
+#       on campus on plotly                                           #
+#   - refresh_data.py:                                                #
+#       This file uses refresh_data to get the most up-to-date event  #
+#       data                                                          #
+#   - coordinate_finder.py:                                           #
+#       This file uses coordinate_finder to plot the correct          #
+#       locations onto the map.                                       #
 #                                                                     #
-# Last Edited: 05/08/2024 by: sb                                      #   
-# Modifications Made: Added description functionality                 # 
+# Last Edited: 05/13/2024 by: sb                                      #   
+# Modifications Made: Added clarifying comments                       # 
 #######################################################################
 
 #######################################################################
@@ -81,6 +97,7 @@ class App(ctk.CTk):
 #######################################################################
 # Left Sidebar (containing various buttons & modes of operation)      #
 #                                                                     #
+# Description: creates a grid for the stagnant left sidebar                                                                   #
 # Contains:                                                           #   
 #   - Light and Dark Appearance Mode Buttons                          #
 #   - Administrator Mode Button                                       #
@@ -131,6 +148,7 @@ class LeftSideBar(ctk.CTkFrame):
                                   font=("default", 25),
                                   text_color=("grey", "lightgrey")
                                   )
+        
         title_label.grid(row=0, 
                         column=0, 
                         padx=(10, 10),
@@ -170,7 +188,9 @@ class AppearanceModeFrame(ctk.CTkFrame):
         super().__init__(master)
 
         ###############################################################
-        # Create the Grid System for Appearance Mode Frame            #   
+        # Create the Grid System for Appearance Mode Frame            #
+        #   - the grid has two columns with greater weight than the   #
+        #     single row.                                             #   
         ###############################################################
         self.grid_columnconfigure((0, 1), 
                                   weight=1)
@@ -178,7 +198,7 @@ class AppearanceModeFrame(ctk.CTkFrame):
                                weight=0)
 
         ###############################################################
-        # Place Light and Dark Mode Buttons onto Mode Grid System     #   
+        # Create and Place Light and Dark Mode Buttons onto Mode Grid #   
         ###############################################################
         self.light_mode_button = ctk.CTkButton(self, 
                                                text='☀', 
@@ -225,9 +245,9 @@ class AdminModeButton(ctk.CTkButton):
         )
         inputs_frame.pack(padx=15, pady=15, fill=tk.BOTH)
 
-        #######################################################################
-        # Input Boxes Configuration
-        #######################################################################
+        ###############################################################
+        # Input Boxes Configuration                                   #
+        ###############################################################
         # Brief Formatting instructions for administrator inputting new event
         input_new_event_instr = ctk.CTkLabel(
             inputs_frame,
@@ -438,8 +458,6 @@ class AdminModeButton(ctk.CTkButton):
             # Close Loading Screen in case of an error
             data_refreshing_loading_screen.destroy()
 
-
-
     def populate_delete_buttons(self):
         # Clear existing data in the scrollable frame
         for widget in self.scrollable_frame_delete_list.winfo_children():
@@ -573,13 +591,18 @@ class AdminModeButton(ctk.CTkButton):
             except pd.errors.ParserError:
                 print("Error parsing CSV file.")
 
-
+    ###################################################################
+    # Create and Display Admin Mode Pop up Window                     #
+    ###################################################################
     def show_admin_mode_popup(self):
         admin_mode_popup = ctk.CTkToplevel(self.master)
         admin_mode_popup.title('Admin Mode')
         admin_mode_popup.geometry('170x160')
         admin_mode_popup.resizable(False, False)
 
+        ###############################################################
+        # Input Boxes Configuration                                   #
+        ###############################################################
         # Add New Event button
         add_new_event_button = ctk.CTkButton(admin_mode_popup, 
                                              width=111,
@@ -627,11 +650,6 @@ class ResourcesButton(ctk.CTkButton):
         resource_list_window.title('Online Resources')
         resource_list_window.geometry('725x635')
         resource_list_window.resizable(False, False)  # width, height are constant
-
-        # Removed to match other windows
-        # # Create a Label to display additional resources
-        # resource_label = ctk.CTkLabel(resource_list_window, text="Online Resources", font=("bold", 30))
-        # resource_label.pack(padx=10, pady=10)
 
         # Create a Text widget to display sample text with hyperlinks
         resource_text = tk.Text(resource_list_window, wrap=tk.WORD, height=20, width=80)
@@ -777,7 +795,7 @@ class ResourcesButton(ctk.CTkButton):
         list_popup.mainloop()
 
 #######################################################################
-# About Pop-up Button
+# Create About Pop-up Button                                          #
 #######################################################################
 class AboutButton(ctk.CTkButton):
     def __init__(self, master):
@@ -796,12 +814,12 @@ def show_about_popup():
 
     Copyright © 2024 University of Oregon
     """
-
+    # Make window
     about_popup = ctk.CTkToplevel()
     about_popup.title('About Dollarless Dining')
     about_popup.geometry('300x200')
     about_popup.resizable(False, False)
-
+    # Make label and place onto window
     about_label = ctk.CTkLabel(about_popup, 
                                text=about_text, 
                                wraplength=280)
@@ -854,7 +872,6 @@ class MainArea(ctk.CTkScrollableFrame):
 # Contains:                                                           #
 #   1. Scrollable Frame Events by timeframe                           #   
 #   2. View Map Button by timeframe                                   # 
-#                                                                     # 
 #######################################################################
 class FoodEventTabs(ctk.CTkTabview):
     def __init__(self, master):
@@ -914,7 +931,6 @@ class FoodEventTabs(ctk.CTkTabview):
         ###############################################################
         # Add a scrollable frame to each tab                          #   
         ###############################################################
-        
         # Today Tab
         self.today_scrollable_frame = TodayFrame(self.tab("Today"))
         self.today_scrollable_frame.pack(padx=5, 
@@ -922,7 +938,6 @@ class FoodEventTabs(ctk.CTkTabview):
                                          side=tk.BOTTOM,
                                          fill=tk.BOTH, 
                                          expand=True)
-
         # Tomorrow Tab
         self.tomorrow_scrollable_frame = TomorrowFrame(self.tab("Tomorrow"))
         self.tomorrow_scrollable_frame.pack(padx=5, 
@@ -930,7 +945,6 @@ class FoodEventTabs(ctk.CTkTabview):
                                             side=tk.BOTTOM,
                                             fill=tk.BOTH, 
                                             expand=True)
-
         # This Week Tab
         self.thisweek_scrollable_frame = ThisWeekFrame(self.tab("This Week"))
         self.thisweek_scrollable_frame.pack(padx=5, 
@@ -938,7 +952,6 @@ class FoodEventTabs(ctk.CTkTabview):
                                             side=tk.BOTTOM,
                                             fill=tk.BOTH, 
                                             expand=True)
-
         # Next Week Tab
         self.nextweek_scrollable_frame = NextWeekFrame(self.tab("Next Week"))
         self.nextweek_scrollable_frame.pack(padx=5, 
@@ -961,13 +974,12 @@ class TodayFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
-
         events, title_name = get_all_events(csv_file_path, 
                         'today') 
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self,
                                                             bg_color=("#cfcfcf","#333333"),
-                                                            fg_color=("grey88", "grey33"),
+                                                            fg_color=("grey88", "grey33"), 
                                                             label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
         scrollable_frame_food_list.pack(fill=tk.BOTH, 
@@ -995,8 +1007,8 @@ class TodayFrame(ctk.CTkFrame):
                 #######################################################
                 # Create the Tkinter Text widgets for Today Frame     #   
                 #######################################################  
-                # Choosing colors since the CTkScrollableFrame header 
-                # text becomes black on light mode which is 
+                # Choosing specific colors since the CTkScrollableFrame  
+                # header text becomes black on light mode which is 
                 # inconcsistent with the light theme for most widgets.
                 event_button = ctk.CTkButton(scrollable_frame_food_list,
                                              anchor="nw", 
@@ -1009,7 +1021,7 @@ class TodayFrame(ctk.CTkFrame):
                 event_button._text_label.configure(wraplength=400)
 
                 # A disabled, invisible button with a small font acts 
-                # as a spacer between each event button!
+                # as a spacer between each event button
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -1036,10 +1048,8 @@ class TomorrowFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the Today Scrollable Frame     #   
         ###############################################################
-
         events, title_name = get_all_events(csv_file_path, 
                                     'tomorrow')
-
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
@@ -1077,8 +1087,7 @@ class TomorrowFrame(ctk.CTkFrame):
                                              command = lambda desc=event_desc: update_description(desc),
                                              fg_color=("grey88", "gray33"),  
                                              hover_color=("lightgrey", "grey")) 
-                
-                event_button._text_label.configure(wraplength=400)
+                event_button._text_label.configure(wraplength=400) # wrap lines
                 spacing = ctk.CTkButton(scrollable_frame_food_list, 
                                         text= " ", 
                                         height=9, 
@@ -1105,10 +1114,8 @@ class ThisWeekFrame(ctk.CTkFrame):
         ###############################################################
         # Place Events as Buttons onto the This Week Scrollable Frame #  
         ###############################################################
-
         events, title_name = get_all_events(csv_file_path, 
                         'this week') 
-
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
@@ -1176,7 +1183,6 @@ class NextWeekFrame(ctk.CTkFrame):
         ###############################################################
         events, title_name = get_all_events(csv_file_path, 
                         'next week')
-
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self, 
                                                             bg_color=("#cfcfce","#333333"),
                                                             fg_color=("grey88", "grey33"),
@@ -1254,4 +1260,3 @@ class EventDescription(ctk.CTkButton):
 update_database()
 app = App()
 app.mainloop()
-
