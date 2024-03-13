@@ -26,6 +26,7 @@ import webbrowser
 import refresh_data
 from coordinate_finder import coordinate_validity
 from tkinter import messagebox
+from PIL import Image
 
 csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 
@@ -42,9 +43,8 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("Dollarless Dining")
-        self.geometry("895x800")
+        self.geometry("695x700")
         self.minsize(500, 440)
-        self.maxsize(1000, 880)
 
         ###############################################################
         # Place Internal Frames onto the Main App                     #   
@@ -99,7 +99,22 @@ class LeftSideBar(ctk.CTkFrame):
                                         pady=(10, 10),
                                         sticky="n")
 
-        # Title Label 
+        ###############################################################
+        # Create the Logo placeholder and display logo                #   
+        ###############################################################
+        # create image utility
+        logo = ctk.CTkImage(light_image=Image.open("./dollarless_dining_images/light_dollarless_dining_logo.png"),
+                            dark_image=Image.open("./dollarless_dining_images/dark_dollarless_dining_logo.png"),
+                            size=(33, 66)
+                            )
+        logo_label=ctk.CTkLabel(self, text="", image=logo)
+        logo_label.grid(row=0, 
+                        column=0,
+                        )
+        
+        ###############################################################
+        # Include the Dollarless Dining Title Label                   #   
+        ###############################################################
         title_label = ctk.CTkLabel(self, 
                                   text="Dollarless\nDining", 
                                   font=("default", 25),
@@ -107,7 +122,9 @@ class LeftSideBar(ctk.CTkFrame):
                                   )
         title_label.grid(row=0, 
                         column=0, 
-                        pady=(10, 10)
+                        padx=(10, 10),
+                        pady=(10, 30),
+                        sticky="s"
                         )
         
         # Admin Mode Button Frame
@@ -938,7 +955,7 @@ class TodayFrame(ctk.CTkFrame):
                         'today') 
 
         scrollable_frame_food_list = ctk.CTkScrollableFrame(self,
-                                                            bg_color=("#cfcfce","#333333"),
+                                                            bg_color=("#cfcfcf","#333333"),
                                                             fg_color=("grey88", "grey33"),
                                                             label_text = 'Free Food Resources' + title_name, 
                                                             label_text_color=("grey", "lightgrey"))
