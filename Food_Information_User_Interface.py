@@ -71,7 +71,7 @@ class App(ctk.CTk):
 
         self.title("Dollarless Dining")
         self.geometry("695x700")
-        self.minsize(550, 380)
+        self.minsize(575, 540)
 
         ###############################################################
         # Place Internal Frames onto the Main App                     #   
@@ -136,7 +136,9 @@ class LeftSideBar(ctk.CTkFrame):
                             size=(33, 66)
                             )
         logo_label=ctk.CTkLabel(self, text="", image=logo)
-        logo_label.grid(row=0, 
+        logo_label.grid(row=0,  
+                        padx=(0, 1), 
+                        pady=(1, 1),
                         column=0,
                         )
         
