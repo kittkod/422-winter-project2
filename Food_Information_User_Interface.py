@@ -61,9 +61,12 @@ csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 # Overall Application Section:                                        #
 #                                                                     #
 # Description:                                                        #
-#   Creates the Dollarless Dining application.                        #   
+#   Creates the Dollarless Dining application, portioned as a grid    #   
+#   into columns and rows.                                            #
+#                                                                     #
 # Contains:                                                           #   
-#   #FIXME List upon completion.                                      #
+#   - Left Sidebar Frame                                              #
+#   - Main Area Frame                                                 #
 #######################################################################
 class App(ctk.CTk):
     def __init__(self):
@@ -183,7 +186,15 @@ class LeftSideBar(ctk.CTkFrame):
                                sticky="ns")
 
 #######################################################################
-# Light and Dark Appearance Mode Buttons                              #   
+# Light and Dark Appearance Mode Buttons                              # 
+#                                                                     #
+# Description:                                                        #
+#   Creates buttons for the light and dark mode of the system.        #
+#                                                                     #
+# Contains:                                                           #   
+#   - Appearance Mode Frame                                           #
+#   - light_mode_button                                               #  
+#   - dark_mode_button                                                #
 #######################################################################
 class AppearanceModeFrame(ctk.CTkFrame):
     def __init__(self, master):
@@ -191,7 +202,8 @@ class AppearanceModeFrame(ctk.CTkFrame):
 
         ###############################################################
         # Create the Grid System for Appearance Mode Frame            #
-        #   - the grid has two columns with greater weight than the   #
+        #                                                             #
+        #     The grid has two columns with greater weight than the   #
         #     single row.                                             #   
         ###############################################################
         self.grid_columnconfigure((0, 1), 
@@ -317,7 +329,7 @@ class AdminModeButton(ctk.CTkButton):
                     'desc': '',
                     'organizers': ''}
 
-        def my_function():
+        def input_user_event():
             # Getting the input box elements
             event_title = event_title_input.get()
             date = date_input.get()
@@ -414,7 +426,7 @@ class AdminModeButton(ctk.CTkButton):
         submit_form = ctk.CTkButton(
             inputs_frame,
             text="Submit Event",
-            command=lambda: my_function()
+            command=lambda: input_user_event()
         )
         submit_form.pack(padx=5, pady=5)
         
@@ -1258,7 +1270,8 @@ class EventDescription(ctk.CTkButton):
 #######################################################################
 # Run application                                                     #   
 #######################################################################
-# updating the database with any possible new event additions
+# updating the database with any possible new event additions before 
+# running so that the user sees the most recent events.
 update_database()
 app = App()
 app.mainloop()
