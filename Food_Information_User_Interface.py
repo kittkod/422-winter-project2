@@ -1,12 +1,23 @@
 #######################################################################
-# Remodeled Food Information User Interface                           # 
-# Created: TODO                                                       #
-# Authors: All team                                                   #
+# Food Information User Interface                                     # 
 #                                                                     #
-# Description/Interactions:                                           #
-# TODO                                                                #
+# Created: February 15 2024                                           #
+# Authors: Simone Badaruddin, Nithi Deivanayagam, Max Hermens,        #
+#          Jasmine Wallin                                             #
+# Function: This file creates the user interface for the Dollarless   #
+# Dining System, including event selection and map view               #
+# functionality.                                                      #
+#                                                                     #
+# Interactions:                                                       #
+# - utils.py                                                                #
+# - database.py
+# - admin_intake_form.py                                                                   #
+# - Resource_Graph.py                                                                  #
+# - refresh_data.py                                                                    #
+# - coordinate_finder.py                                                                    #
+#                                                                     #
 # Last Edited: 05/08/2024 by: sb                                      #   
-# Log: Added description functionality                                # 
+# Modifications Made: Added description functionality                 # 
 #######################################################################
 
 #######################################################################
@@ -44,7 +55,7 @@ class App(ctk.CTk):
 
         self.title("Dollarless Dining")
         self.geometry("695x700")
-        self.minsize(500, 440)
+        self.minsize(550, 380)
 
         ###############################################################
         # Place Internal Frames onto the Main App                     #   
