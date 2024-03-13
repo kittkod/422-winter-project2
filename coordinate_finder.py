@@ -1,13 +1,13 @@
 #######################################################################
 # UO_scraper.py                                                       #
-# created: TODO                                                       # 
+# created: 2/29/2024                                                  # 
 # Authors: Kylie Griffiths                                            #
 #                                                                     #
 # Description: Code body to take in an address and return the         #
 # latitude and longitude -- requires internet connection.             #                             
 #                                                                     #
 # Interactions:                                                       #
-# - TODO                                                              #
+# - campus_buildings.txt: Add dictionary to text file                 #
 ####################################################################### 
 
 from bs4 import BeautifulSoup

@@ -3,8 +3,7 @@
 # created: 2/15/2024                                                  # 
 # Authors: Kylie Griffiths                                            #
 #                                                                     #
-# Description: Web Scraper for University of Oregon Free Food Events
-# and                            
+# Description: Web Scraper for University of Oregon Free Food Events  #                         
 #                                                                     #
 # Interactions:                                                       #
 # -                                                                   #

@@ -1,13 +1,16 @@
 #######################################################################
 # UO_scraper.py                                                       #
-# created: TODO                                                       # 
-# Authors: Kylie Griffiths                                                     #
+# created: 2/29/2024                                                  # 
+# Authors: Kylie Griffiths                                            #
 #                                                                     #
 # Description: Form to take in administrative input and add to        #
 # database.                                                           #                             
 #                                                                     #
 # Interactions:                                                       #
-# - TODO                                                              #
+# - coordinate_finder: Calls lat_and_long, address_converter          #
+# - UO_scraper: Calls CSV_file_creator, CSV_data_inputter             #
+# - food_CSV_file: inputs admin information into CSV file             # 
+# - admin_CSV_file: inputs admin information into CSV file            #
 ####################################################################### 
 
 from datetime import datetime 
