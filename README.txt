@@ -18,8 +18,8 @@ admin_info.csv, campus_buildings.txt, Free_Food_Database.csv, unprocessed_admin_
 
 Running Instructions:
 ---------------------
-Installations/Modules needed: Python, Pandas, plotly.express, bs4, requests, customtkinter,
-                              selenium, webbrowser
+Installations/Modules needed: Python, Pandas, plotly.express, BeautifulSoup4, requests, customtkinter,
+                              selenium, webbrowser, pillow.
 
 1) after all modules from above are installed, download or clone this repository to your
 computer
