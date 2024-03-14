@@ -249,7 +249,7 @@ class AdminModeButton(ctk.CTkButton):
         # Set up New Event User Input Window
         user_input_window = ctk.CTkToplevel(self.master)
         user_input_window.title('Add Event')
-        user_input_window.geometry('370x373')
+        user_input_window.geometry('695x373')
         user_input_window.minsize(370, 373)
         user_input_window.maxsize(777, 373)
 
