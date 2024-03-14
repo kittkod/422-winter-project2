@@ -45,7 +45,6 @@
 import customtkinter as ctk 
 import tkinter as tk
 from utils import get_all_events, update_database, is_valid_date, is_valid_time, break_str, format_time
-from database import run_map
 import admin_intake_form
 import Resource_Graph
 import pandas as pd

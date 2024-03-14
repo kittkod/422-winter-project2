@@ -1,7 +1,7 @@
 Dollarless Dining
 -----------------
 Authors : Simone Badaruddin, Nithi Deivanayagam, Kylie Griffiths, Max Hermens, Jasmine Wallin 
-Created : April-March 2024 for CS 422 Winter '24 project 2
+Created : February-March 2024 for CS 422 Winter '24 project 2
 
 Dollarless Dining is a program that aims to establish larger accessibility to 
 free food resources around UO and the Eugene area. Users of this program can either 
@@ -13,7 +13,7 @@ interactive map, or add their free food resources and refresh the database
 admin_intake_form.py, coordinate_finder.py, database.py, DollarlessDining.py, ect..
 refresh_data.py, Resource_Graph.py, UO_scraper.py, utils.py, README.txt
 - All database files are in (422-winter-project2/dollarless_database_files):
-admin_info.csv, campus_buildings.txt, Free_Food_Database.csv, unprocessed_admin_info.csv
+admin_info.csv, Free_Food_Database.csv, unprocessed_admin_info.csv
 - Dollarless_dining_images contains 2 png files that are the DollarlessDining logos.
 
 Running Instructions:

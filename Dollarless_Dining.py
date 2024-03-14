@@ -1,7 +1,6 @@
 """
 Runs Dollarless_Dining.py program
 """
-import coordinate_finder
 import Food_Information_User_Interface
 
 def main():
