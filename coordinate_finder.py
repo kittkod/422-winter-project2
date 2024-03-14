@@ -139,15 +139,19 @@ def coordinate_validity(address: str):
     matched_location = None
     with open('campus_buildings.txt') as f:
         campus_buildings = json.load(f)
+        #dictionary of buildings on UO campus
     if address != '':
         for location in campus_buildings.keys():
+            #check if location is one of the buildings
             if location in address:
                 matched_location = location
                 break
         if matched_location == None:
+            #if location is not one of the buildings, map its address for coordinates
             new_location = address_converter(address)
             lat, long = lat_and_long(new_location)
         else:
+            #if location is one of the buildings, pull the coordinates
             latlong = campus_buildings.get(matched_location).split(" ")
             lat = latlong[0]
             long = latlong[1]
