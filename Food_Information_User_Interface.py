@@ -217,9 +217,14 @@ class AppearanceModeFrame(ctk.CTkFrame):
                                    pady=5, 
                                    sticky="ns")
         
-        
+
 #######################################################################
-# Admin Mode Button                                                   #   
+# Admin Mode                                                          #
+#                                                                     #       
+# Contains:                                                           #   
+#   1. Add new event functionality                                    #
+#   2. Refresh data functionality                                     #
+#   3. Delete Data functionality                                      #
 #######################################################################
 class AdminModeButton(ctk.CTkButton):
     def __init__(self, master):
