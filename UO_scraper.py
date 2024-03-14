@@ -6,7 +6,12 @@
 # Description: Web Scraper for University of Oregon Free Food Events  #                         
 #                                                                     #
 # Interactions:                                                       #
-# -                                                                   #
+# - utils.py: utils.py uses CSV_data_inputter() and CSV_file_creator()#
+#   to update admin_info and Free_Food_Database                       #
+# - refresh_data.py: this file uses food_CSV_file(),                  #
+#   engage_URL_web_scraper(), engage_site_scraper(),                  #
+#   events_calendar_URL_scraper(), food_pantry_211_scraper(),         #
+#   student_life_scraper()                                            #
 ####################################################################### 
 
 from bs4 import BeautifulSoup

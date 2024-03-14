@@ -22,9 +22,9 @@ Installations/Modules needed: Python, Pandas, plotly.express, BeautifulSoup4, re
 
 1) After all modules from above are installed, download or clone this repository to your
 computer
-2) Through the terminal or a code editor (like virtual studio code), run the Dollarless_Dining.py 
+2) through terminal or a code editor (like virtual studio code), run the Dollarless_Dining.py
 script
-3) If this is the first time running: enter admin mode through the 'Admin Mode' button on the 
-the main page, and click the 'Refresh Data' button
-4) Wait for output that the scraping has been finished in the terminal, and now the program is set up
-and ready to use
+3) if this is the first time running: enter admin mode through the 'Admin Mode' button on the 
+main page, and click the 'Refresh Data' button
+4) wait for output that the scraping has been finished in terminal and a window popout on your 
+screen, and now the program is set up and ready to use
