@@ -14,12 +14,11 @@ admin_intake_form.py, coordinate_finder.py, database.py, DollarlessDining.py, ec
 refresh_data.py, Resource_Graph.py, UO_scraper.py, utils.py, README.txt
 - All database files are in (422-winter-project2/dollarless_database_files):
 admin_info.csv, Free_Food_Database.csv, unprocessed_admin_info.csv
-- Dollarless_dining_images contains 2 png files that are the DollarlessDining logos.
 
 Running Instructions:
 ---------------------
 Installations/Modules needed: Python, Pandas, plotly.express, BeautifulSoup4, requests, customtkinter,
-                              selenium, webbrowser, pillow.
+                              selenium, webbrowser.
 
 1) After all modules from above are installed, download or clone this repository to your
 computer
