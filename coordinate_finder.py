@@ -23,11 +23,17 @@ acronym_link = "https://registrar.uoregon.edu/faculty-staff/academic-scheduling/
 address_exceptions = {"Grace Evangelical Church": [44.0408363098272, -123.08166553148503]}
 
 def class_dict_maker():
+    """
+    Parses the UO buildings and their coordinates then combines
+    them with set acronyms to create a dictionary mapping these to
+    their coordinates.
+    """
     class_dictionary = {}
 
     link_1 = requests.get(raw_link)
     soup = BeautifulSoup(link_1.text, 'html.parser')
     list_of_buildings = soup.find_all("tr")
+
     for row in list_of_buildings:
         row_of_buildings = row.find_all("td")
         for specific in row_of_buildings:
@@ -83,6 +89,10 @@ def class_dict_maker():
     return class_dictionary
 
 def address_converter(initial_address: str):
+    """
+    Takes an address string and attempts to return a standard address format.
+    Strips away any non-digit characters (which are presumed to be the street #)
+    """
     #find specific address pattern
     pattern = r'^\D+\d+'
 
@@ -96,7 +106,10 @@ def address_converter(initial_address: str):
         return initial_address
     
 def lat_and_long(address: str): 
-    """Take an address and return the latitude and longitude"""
+    """
+    Converts an adress to latitude and longitude coordinates. Validation is
+    done to ensure coordinates fall within the expected bounds.
+    """
     match = None
     for location in address_exceptions:
             if location.lower() in address.lower():
@@ -120,7 +133,9 @@ def lat_and_long(address: str):
             return [response[0]["lat"], response[0]["lon"]]
 
 def coordinate_validity(address: str):
-    """Ensure the validity of an address - check if coordinates exist"""
+    """
+    Ensure the validity of an address - check if coordinates exist
+    """
     matched_location = None
     with open('campus_buildings.txt') as f:
         campus_buildings = json.load(f)
@@ -142,6 +157,10 @@ def coordinate_validity(address: str):
         return False
 
 def main():
+    """
+    main function that is executed with the script. Generates the 
+    dictionary and writes it to a txt file in json format.
+    """
     class_dict = class_dict_maker()
     with open('campus_buildings.txt', 'w') as convert_file: 
         convert_file.write(json.dumps(class_dict))
