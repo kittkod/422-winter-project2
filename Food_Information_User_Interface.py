@@ -3,8 +3,8 @@
 # Created:                                                            #
 #   February 15 2024                                                  #
 # Authors:                                                            #
-#   Simone Badaruddin (sb), Nithi Deivanayagam, Max Hermens,  Jasmine #
-#                                                         Wallin      #
+#  Simone Badaruddin, Nithi Deivanayagam, Max Hermens, Jasmine Wallin #
+#                                                                     #
 #                                                                     #
 # Function: This file creates the user interface for the Dollarless   #
 # Dining System, including event selection, map view, and 'Add Event' #
