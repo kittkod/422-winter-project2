@@ -30,7 +30,7 @@ food_CSV_file = "./dollarless_database_files/Free_Food_Database.csv"
 days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 #to be used when parsing date strings
 
-with open('campus_buildings.txt') as f: 
+with open('./campus_buildings.txt') as f: 
     data = f.read() 
 #pull data to be read from
       
