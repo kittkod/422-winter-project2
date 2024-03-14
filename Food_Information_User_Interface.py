@@ -32,7 +32,7 @@
 #       This file uses coordinate_finder to plot the correct          #
 #       locations onto the map.                                       #
 #                                                                     #
-# Last Edited: 05/13/2024 by: sb                                      #   
+# Last Edited: 05/13/2024 by: nd                                      #   
 # Modifications Made: Added clarifying comments                       # 
 #######################################################################
 
@@ -217,9 +217,14 @@ class AppearanceModeFrame(ctk.CTkFrame):
                                    pady=5, 
                                    sticky="ns")
         
-        
+
 #######################################################################
-# Admin Mode Button                                                   #   
+# Admin Mode                                                          #
+#                                                                     #       
+# Contains:                                                           #   
+#   1. Add new event functionality                                    #
+#   2. Refresh data functionality                                     #
+#   3. Delete Data functionality                                      #
 #######################################################################
 class AdminModeButton(ctk.CTkButton):
     def __init__(self, master):
@@ -413,7 +418,9 @@ class AdminModeButton(ctk.CTkButton):
         )
         submit_form.pack(padx=5, pady=5)
         
-    
+    ###############################################################
+        # Refresh Data Button                                     #
+    ###############################################################
     def on_refresh_data_click(self):
         # Open loading screen
         data_refreshing_loading_screen = ctk.CTkToplevel(self.master)
@@ -455,6 +462,9 @@ class AdminModeButton(ctk.CTkButton):
             # Close Loading Screen in case of an error
             data_refreshing_loading_screen.destroy()
 
+    ###############################################################
+        # Delete Data Button                                     #
+    ###############################################################
     def populate_delete_buttons(self):
         # Clear existing data in the scrollable frame
         for widget in self.scrollable_frame_delete_list.winfo_children():
@@ -518,9 +528,6 @@ class AdminModeButton(ctk.CTkButton):
             print("Error parsing CSV file.")
 
     def on_delete_data_click(self):
-        ###############################################################
-        # Delete Data Functionality                                   #
-        ###############################################################
         delete_data_popup = ctk.CTkToplevel(self.master)
         delete_data_popup.title('Admin Delete Events')
         delete_data_popup.geometry('400x300')

@@ -7,7 +7,9 @@
 # latitude and longitude -- requires internet connection.             #                             
 #                                                                     #
 # Interactions:                                                       #
-# - campus_buildings.txt: Add dictionary to text file                 #
+# - campus_buildings.txt: This file adds a dictionary to the txt file #                
+# - admin_intake_form.py: This file is used to check valid addresses  #
+# and return coordinates                                              #
 ####################################################################### 
 
 from bs4 import BeautifulSoup
@@ -80,6 +82,8 @@ def class_dict_maker():
     class_dictionary["Barn"] = '44.04102377844486, -123.07411695536857'
     class_dictionary["Lylle Reynolds-Parker"] = '44.04321043698473, -123.06539574909931'
     class_dictionary["Black Cultural Center"] = class_dictionary.get("Lylle Reynolds-Parker")
+    class_dictionary["O desk"] = class_dictionary.get("Erb Memorial Union")
+    class_dictionary["O Desk"] = class_dictionary.get("Erb Memorial Union")
     
     
     return class_dictionary
