@@ -18,7 +18,7 @@ admin_info.csv, Free_Food_Database.csv, unprocessed_admin_info.csv
 Running Instructions:
 ---------------------
 Installations/Modules needed: Python, Pandas, plotly.express, BeautifulSoup4, requests, customtkinter,
-                              selenium, webbrowser.
+                              selenium, webbrowser, pillow.
 
 1) After all modules from above are installed, download or clone this repository to your
 computer
