@@ -52,6 +52,7 @@ import webbrowser
 import refresh_data
 from coordinate_finder import coordinate_validity
 from tkinter import messagebox
+from PIL import Image
 
 csv_file_path = './dollarless_database_files/Free_Food_Database.csv'
 
@@ -144,6 +145,22 @@ class LeftSideBar(ctk.CTkFrame):
                         sticky="s"
                         )
         
+        ###############################################################
+        # Create the Logo placeholder and display logo                #
+        ###############################################################
+        # create image utility
+        logo = ctk.CTkImage(light_image=Image.open("./dollarless_dining_images/light_dollarless_dining_logo.png"),
+                            dark_image=Image.open("./dollarless_dining_images/dark_dollarless_dining_logo.png"),
+                            size=(33, 66)
+                            )
+        
+        logo_label=ctk.CTkLabel(self, text="", image=logo)
+        logo_label.grid(row=0,
+                        padx=(0, 1),
+                        pady=(1, 1),
+                        column=0,
+                        )
+
         # Admin Mode Button Frame
         self.admin_mode_frame = AdminModeButton(self)
         self.admin_mode_frame.grid(row=4, 
